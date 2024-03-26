@@ -5,7 +5,7 @@ export default function Layout({ children }) {
         <div className="w-full flex flex-col sm:flex-row">
             <Navbar />
 
-            <div className="w-full h-screen overflow-y-auto">
+            <div className="w-full h-screen overflow-y-auto p-2 md:p-10">
                 {children}
             </div>
         </div>

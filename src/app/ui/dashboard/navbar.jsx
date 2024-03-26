@@ -11,7 +11,7 @@ export default function Navbar() {
                 </div>
                 <hr className="w-full" />
             </div>
-            <div className="flex sm:flex-col gap-3 py-8">
+            <div className="flex sm:flex-col gap-3 overflow-x-auto py-2 sm:py-8">
                 <NavLinks />
             </div>
             {/* <Link 

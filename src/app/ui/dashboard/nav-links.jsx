@@ -43,13 +43,14 @@ export default function NavLinks() {
                             key={link.name}
                             href={link.href}
                             className={clsx(
-                                'w-full py-2 px-4 bg-secondary rounded-lg border-b-2 hover:bg-secondary/50 duration-500',
+                                'w-full py-2 px-4 bg-secondary rounded-lg border-b-2 hover:bg-secondary/50 duration-500 flex flex-col sm:flex-row items-center',
                                 {
                                     'text-primary bg-secondary/50 border-primary': pathname === link.href
                                 }
                             )}
                         >
-                            <i className={`${link.icon} sm:me-2`}></i><span className="hidden sm:inline">{link.name}</span>
+                            <i className={`${link.icon} sm:me-2`}></i>
+                            <span className="text-xs sm:text-md">{link.name}</span>
                         </Link>
                     )
                 })
