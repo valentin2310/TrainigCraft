@@ -42,9 +42,9 @@ export default function MiSemana() {
     return (
         <div className="misemana w-full bg-secondary border-2 border-secondary shadow-lg rounded p-4">
             <div className="w-full flex items-center justify-between mb-4 px-2 text-white">
-                <p className="text-xl font-bold"><i class="ri-calendar-schedule-line me-2"></i>Mi semana</p>
+                <p className="text-xl font-bold"><i className="ri-calendar-schedule-line me-2"></i>Mi semana</p>
                 <Button>
-                    <i class="ri-edit-2-line m-2"></i><span className="hidden sm:inline">Editar</span>
+                    <i className="ri-edit-2-line m-2"></i><span className="hidden sm:inline">Editar</span>
                 </Button>
             </div>
             <div className="w-full md:p-2 flex justify-evenly gap-1 lg:gap-3 rounded">
@@ -52,7 +52,7 @@ export default function MiSemana() {
                     const icon = dia.estado ? 'ri-checkbox-circle-line text-primary' : 'ri-checkbox-blank-circle-line'
 
                     return (
-                        <div className="flex flex-col gap-2 items-center py-2 md:p-2 lg-p-4 w-full bg-dark/50 text-white rounded shadow text-xs md:text-md">
+                        <div key={dia.simbolo} className="flex flex-col gap-2 items-center py-2 md:p-2 lg-p-4 w-full bg-dark/50 text-white rounded shadow text-xs md:text-md">
                             <p className="hidden md:block">{dia.dia}</p>
                             <p className="md:hidden">{dia.simbolo}</p>
                             <i className={`${icon} text-sm md:text-xl lg:text-3xl`}></i>

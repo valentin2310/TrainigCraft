@@ -1,11 +1,18 @@
 import MiSemana from "@/app/ui/dashboard/mi-semana";
 import MisObjetivos from "../ui/dashboard/mis-objetivos";
+import { Input } from "@nextui-org/react";
+import MisRutinas from "../ui/dashboard/mis-rutinas";
 
 export default function Page() {
     return (
         <div className="">
             <div className="buscador w-full bg-secondary text-white p-4 rounded">
-                Buscador
+                <Input
+                    isClearable
+                    radius="lg"
+                    placeholder="Busca una rutina o ejercicio..."
+
+                />
             </div>
             
             <div className="mt-5">
@@ -14,6 +21,10 @@ export default function Page() {
 
             <div className="mt-5">
                 <MisObjetivos />
+            </div>
+
+            <div className="mt-5">
+                <MisRutinas />
             </div>
         </div>
     )

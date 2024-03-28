@@ -12,7 +12,7 @@ const objetivos = [
 export default function MisObjetivos() {
     return (
         <div className="">
-
+            Mis objetivos
         </div>
     )
 }
