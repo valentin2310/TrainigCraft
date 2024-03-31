@@ -1,17 +1,21 @@
 'use client'
 
+import { Image } from "@nextui-org/react"
 import NavLinks from "./nav-links"
-import { getAuthUser, signOutUser } from "@/app/lib/auth"
+import { signOutUser } from "@/app/lib/auth"
 
 export default function Navbar() {
-
     return (
         <header className="w-full sm:h-screen sm:w-[320px] bg-dark px-2 sm:py-10 sm:px-5 text-white">
             <div className="hidden sm:grid place-items-center px-4">
                 <p className="text-xl text-primary text-center font-bold">TrainigCraft</p>
-                <div className="rounded-full w-32 h-32 my-8 bg-secondary shadow-lg grid place-items-center">
-                    <p className="text-3xl">TR</p>
-                </div>
+                <Image
+                    radius="none"
+                    width={100}
+                    alt="Logo"
+                    src="/logo.png"
+                    className="my-10"
+                />
                 <hr className="w-full" />
             </div>
             <div className="flex sm:flex-col gap-3 overflow-x-auto py-2 sm:py-8">

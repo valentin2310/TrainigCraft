@@ -12,11 +12,7 @@ export async function googleSingIn() {
     const googleProvider = new GoogleAuthProvider()
     const result = await signInWithPopup(auth, googleProvider)
 
-    console.log(result)
     console.log(result.user)
-
-    const logged = await isLoggedIn()
-    console.log('login', logged)
 
     revalidatePath('/')
 
