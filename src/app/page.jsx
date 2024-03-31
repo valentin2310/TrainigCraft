@@ -5,9 +5,11 @@ import { Button } from "@nextui-org/react";
 import { googleSingIn, useUser } from "@/app/lib/auth";
 import FuncionesCard from "@/app/ui/FuncionesCard"
 import UserCard from "@/app/ui/user-card";
+import { useContext } from "react";
+import { UserContext } from "@/app//providers";
 
 export default function Home() {
-  const user = useUser()
+  const user = useContext(UserContext)
 
   return (
     <>

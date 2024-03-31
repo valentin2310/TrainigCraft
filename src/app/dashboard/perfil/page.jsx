@@ -1,11 +1,11 @@
 'use client'
 
-import { useUser } from "@/app/lib/auth"
+import { UserContext } from "@/app/providers"
 import { Button, Avatar } from "@nextui-org/react"
+import { useContext } from "react"
 
 export default function Page() {
-    const user = useUser()
-    console.log(user)
+    const user = useContext(UserContext)
 
     return (
         <>

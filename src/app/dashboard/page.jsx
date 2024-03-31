@@ -1,11 +1,9 @@
 import MiSemana from "@/app/ui/dashboard/mi-semana";
-import MisObjetivos from "../ui/dashboard/mis-objetivos";
+import MisObjetivos from "@/app/ui/dashboard/mis-objetivos";
 import { Input } from "@nextui-org/react";
-import MisRutinas from "../ui/dashboard/mis-rutinas";
-import { getAuthUser } from "../lib/auth";
+import MisRutinas from "@/app/ui/dashboard/mis-rutinas";
 
 export default function Page() {
-
     return (
         <div className="">
             <div className="buscador w-full bg-secondary text-white p-4 rounded">
