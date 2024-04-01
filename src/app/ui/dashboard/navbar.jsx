@@ -21,12 +21,15 @@ export default function Navbar() {
             <div className="flex sm:flex-col gap-3 overflow-x-auto py-2 sm:py-8">
                 <NavLinks />
             </div>
-            <button 
-                onClick={signOutUser}
-                className={'hidden sm:block text-start w-full py-2 px-4 text-red-500 bg-secondary rounded-lg border-b-2 border-red-500 hover:bg-red-500 hover:text-white duration-500'}
-            >
-                <i className={`ri-logout-circle-r-line sm:me-2`}></i><span className="hidden sm:inline">Cerrar sesión</span>
-            </button>
+            <form action={signOutUser}>
+                <button 
+                    type="submit"
+                    onClick={signOutUser}
+                    className={'hidden sm:block text-start w-full py-2 px-4 text-red-500 bg-secondary rounded-lg border-b-2 border-red-500 hover:bg-red-500 hover:text-white duration-500'}
+                >
+                    <i className={`ri-logout-circle-r-line sm:me-2`}></i><span className="hidden sm:inline">Cerrar sesión</span>
+                </button>
+            </form>
         </header>
     )
 }

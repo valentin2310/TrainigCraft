@@ -4,6 +4,8 @@ import { auth } from "@/firebase/config";
 import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence }  from "firebase/auth"
 import { revalidatePath } from "next/cache";
 import { useEffect, useState } from "react";
+import { addUsuarioFromLogin } from "@/app/lib/data";
+import { redirect } from "next/navigation";
 
 export async function googleSingIn() {
 
@@ -13,8 +15,8 @@ export async function googleSingIn() {
     const result = await signInWithPopup(auth, googleProvider)
 
     console.log(result.user)
-
-    revalidatePath('/')
+    const user = await addUsuarioFromLogin(result.user)
+    console.log(user)
 
 }
 
@@ -25,7 +27,8 @@ export async function emailSignIn(email, password) {
 export async function signOutUser() {
     const result = await signOut(auth)
     console.log(result)
-    return result
+
+    redirect('/')
 }
 
 export function useUser() {

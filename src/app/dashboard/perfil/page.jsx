@@ -6,6 +6,7 @@ import { useContext } from "react"
 
 export default function Page() {
     const user = useContext(UserContext)
+    console.log(user)
 
     return (
         <>
