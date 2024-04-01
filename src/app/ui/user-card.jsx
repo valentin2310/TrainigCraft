@@ -7,11 +7,11 @@ export default function UserCard({ user }) {
                 width={50}
                 radius="full"
                 alt="Imagen de avatar del usuario"
-                src={user.photoURL}
+                src={user.photoUrl}
             />
             <div className="">
-                <p className="text-lg font-bold">{user.displayName}</p>
-                <p>{user.email}</p>
+                <p className="text-lg font-bold">{user.usuario}</p>
+                <p>{user.correo}</p>
             </div>
         </div>
     )

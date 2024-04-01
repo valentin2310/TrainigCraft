@@ -5,7 +5,7 @@ import { generateFromEmail } from 'unique-username-generator'
 const miIdUsuario = "qooTrBxEKNd25EDIDLE2";
 
 export async function addUsuarioFromLogin(user) {
-    if (await userExist(user.uid)) return null
+    if (await getUser(user.uid)) return null
 
     const userRef = doc(db, "usuarios", user.uid);
     const randomUsername = generateFromEmail(user.email, 3)
@@ -32,12 +32,12 @@ export async function addUsuarioFromLogin(user) {
 
 }
 
-async function userExist(uid) {
+export async function getUser(uid) {
     const ref = doc(db, "usuarios", uid)
     const snapshot = await getDoc(ref)
 
     if(snapshot.exists()) {
-        return true
+        return snapshot.data()
     }
 
     return false

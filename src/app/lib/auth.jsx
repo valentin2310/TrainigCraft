@@ -4,7 +4,7 @@ import { auth } from "@/firebase/config";
 import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence }  from "firebase/auth"
 import { revalidatePath } from "next/cache";
 import { useEffect, useState } from "react";
-import { addUsuarioFromLogin } from "@/app/lib/data";
+import { addUsuarioFromLogin, getUser } from "@/app/lib/data";
 import { redirect } from "next/navigation";
 
 export async function googleSingIn() {
@@ -35,7 +35,10 @@ export function useUser() {
     const [user, setUser] = useState(auth.currentUser)
 
     useEffect(() => {
-        onAuthStateChanged(auth, (user) => setUser(user))
+        onAuthStateChanged(auth, async (user) => {
+            const appUser = await getUser(user.uid)
+            setUser(appUser)
+        })
     }, [])
 
     return user

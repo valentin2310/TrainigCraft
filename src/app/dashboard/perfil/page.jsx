@@ -18,10 +18,10 @@ export default function Page() {
                 <div className="flex gap-10 items-center">
                     {user && 
                         <>
-                            <Avatar isBordered color="primary" src={user.photoURL} className="w-30 h-30"></Avatar>
+                            <Avatar isBordered color="primary" src={user.photoUrl} className="w-30 h-30"></Avatar>
                             <div className="border-l-4 border-primary py-2 px-4">
-                                <p className="text-3xl font-bold">{user.displayName}</p>
-                                <p className="text-xl">{user.email}</p>
+                                <p className="text-2xl"><span className="text-3xl font-bold">@{user.usuario}<span className="text-primary me-2">/</span></span>{user.nombre}</p>
+                                <p className="text-xl">{user.correo}</p>
                             </div>
                         </>
                     }
