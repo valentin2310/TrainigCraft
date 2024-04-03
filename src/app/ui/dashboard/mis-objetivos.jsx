@@ -1,30 +1,16 @@
 'use client'
 
-import { Rate } from "rsuite"
-import clsx from "clsx"
 import { useContext, useEffect, useState } from "react"
 import { UserContext } from "@/app/providers"
 import { fetchUserObjetivos } from "@/app/lib/data"
-import { Button, Tooltip } from "@nextui-org/react"
-
-const renderCharacter = (value, index) => {
-    if (value < index + 1) {
-        return <i className="ri-fire-fill text-white"></i>
-    }
-    if (value <= 2) {
-        return <i className="ri-fire-fill text-blue-500"></i>
-    }
-
-    if (value == 3) {
-        return <i className="ri-fire-fill text-green-500"></i>
-    }
-
-    return <i className="ri-fire-fill text-red-500"></i>
-}
+import { Button, useDisclosure } from "@nextui-org/react"
+import { ObjetivoModalForm } from "@/app/ui/objetivos/ModalForm"
+import ObjetivoCard from "@/app/ui/objetivos/ObjetivoCard"
 
 export default function MisObjetivos() {
     const user = useContext(UserContext)
     const [objetivos, setObjetivos] = useState([])
+    const {isOpen, onOpen, onOpenChange} = useDisclosure()
 
     useEffect(() => {
         if (!user) return
@@ -37,42 +23,34 @@ export default function MisObjetivos() {
 
     return (
         <>
-            <p className="text-xl text-primary font-semibold mb-3">Mis objetivos</p>
+             <div className="w-full flex justify-between items-center">
+                <p className="text-xl text-primary font-semibold mb-3">Mis objetivos</p>
+                <div className="flex gap-2">
+                    <Button onPress={onOpen}>
+                        <i className="ri-file-add-line m-2"></i><span className="hidden sm:inline">Añadir</span>
+                    </Button>
+                    <Button>
+                        <i className="ri-eye-line m-2"></i><span className="hidden sm:inline">Ver todas</span>
+                    </Button>
+                </div>
+             </div>
             
-            <div className="grid grid-cols-2 gap-3">
+            <div className="mt-3 grid sm:grid-cols-2 2xl:grid-cols-3 gap-2">
                 {objetivos && objetivos.map((obj) => (
-                    <>
-                        <div className="bg-secondary text-white p-4 rounded shadow flex justify-between gap-3">
-                            <div className="flex gap-5">
-                                {obj.completado ? 
-                                    <i className="ri-checkbox-circle-line text-xl text-primary"></i>
-                                    :
-                                    <i className="ri-hourglass-fill text-xl text-white"></i>
-                                }
-                                <div className="">
-                                    <div className="flex gap-3 items-baseline">
-                                        <p className="text-xl">{obj.titulo}</p>
-                                        <Rate allowHalf defaultValue={obj.dificultad / 2} readOnly size="xs"  renderCharacter={renderCharacter} />
-                                    </div>
-                                    <p className="line-clamp-2 text-gray-300">{obj.descripcion}</p>
-                                </div>
-                            </div>
-                            <div className={clsx(
-                                'text-5xl',
-                                {
-                                    'text-amber-700' : obj.importancia <= 1,
-                                    'text-slate-400' : obj.importancia == 2,
-                                    'text-yellow-500' : obj.importancia >= 3,
-                                }
-                            )}>
-                                <i className="ri-medal-line"></i>
-                            </div>
-                        </div>
-                    </>
+                    <ObjetivoCard key={obj.id} objetivo={obj} />
                 ))
 
                 }
             </div>
+
+            {user && 
+                <ObjetivoModalForm 
+                    userId={user.id}
+                    isOpen={isOpen}
+                    onOpenChange={onOpenChange}
+                />
+            }
+            
         </>
     )
 }

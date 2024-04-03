@@ -2,9 +2,7 @@
 
 import { auth } from "@/firebase/config";
 import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence }  from "firebase/auth"
-import { revalidatePath } from "next/cache";
-import { useEffect, useState } from "react";
-import { addUsuarioFromLogin, getUser } from "@/app/lib/data";
+import { addUsuarioFromLogin } from "@/app/lib/data";
 import { redirect } from "next/navigation";
 
 export async function googleSingIn() {
