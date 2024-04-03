@@ -30,16 +30,3 @@ export async function signOutUser() {
 
     redirect('/')
 }
-
-export function useUser() {
-    const [user, setUser] = useState(auth.currentUser)
-
-    useEffect(() => {
-        onAuthStateChanged(auth, async (user) => {
-            const appUser = await getUser(user.uid)
-            setUser(appUser)
-        })
-    }, [])
-
-    return user
-}

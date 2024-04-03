@@ -1,8 +1,7 @@
-import { firestore as db } from '@/firebase/config'
+import { firestore as db, auth } from '@/firebase/config'
+import { getAuth } from 'firebase/auth';
 import { collection, getDocs, doc, getDoc, query, where, setDoc } from 'firebase/firestore'
 import { generateFromEmail } from 'unique-username-generator'
-
-const miIdUsuario = "qooTrBxEKNd25EDIDLE2";
 
 export async function addUsuarioFromLogin(user) {
     if (await getUser(user.uid)) return null
@@ -37,7 +36,10 @@ export async function getUser(uid) {
     const snapshot = await getDoc(ref)
 
     if(snapshot.exists()) {
-        return snapshot.data()
+        return {
+            ...snapshot.data(),
+            id: uid
+        }
     }
 
     return false
@@ -65,12 +67,20 @@ export async function fetchUserData(idUser = miIdUsuario) {
     return null
 }
 
-export async function fetchUserRutinas(idUser = miIdUsuario) {
+export function fetchUserRutinas(idUser) {
     const userRef = doc(db, "usuarios", idUser)
     const rutinasCollectionRef = collection(db, "rutinas")
 
     const q = query(rutinasCollectionRef, where("usuario", "==", userRef))
-    const data = await fetchCollectionData(q);
+    fetchCollectionData(q)
+        .then((data) => {
+            return data
+        });
+}
 
-    return data;
+export async function fetchUserObjetivos(idUser) {
+    const objetivosColl = collection(db, `usuarios/${idUser}/objetivos`)
+    const result = await fetchCollectionData(objetivosColl)
+
+    return result;
 }
