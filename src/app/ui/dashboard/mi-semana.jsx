@@ -38,7 +38,7 @@ const semana = [
     },
 ]
 
-export default function MiSemana() {
+export default async function MiSemana() {
     return (
         <div className="misemana w-full bg-secondary border-2 border-secondary shadow-lg rounded p-4">
             <div className="w-full flex items-center justify-between mb-4 px-2 text-white">

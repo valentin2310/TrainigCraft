@@ -1,6 +1,6 @@
 'use client'
 
-import { useContext, useEffect, useState } from "react"
+import { use, useContext, useEffect, useState } from "react"
 import { UserContext } from "@/app/providers"
 import { fetchUserObjetivos } from "@/app/lib/data"
 import { Button, useDisclosure } from "@nextui-org/react"
@@ -8,7 +8,7 @@ import { ObjetivoModalForm } from "@/app/ui/objetivos/ModalForm"
 import ObjetivoCard from "@/app/ui/objetivos/ObjetivoCard"
 
 export default function MisObjetivos() {
-    const user = useContext(UserContext)
+    const user = use(UserContext)
     const [objetivos, setObjetivos] = useState([])
     const {isOpen, onOpen, onClose, onOpenChange} = useDisclosure()
     const nObjetivos = 4
@@ -20,10 +20,14 @@ export default function MisObjetivos() {
         
     }, [user])
 
-    const actualizarObjetivos = (userId, limit = nObjetivos) => {
-        fetchUserObjetivos(userId, limit)
-            .then((data) => setObjetivos(data))
-            .catch((error) => console.log(error))
+    const actualizarObjetivos = async (userId, limit = nObjetivos) => {
+        try {
+            const data = await fetchUserObjetivos(userId, limit)
+            setObjetivos(data)
+
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     return (

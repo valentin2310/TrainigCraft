@@ -53,14 +53,6 @@ async function fetchCollectionData(collectionRef) {
     }))
 
     return data
-
-    /* const querySnapshot = await getDocs(q);
-    const data = querySnapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id
-    }))
-
-    return data; */
 }
 
 export async function fetchUserData(idUser = miIdUsuario) {
