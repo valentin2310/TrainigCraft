@@ -5,7 +5,7 @@ import { Rate } from "rsuite";
 import { renderRateCharacter } from "@/app/lib/utils";
 import { addUserObjetivo } from "@/app/lib/actions";
 import { useFormState, useFormStatus } from 'react-dom'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const CustomRadio = (props) => {
     const {children, ...otherProps} = props;
@@ -30,11 +30,19 @@ const initialState = {
     message: ''
 }
 
-export function ObjetivoModalForm({ userId, isOpen, onOpenChange }) {
+export function ObjetivoModalForm({ userId, isOpen, onClose, onOpenChange, actualizarObjetivos, nObjetivos }) {
     const addUserObjetivoWithId = addUserObjetivo.bind(null, userId)
     const [state, formAction] = useFormState(addUserObjetivoWithId, initialState)
     const { pending } = useFormStatus()
     const [dificultad, setDificultad] = useState(1)
+
+    useEffect(() => {  
+        // Si se ha podido guardar el item el state será null o undefined
+        if (!state) {
+            actualizarObjetivos(userId, nObjetivos)
+            onClose()
+        }
+    }, [state])
 
     return (
         <Modal isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false}>
@@ -49,7 +57,8 @@ export function ObjetivoModalForm({ userId, isOpen, onOpenChange }) {
                             <ModalBody className="max-h-[500px] overflow-y-auto">
                                 <p className="bg-primary/20 py-2 px-4 mt-2 rounded-xl">Marcate un nuevo objetivo, define cuales son tus metas a cumplir.</p>
                                 <p aria-live="polite" className="sr-only">
-                                    {state?.message}
+                                    {state?.messages}
+                                    {state?.errors?.user}
                                 </p>
                                 <div className="my-5 flex flex-col gap-5">
                                     <Input
@@ -59,16 +68,16 @@ export function ObjetivoModalForm({ userId, isOpen, onOpenChange }) {
                                         labelPlacement="outside"
                                         placeholder="Quiero lograr.."
                                         required
-                                        isInvalid={!!state.errors?.titulo}
-                                        errorMessage={state.errors?.titulo}
+                                        isInvalid={!!state?.errors?.titulo}
+                                        errorMessage={state?.errors?.titulo}
                                     />
                                     <Textarea 
                                         name="descripcion"
                                         label="Descripción"
                                         labelPlacement="outside"
                                         placeholder="El objetivo trata de.."
-                                        isInvalid={!!state.errors?.descripcion}
-                                        errorMessage={state.errors?.descripcion}
+                                        isInvalid={!!state?.errors?.descripcion}
+                                        errorMessage={state?.errors?.descripcion}
                                     />
                                     <div className="">
                                         <p className="text-small">Dificultad *</p>
@@ -82,8 +91,8 @@ export function ObjetivoModalForm({ userId, isOpen, onOpenChange }) {
                                                 aria-describedby="dificultad-error"
                                             />
                                             <div id="dificultad-error" aria-live="polite" aria-atomic="true">
-                                                {state.errors?.dificultad &&
-                                                    state.errors.dificultad.map((error) => (
+                                                {state?.errors?.dificultad &&
+                                                    state?.errors.dificultad.map((error) => (
                                                         <p className="mt-4 text-tiny text-red-500" key={error}>
                                                             {error}
                                                         </p>
@@ -98,8 +107,8 @@ export function ObjetivoModalForm({ userId, isOpen, onOpenChange }) {
                                             required 
                                             name="importancia" 
                                             description="Que tan importante es conseguir este objetivo?"
-                                            isInvalid={!!state.errors?.importancia}
-                                            errorMessage={state.errors?.importancia}
+                                            isInvalid={!!state?.errors?.importancia}
+                                            errorMessage={state?.errors?.importancia}
                                         >
                                             <CustomRadio value={1}>
                                                 <div className="flex gap-3">

@@ -10,16 +10,21 @@ import ObjetivoCard from "@/app/ui/objetivos/ObjetivoCard"
 export default function MisObjetivos() {
     const user = useContext(UserContext)
     const [objetivos, setObjetivos] = useState([])
-    const {isOpen, onOpen, onOpenChange} = useDisclosure()
+    const {isOpen, onOpen, onClose, onOpenChange} = useDisclosure()
+    const nObjetivos = 4
 
     useEffect(() => {
         if (!user) return
 
-        fetchUserObjetivos(user.id)
-            .then((data) => setObjetivos(data))
-            .catch((error) => console.log(error))
+        actualizarObjetivos(user.id, nObjetivos)
         
     }, [user])
+
+    const actualizarObjetivos = (userId, limit = nObjetivos) => {
+        fetchUserObjetivos(userId, limit)
+            .then((data) => setObjetivos(data))
+            .catch((error) => console.log(error))
+    }
 
     return (
         <>
@@ -47,7 +52,10 @@ export default function MisObjetivos() {
                 <ObjetivoModalForm 
                     userId={user.id}
                     isOpen={isOpen}
+                    onClose={onClose}
                     onOpenChange={onOpenChange}
+                    actualizarObjetivos={actualizarObjetivos}
+                    nObjetivos={nObjetivos}
                 />
             }
             

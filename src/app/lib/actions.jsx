@@ -22,8 +22,6 @@ export async function addUserObjetivo(idUser, prevState, formData) {
         }
     }
 
-    console.log(formData)
-
     const rawData = {
         titulo: formData.get('titulo'),
         descripcion: formData.get('descripcion'),
@@ -34,26 +32,19 @@ export async function addUserObjetivo(idUser, prevState, formData) {
     const validatedFields = SCHEMA_OBJETIVO.safeParse(rawData)
 
     if (!validatedFields.success) {
-        console.log(validatedFields.error.flatten().fieldErrors)
         return{
             errors: validatedFields.error.flatten().fieldErrors
         }
     }
-
-    console.log(validatedFields.data)
 
     // Guardar los datos en firestore
     try {
         const newObjetivo = await storeUserObjetivo(idUser, validatedFields.data);
         console.log(newObjetivo.id)
 
-        revalidatePath('/dashboard')
-        redirect('/dashboard')
-        
-
     } catch (err) {
         return {
-            errors: 'Ups.. Hubo un error en la creación del objetivo.'
+            message: 'Ups.. Hubo un error en la creación del objetivo.'
         }
     }
 
