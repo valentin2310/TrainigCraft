@@ -9,16 +9,19 @@ import { useObjetivos } from "@/app/stores/use-objetivos"
 
 export default function MisObjetivos({ nObjetivos = 10 }) {
     const user = use(UserContext)
-    const { objetivos, updateObjetivos, updateCant } = useObjetivos()
+    const { objetivos, updateObjetivos, cant, updateCant } = useObjetivos()
     const {isOpen, onOpen, onClose, onOpenChange} = useDisclosure()
+    
+    useEffect(() => {
+        updateCant(nObjetivos)
+    }, [])
 
     useEffect(() => {
         if (!user) return
-
-        updateCant(nObjetivos)
-        updateObjetivos(user.id, nObjetivos)
         
-    }, [user])
+        updateObjetivos(user.id, cant)
+        
+    }, [user, cant])
 
     return (
         <>

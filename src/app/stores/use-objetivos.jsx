@@ -4,7 +4,7 @@ import { fetchObjetivos } from "@/app/lib/data"
 export const useObjetivos = create((set) => ({
     objetivos: [],
     cant: 10,
-    updateCant: (newCant) => ({ cant: newCant }),
+    updateCant: (newCant) => set({ cant: newCant }),
     storeObjetivo: (newObjetivo) => {
         set((state) => ({
             objetivos: [
@@ -33,9 +33,9 @@ export const useObjetivos = create((set) => ({
             objetivos: state.objetivos.filter((obj) => obj.id != oldObjetivo.id)
         }))
     },
-    updateObjetivos: async (user, cant) => {
+    updateObjetivos: async (user, cantidad) => {
         try {
-            const data = await fetchObjetivos(user, cant)
+            const data = await fetchObjetivos(user, cantidad)
             set({ objetivos: data })
 
         } catch (error) {

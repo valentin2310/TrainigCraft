@@ -82,9 +82,10 @@ export async function fetchObjetivosSinCompletar(idUser, limite = 10) {
     return data;
 }
 
-export async function fetchObjetivos(idUser) {
+export async function fetchObjetivos(idUser, limite) {
+    console.log(limite)
     const objetivosColl = collection(db, `usuarios/${idUser}/objetivos`)
-    const q = query(objetivosColl, orderBy("importancia", "desc"))
+    const q = query(objetivosColl, orderBy("importancia", "desc"), limit(limite))
 
     const data = await fetchCollectionData(q)
     return data;

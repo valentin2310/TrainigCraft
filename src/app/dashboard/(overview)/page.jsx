@@ -23,7 +23,7 @@ export default function Page() {
 
             <div className="mt-5">
                 <Suspense fallback={<MisObjetivosSkeleton />}>
-                    <MisObjetivos nObjetivos={4} />
+                    <MisObjetivos nObjetivos={8} />
                 </Suspense>
             </div>
 
