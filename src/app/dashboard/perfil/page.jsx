@@ -1,16 +1,17 @@
 'use client'
 
 import { UserContext } from "@/app/providers"
+import MisObjetivos from "@/app/ui/dashboard/mis-objetivos"
 import { Button, Avatar } from "@nextui-org/react"
-import { useContext } from "react"
+import { Suspense, useContext } from "react"
 
 export default function Page() {
     const user = useContext(UserContext)
-    console.log(user)
 
     return (
         <>
-            <div className="">
+            {/* Datos de usuario */}
+            <div className="mb-10">
                 <div className="flex justify-between px-4">
                     <p>Mi perfil</p>
                     <Button color="primary" variant="ghost"> <i className="ri-edit-2-line m-2"></i>Editar</Button>
@@ -27,6 +28,9 @@ export default function Page() {
                     }
                 </div>
             </div>
+
+            {/* Objetivos */}
+            <MisObjetivos nObjetivos={20} />
         </>
     )
 }

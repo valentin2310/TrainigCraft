@@ -1,11 +1,10 @@
-'use client'
-
 import { Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Input, Textarea, RadioGroup, Radio, cn } from "@nextui-org/react"
 import { Rate } from "rsuite";
 import { renderRateCharacter } from "@/app/lib/utils";
-import { addUserObjetivo } from "@/app/lib/actions";
+import { addObjetivo, editObjetivo } from "@/app/lib/actions";
 import { useFormState, useFormStatus } from 'react-dom'
 import { useEffect, useState } from "react";
+import { useObjetivos } from "@/app/stores/use-objetivos";
 
 export const CustomRadio = (props) => {
     const {children, ...otherProps} = props;
@@ -30,34 +29,48 @@ const initialState = {
     message: ''
 }
 
-export function ObjetivoModalForm({ userId, isOpen, onClose, onOpenChange, actualizarObjetivos, nObjetivos }) {
-    const addUserObjetivoWithId = addUserObjetivo.bind(null, userId)
-    const [state, formAction] = useFormState(addUserObjetivoWithId, initialState)
+export function ObjetivoModalForm({ userId = null, isOpen, onClose, onOpenChange, objetivo = null }) {
+    const { storeObjetivo , updateObjetivo } = useObjetivos()
+
+    const addObjetivoWithId = addObjetivo.bind(null, userId)
+    const editObjetivoWithPath = editObjetivo.bind(null, objetivo?.path)
+
+    const [state, formAction] = useFormState(objetivo ? editObjetivoWithPath : addObjetivoWithId, initialState)
+    
     const { pending } = useFormStatus()
-    const [dificultad, setDificultad] = useState(1)
+    const [dificultad, setDificultad] = useState(objetivo ? objetivo.dificultad : 1)
 
     useEffect(() => {  
         // Si se ha podido guardar el item el state será null o undefined
-        if (!state) {
-            actualizarObjetivos(userId, nObjetivos)
-            onClose()
+        if (state && !state?.success) {
+            return
         }
+
+        if (!objetivo) {
+            storeObjetivo(state.data)
+            
+        } else {
+            // Actualizar objetivo
+            updateObjetivo(state.data)
+        }
+        onClose()
+
     }, [state])
 
     return (
-        <Modal isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false}>
+        <Modal className="z-50" isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false}>
             <ModalContent>
                 {(onClose) => (
                     <>
                         <ModalHeader className="bg-secondary">
                             <i className="ri-focus-2-line text-white text-xl me-2"></i>
-                            <p className="font-bold text-white">Crear nuevo objetivo</p>
+                            <p className="font-bold text-white">{objetivo ? 'Editar' : 'Crear nuevo'} objetivo</p>
                         </ModalHeader>
                         <form action={formAction}>
                             <ModalBody className="max-h-[500px] overflow-y-auto">
                                 <p className="bg-primary/20 py-2 px-4 mt-2 rounded-xl">Marcate un nuevo objetivo, define cuales son tus metas a cumplir.</p>
                                 <p aria-live="polite" className="sr-only">
-                                    {state?.messages}
+                                    {state?.message}
                                     {state?.errors?.user}
                                 </p>
                                 <div className="my-5 flex flex-col gap-5">
@@ -68,6 +81,7 @@ export function ObjetivoModalForm({ userId, isOpen, onClose, onOpenChange, actua
                                         labelPlacement="outside"
                                         placeholder="Quiero lograr.."
                                         required
+                                        defaultValue={objetivo?.titulo}
                                         isInvalid={!!state?.errors?.titulo}
                                         errorMessage={state?.errors?.titulo}
                                     />
@@ -76,6 +90,7 @@ export function ObjetivoModalForm({ userId, isOpen, onClose, onOpenChange, actua
                                         label="Descripción"
                                         labelPlacement="outside"
                                         placeholder="El objetivo trata de.."
+                                        defaultValue={objetivo?.descripcion}
                                         isInvalid={!!state?.errors?.descripcion}
                                         errorMessage={state?.errors?.descripcion}
                                     />
@@ -86,7 +101,7 @@ export function ObjetivoModalForm({ userId, isOpen, onClose, onOpenChange, actua
                                                 required 
                                                 onChange={(value) => { setDificultad(value) }} 
                                                 value={dificultad} 
-                                                defaultValue={1} 
+                                                defaultValue={objetivo?.dificultad} 
                                                 renderCharacter={renderRateCharacter} 
                                                 aria-describedby="dificultad-error"
                                             />
@@ -107,6 +122,7 @@ export function ObjetivoModalForm({ userId, isOpen, onClose, onOpenChange, actua
                                             required 
                                             name="importancia" 
                                             description="Que tan importante es conseguir este objetivo?"
+                                            defaultValue={objetivo?.importancia}
                                             isInvalid={!!state?.errors?.importancia}
                                             errorMessage={state?.errors?.importancia}
                                         >

@@ -1,34 +1,24 @@
 'use client'
 
-import { use, useContext, useEffect, useState } from "react"
+import { use, useEffect } from "react"
 import { UserContext } from "@/app/providers"
-import { fetchUserObjetivos } from "@/app/lib/data"
 import { Button, useDisclosure } from "@nextui-org/react"
 import { ObjetivoModalForm } from "@/app/ui/objetivos/ModalForm"
-import ObjetivoCard from "@/app/ui/objetivos/ObjetivoCard"
+import GridObjetivos from "@/app/ui/grid-objetivos"
+import { useObjetivos } from "@/app/stores/use-objetivos"
 
-export default function MisObjetivos() {
+export default function MisObjetivos({ nObjetivos = 10 }) {
     const user = use(UserContext)
-    const [objetivos, setObjetivos] = useState([])
+    const { objetivos, updateObjetivos, updateCant } = useObjetivos()
     const {isOpen, onOpen, onClose, onOpenChange} = useDisclosure()
-    const nObjetivos = 4
 
     useEffect(() => {
         if (!user) return
 
-        actualizarObjetivos(user.id, nObjetivos)
+        updateCant(nObjetivos)
+        updateObjetivos(user.id, nObjetivos)
         
     }, [user])
-
-    const actualizarObjetivos = async (userId, limit = nObjetivos) => {
-        try {
-            const data = await fetchUserObjetivos(userId, limit)
-            setObjetivos(data)
-
-        } catch (error) {
-            console.error(error)
-        }
-    }
 
     return (
         <>
@@ -44,13 +34,7 @@ export default function MisObjetivos() {
                 </div>
              </div>
             
-            <div className="mt-3 grid sm:grid-cols-2 2xl:grid-cols-3 gap-2">
-                {objetivos && objetivos.map((obj) => (
-                    <ObjetivoCard key={obj.id} objetivo={obj} />
-                ))
-
-                }
-            </div>
+            <GridObjetivos lista={objetivos} />
 
             {user && 
                 <ObjetivoModalForm 
@@ -58,8 +42,6 @@ export default function MisObjetivos() {
                     isOpen={isOpen}
                     onClose={onClose}
                     onOpenChange={onOpenChange}
-                    actualizarObjetivos={actualizarObjetivos}
-                    nObjetivos={nObjetivos}
                 />
             }
             

@@ -1,10 +1,23 @@
 import { Rate } from "rsuite"
 import clsx from "clsx"
 import { renderRateCharacter } from "@/app/lib/utils"
+import { Popover, PopoverTrigger, PopoverContent, Button, Listbox, ListboxItem, useDisclosure } from '@nextui-org/react'
+import { ObjetivoModalForm } from "@/app/ui/objetivos/ModalForm"
+import { useState } from "react"
 
 export default function objetivoetivoCard({ objetivo }) {
+    console.log(objetivo)
+    const {isOpen, onOpen, onClose, onOpenChange} = useDisclosure()
+    const [popIsOpen, popSetIsOpen] = useState(false)
+
     return (
-        <div className="bg-gradient-to-br from-secondary to-secondary/90 text-white p-4 rounded-xl shadow  border-b-4 border-dark flex justify-between gap-3">
+        <>
+        <div className={clsx(
+            "w-full md:w-[500px] bg-gradient-to-br from-secondary to-secondary/90 text-white p-4 rounded-xl shadow border-b-4 border-dark flex justify-between gap-3",
+            {
+                'border-primary': objetivo.fecha_completado != null,
+            }
+        )}>
             <div className="flex gap-5">
                 <div className={clsx(
                     'text-5xl',
@@ -12,6 +25,9 @@ export default function objetivoetivoCard({ objetivo }) {
                         'text-amber-700' : objetivo.importancia <= 1,
                         'text-slate-400' : objetivo.importancia == 2,
                         'text-yellow-500' : objetivo.importancia >= 3,
+                    },
+                    {
+                        'text-opacity-20' : objetivo.fecha_completado == null
                     }
                 )}>
                     <i className="ri-medal-line"></i>
@@ -24,12 +40,48 @@ export default function objetivoetivoCard({ objetivo }) {
                     <p className="line-clamp-2 text-gray-300">{objetivo.descripcion ? objetivo.descripcion : 'Sin descripción.'}</p>
                 </div>
             </div>
-            {objetivo.fecha_completado ? 
-                <i className="ri-checkbox-circle-line text-xl text-primary"></i>
-                :
-                <i className="ri-hourglass-fill text-xl text-white"></i>
-            }
-            
+            <Popover placement="right" crossOffset={8} className="z-20" isOpen={popIsOpen} onOpenChange={(open) => popSetIsOpen(open)}>
+                <PopoverTrigger>
+                    <div className="px-1 text-xl hover:bg-gray-600 duration-500 h-fit rounded-full cursor-pointer">
+                        <i className="ri-more-2-line"></i>
+                    </div>
+                </PopoverTrigger>
+                <PopoverContent>
+                    <div className="py-1 max-w-[250px]">
+                        <Listbox
+                            aria-label="Actions"
+                            onAction={(key) => {
+                                switch (key) {
+                                    case 'edit':
+                                        console.log('editar', objetivo.id)
+                                        onOpen()
+                                        break;
+                                
+                                    case 'delete':
+                                        console.log('eliminar', objetivo.id)
+                                        break;
+                                }
+                                popSetIsOpen(false)
+                            }}
+                        >
+                            <ListboxItem key="edit">
+                                <i className="ri-edit-2-line me-2"></i>Editar
+                            </ListboxItem>
+                            <ListboxItem key="delete" className="text-danger" color="danger">
+                                <i className="ri-delete-bin-2-line me-2"></i>Eliminar
+                            </ListboxItem>
+                        </Listbox>
+                    </div>
+                </PopoverContent>
+            </Popover>
         </div>
+            
+            <ObjetivoModalForm 
+                objetivo={objetivo}
+                isOpen={isOpen}
+                onClose={onClose}
+                onOpenChange={onOpenChange}
+            />
+        </>
     )
 }
