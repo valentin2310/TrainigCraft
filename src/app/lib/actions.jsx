@@ -11,8 +11,19 @@ const SCHEMA_OBJETIVO = z.object({
     completado: z.boolean().nullable()
 })
 
+function formatObjetivo(docSnapshot) {
+    const {created_at, ...rest} = docSnapshot.data()
+    const formatedDate = new Date(created_at.seconds * 1000 + created_at.nanoseconds / 1000000).toISOString();
+    
+    return {
+        ...rest,
+        created_at: formatedDate,
+        id: docSnapshot.id,
+        path: docSnapshot.path
+    }
+}
 
-export async function addObjetivo(idUser, prevState, formData) {    console.log(idUser)
+export async function addObjetivo(idUser, prevState, formData) {
     if(!idUser) {
         return{
             errors: {
@@ -40,13 +51,11 @@ export async function addObjetivo(idUser, prevState, formData) {    console.log(
     // Guardar los datos en firestore
     try {
         const result = await storeObjetivo(idUser, validatedFields.data);
+        const formatedData = formatObjetivo(result)
+
         return {
             success: true,
-            data: {
-                ...result.data(),
-                id: result.id,
-                path: result.path
-            }
+            data: formatedData
         }
 
     } catch (err) {
@@ -86,13 +95,11 @@ export async function editObjetivo(path, prevState, formData) {
     // Guardar los datos en firestore
     try {
         const result = await updateObjetivo(path, validatedFields.data);
+        const formatedData = formatObjetivo(result)
+
         return {
             success: true,
-            data: {
-                ...result.data(),
-                id: result.id,
-                path: result.path
-            }
+            data: formatedData
         }
 
 

@@ -47,6 +47,7 @@ export function ObjetivoModalForm({ userId = null, isOpen, onClose, onOpenChange
         }
 
         if (!objetivo) {
+            // Guardar objetivo
             storeObjetivo(state.data)
             
         } else {

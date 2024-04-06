@@ -6,7 +6,6 @@ import { ObjetivoModalForm } from "@/app/ui/objetivos/ModalForm"
 import { useState } from "react"
 
 export default function objetivoetivoCard({ objetivo }) {
-    console.log(objetivo)
     const {isOpen, onOpen, onClose, onOpenChange} = useDisclosure()
     const [popIsOpen, popSetIsOpen] = useState(false)
 
