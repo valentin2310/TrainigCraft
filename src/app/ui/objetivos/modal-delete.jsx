@@ -1,5 +1,5 @@
 import { Modal, ModalHeader, ModalContent, ModalBody, ModalFooter, Button } from '@nextui-org/react'
-import { deleteObjetivo } from '@/app/lib/actions'
+import { deleteObjetivo } from '@/app/lib/objetivo-actions'
 import { useFormState } from 'react-dom'
 import { useEffect } from 'react'
 import { useObjetivos } from '@/app/stores/use-objetivos'

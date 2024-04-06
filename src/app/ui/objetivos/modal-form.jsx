@@ -1,7 +1,7 @@
 import { Button, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Input, Textarea, RadioGroup, Radio, cn } from "@nextui-org/react"
 import { Rate } from "rsuite";
 import { renderRateCharacter } from "@/app/lib/utils";
-import { addObjetivo, editObjetivo } from "@/app/lib/actions";
+import { addObjetivo, editObjetivo } from "@/app/lib/objetivo-actions";
 import { useFormState, useFormStatus } from 'react-dom'
 import { useEffect, useState } from "react";
 import { useObjetivos } from "@/app/stores/use-objetivos";

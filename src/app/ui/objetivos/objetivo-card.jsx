@@ -2,11 +2,11 @@ import { Rate } from "rsuite"
 import clsx from "clsx"
 import { renderRateCharacter } from "@/app/lib/utils"
 import { Popover, PopoverTrigger, PopoverContent, Button, Listbox, ListboxItem, useDisclosure } from '@nextui-org/react'
-import ObjetivoModalForm from "@/app/ui/objetivos/ModalForm"
+import ObjetivoModalForm from "@/app/ui/objetivos/modal-form"
 import { useState } from "react"
-import ObjetivoModalDelete from "./modal-delete"
+import ObjetivoModalDelete from "@/app/ui/objetivos/modal-delete"
 
-export default function objetivoetivoCard({ objetivo }) {
+export default function ObjetivoCard({ objetivo }) {
     const {isOpen, onOpen, onClose, onOpenChange} = useDisclosure()
     const {isOpen : delIsOpen, onOpen : delOnOpen, onClose : delOnClose, onOpenChange : delOnOpenChange} = useDisclosure()
     const [popIsOpen, popSetIsOpen] = useState(false)

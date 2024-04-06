@@ -1,6 +1,6 @@
 'use client'
 
-import { fetchUserRutinas } from "@/app/lib/data"
+import { fetchRutinas } from "@/app/lib/data"
 import RutinaCard from "@/app/ui/rutina-card"
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/app/providers";
@@ -13,7 +13,7 @@ export default function MisRutinas() {
 
     useEffect(() => {
         if (!user) return
-        setRutinas(fetchUserRutinas(user.id))
+        setRutinas(fetchRutinas(user.id))
         
     }, [user])
 

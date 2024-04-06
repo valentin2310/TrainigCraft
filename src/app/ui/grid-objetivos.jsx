@@ -1,4 +1,4 @@
-import ObjetivoCard from "@/app/ui/objetivos/ObjetivoCard"
+import ObjetivoCard from "@/app/ui/objetivos/objetivo-card"
 
 export default function GridObjetivos({ lista }) {
     return (

@@ -63,18 +63,7 @@ async function fetchCollectionData(collectionRef) {
     return data
 }
 
-export async function fetchUserData(idUser = miIdUsuario) {
-    const ref = doc(db, "usuarios", idUser)
-    const snapshot = await getDoc(ref)
-
-    if(snapshot.exists()) {
-        return snapshot.data()
-    }
-
-    return null
-}
-
-export function fetchUserRutinas(idUser) {
+export function fetchRutinas(idUser) {
     const userRef = doc(db, "usuarios", idUser)
     const rutinasCollectionRef = collection(db, "rutinas")
 

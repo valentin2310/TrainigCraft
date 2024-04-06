@@ -3,7 +3,7 @@
 import { Image, Link } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
 import { googleSingIn, useUser } from "@/app/lib/auth";
-import FuncionesCard from "@/app/ui/FuncionesCard"
+import FuncionesCard from "@/app/ui/functiones-card"
 import UserCard from "@/app/ui/user-card";
 import { useContext } from "react";
 import { UserContext } from "@/app//providers";
