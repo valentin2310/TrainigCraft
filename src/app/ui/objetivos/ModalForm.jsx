@@ -29,7 +29,7 @@ const initialState = {
     message: ''
 }
 
-export function ObjetivoModalForm({ userId = null, isOpen, onClose, onOpenChange, objetivo = null }) {
+export default function ObjetivoModalForm({ userId = null, isOpen, onClose, onOpenChange, objetivo = null }) {
     const { storeObjetivo , updateObjetivo } = useObjetivos()
 
     const addObjetivoWithId = addObjetivo.bind(null, userId)
@@ -42,6 +42,7 @@ export function ObjetivoModalForm({ userId = null, isOpen, onClose, onOpenChange
 
     useEffect(() => {  
         // Si se ha podido guardar el item el state será null o undefined
+        // También puede tener success = true
         if (state && !state?.success) {
             return
         }
@@ -159,8 +160,8 @@ export function ObjetivoModalForm({ userId = null, isOpen, onClose, onOpenChange
                                 </div>
                             </ModalBody>
                             <ModalFooter>
-                                <Button isLoading={pending} color="danger" variant="light" onPress={onClose}>Cancelar</Button>
-                                <Button type="submit" color="primary">Guardar</Button>
+                                <Button color="danger" variant="light" onPress={onClose}>Cancelar</Button>
+                                <Button isLoading={pending} type="submit" color="primary">Guardar</Button>
                             </ModalFooter>
                         </form>
                     </>

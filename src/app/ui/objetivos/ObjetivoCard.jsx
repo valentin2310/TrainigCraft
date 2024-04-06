@@ -2,11 +2,13 @@ import { Rate } from "rsuite"
 import clsx from "clsx"
 import { renderRateCharacter } from "@/app/lib/utils"
 import { Popover, PopoverTrigger, PopoverContent, Button, Listbox, ListboxItem, useDisclosure } from '@nextui-org/react'
-import { ObjetivoModalForm } from "@/app/ui/objetivos/ModalForm"
+import ObjetivoModalForm from "@/app/ui/objetivos/ModalForm"
 import { useState } from "react"
+import ObjetivoModalDelete from "./modal-delete"
 
 export default function objetivoetivoCard({ objetivo }) {
     const {isOpen, onOpen, onClose, onOpenChange} = useDisclosure()
+    const {isOpen : delIsOpen, onOpen : delOnOpen, onClose : delOnClose, onOpenChange : delOnOpenChange} = useDisclosure()
     const [popIsOpen, popSetIsOpen] = useState(false)
 
     return (
@@ -58,6 +60,7 @@ export default function objetivoetivoCard({ objetivo }) {
                                 
                                     case 'delete':
                                         console.log('eliminar', objetivo.id)
+                                        delOnOpen()
                                         break;
                                 }
                                 popSetIsOpen(false)
@@ -75,11 +78,20 @@ export default function objetivoetivoCard({ objetivo }) {
             </Popover>
         </div>
             
+            {/* Modal para modificar el objetivo */}
             <ObjetivoModalForm 
                 objetivo={objetivo}
                 isOpen={isOpen}
                 onClose={onClose}
                 onOpenChange={onOpenChange}
+            />
+
+            {/* Modal para confirmar la eliminación del objetivo */}
+            <ObjetivoModalDelete 
+                objetivo={objetivo}
+                isOpen={delIsOpen}
+                onClose={delOnClose}
+                onOpenChange={delOnOpenChange}
             />
         </>
     )

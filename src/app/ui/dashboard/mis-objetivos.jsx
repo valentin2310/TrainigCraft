@@ -3,7 +3,7 @@
 import { use, useEffect } from "react"
 import { UserContext } from "@/app/providers"
 import { Button, useDisclosure } from "@nextui-org/react"
-import { ObjetivoModalForm } from "@/app/ui/objetivos/ModalForm"
+import ObjetivoModalForm from "@/app/ui/objetivos/ModalForm"
 import GridObjetivos from "@/app/ui/grid-objetivos"
 import { useObjetivos } from "@/app/stores/use-objetivos"
 

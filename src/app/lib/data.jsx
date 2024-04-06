@@ -1,5 +1,5 @@
 import { firestore as db, auth } from '@/firebase/config'
-import { collection, getDocs, doc, getDoc, query, where, setDoc, addDoc, Timestamp, orderBy, limit, updateDoc } from 'firebase/firestore'
+import { collection, getDocs, doc, getDoc, query, where, setDoc, addDoc, Timestamp, orderBy, limit, updateDoc, deleteDoc } from 'firebase/firestore'
 import { generateFromEmail } from 'unique-username-generator'
 
 export async function addUsuarioFromLogin(user) {
@@ -139,4 +139,17 @@ export async function updateObjetivo(path, data) {
         return null
     }
 
+}
+
+export async function destroyObjetivo(path) {
+    const objetivo = doc(db, path)
+
+    try {
+        await deleteDoc(objetivo)
+        return true
+        
+    } catch (err) {
+        console.log(err)
+        return null
+    }
 }

@@ -28,6 +28,11 @@ export const useObjetivos = create((set) => ({
             })
         }))
     },
+    destroyObjetivo: (oldObjetivo) => {
+        set((state) => ({
+            objetivos: state.objetivos.filter((obj) => obj.id != oldObjetivo.id)
+        }))
+    },
     updateObjetivos: async (user, cant) => {
         try {
             const data = await fetchObjetivos(user, cant)

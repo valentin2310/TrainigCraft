@@ -1,7 +1,7 @@
 'use server'
 
 import { z } from 'zod';
-import { storeObjetivo, updateObjetivo } from '@/app/lib/data';
+import { destroyObjetivo, storeObjetivo, updateObjetivo } from '@/app/lib/data';
 
 const SCHEMA_OBJETIVO = z.object({
     titulo: z.string().trim().min(3),
@@ -106,8 +106,33 @@ export async function editObjetivo(path, prevState, formData) {
     } catch (err) {
         console.log(err)
         return {
-            message: 'Ups.. Hubo un error en la creación del objetivo.'
+            message: 'Ups.. Hubo un error en la actualización del objetivo.'
         }
     }
 
+}
+
+export async function deleteObjetivo(path) {
+    if(!path) {
+        return{
+            errors: {
+                'user' : 'Usuario no existe'
+            }
+        }
+    }
+
+    // Elimina los datos en firestore
+    try {
+        const result = await destroyObjetivo(path);
+
+        return {
+            success: result
+        }
+        
+    } catch (err) {
+        console.log(err)
+        return {
+            message: 'Ups.. Hubo un error en la eliminación del objetivo.'
+        }
+    }
 }
