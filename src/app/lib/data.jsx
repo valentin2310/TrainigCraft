@@ -63,6 +63,39 @@ async function fetchCollectionData(collectionRef) {
     return data
 }
 
+export async function fetchMusculos() {
+    try {
+        const collectionRef = collection(db, 'musculos')
+        const data = await fetchCollectionData(collectionRef)
+        return data
+        
+    } catch (error) {
+        console.log(error)
+        return []
+    }
+}
+
+export async function fetchDefaultEjercicios() {
+    try {
+        const collectionRef = collection(db, 'ejercicios-default')
+        const data = await fetchCollectionData(collectionRef)
+        return data
+        
+    } catch (error) {
+        console.log(error)
+        return []
+    }
+}
+
+export async function fetchDefaultRutinas() {
+    /* const data = [] */
+
+    const rutinasColl = collection(db, 'rutinas')
+    const data = await fetchCollectionData(rutinasColl)
+    return data;
+
+}
+
 export function fetchRutinas(idUser) {
     const userRef = doc(db, "usuarios", idUser)
     const rutinasCollectionRef = collection(db, "rutinas")
@@ -83,7 +116,6 @@ export async function fetchObjetivosSinCompletar(idUser, limite = 10) {
 }
 
 export async function fetchObjetivos(idUser, limite) {
-    console.log(limite)
     const objetivosColl = collection(db, `usuarios/${idUser}/objetivos`)
     const q = query(objetivosColl, orderBy("importancia", "desc"), limit(limite))
 
@@ -138,6 +170,24 @@ export async function destroyObjetivo(path) {
         await deleteDoc(objetivo)
         return true
         
+    } catch (err) {
+        console.log(err)
+        return null
+    }
+}
+
+export async function storeEjercicio(data) {
+    const collectionRef = collection(db, `ejercicios-default`)
+
+    try {
+        const docRef = await addDoc(collectionRef, {
+            ...data,
+            created_at: Timestamp.now(),
+        })
+        
+        const result = await getDoc(docRef)
+        return result;
+
     } catch (err) {
         console.log(err)
         return null

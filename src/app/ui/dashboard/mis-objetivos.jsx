@@ -4,7 +4,7 @@ import { use, useEffect } from "react"
 import { UserContext } from "@/app/providers"
 import { Button, useDisclosure } from "@nextui-org/react"
 import ObjetivoModalForm from "@/app/ui/objetivos/modal-form"
-import GridObjetivos from "@/app/ui/grid-objetivos"
+import GridObjetivos from "@/app/ui/objetivos/grid-objetivos"
 import { useObjetivos } from "@/app/stores/use-objetivos"
 
 export default function MisObjetivos({ nObjetivos = 10 }) {

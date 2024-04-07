@@ -13,7 +13,7 @@ export default function MisRutinas() {
 
     useEffect(() => {
         if (!user) return
-        setRutinas(fetchRutinas(user.id))
+        
         
     }, [user])
 

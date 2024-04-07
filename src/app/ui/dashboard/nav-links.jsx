@@ -22,7 +22,7 @@ const links = [
     },
     {
         name: 'Ejercicios',
-        href: '/dashboard/rutinas',
+        href: '/dashboard/ejercicios',
         icon: 'ri-file-paper-2-line'
     },
     {
