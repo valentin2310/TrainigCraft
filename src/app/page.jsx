@@ -54,7 +54,7 @@ export default function Home() {
                 isZoomed
                 width={500}
                 alt="Training image"
-                src="/inicio-background.jpg"
+                src="/calisthenic-soldier.jpg"
               />
             </div>
         </section>
