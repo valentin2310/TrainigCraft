@@ -1,15 +1,14 @@
 import { Rate } from "rsuite"
 import clsx from "clsx"
 import { renderRateCharacter } from "@/app/lib/utils"
-import { Popover, PopoverTrigger, PopoverContent, Button, Listbox, ListboxItem, useDisclosure } from '@nextui-org/react'
+import { useDisclosure } from '@nextui-org/react'
 import ObjetivoModalForm from "@/app/ui/objetivos/modal-form"
-import { useState } from "react"
 import ObjetivoModalDelete from "@/app/ui/objetivos/modal-delete"
+import CardEditDots from "@/app/ui/card-edit-dots"
 
 export default function ObjetivoCard({ objetivo }) {
     const {isOpen, onOpen, onClose, onOpenChange} = useDisclosure()
     const {isOpen : delIsOpen, onOpen : delOnOpen, onClose : delOnClose, onOpenChange : delOnOpenChange} = useDisclosure()
-    const [popIsOpen, popSetIsOpen] = useState(false)
 
     return (
         <>
@@ -41,41 +40,10 @@ export default function ObjetivoCard({ objetivo }) {
                     <p className="line-clamp-2 text-gray-300">{objetivo.descripcion ? objetivo.descripcion : 'Sin descripción.'}</p>
                 </div>
             </div>
-            <Popover placement="right" crossOffset={8} className="z-20" isOpen={popIsOpen} onOpenChange={(open) => popSetIsOpen(open)}>
-                <PopoverTrigger>
-                    <div className="px-1 text-xl hover:bg-gray-600 duration-500 h-fit rounded-full cursor-pointer">
-                        <i className="ri-more-2-line"></i>
-                    </div>
-                </PopoverTrigger>
-                <PopoverContent>
-                    <div className="py-1 max-w-[250px]">
-                        <Listbox
-                            aria-label="Actions"
-                            onAction={(key) => {
-                                switch (key) {
-                                    case 'edit':
-                                        console.log('editar', objetivo.id)
-                                        onOpen()
-                                        break;
-                                
-                                    case 'delete':
-                                        console.log('eliminar', objetivo.id)
-                                        delOnOpen()
-                                        break;
-                                }
-                                popSetIsOpen(false)
-                            }}
-                        >
-                            <ListboxItem key="edit">
-                                <i className="ri-edit-2-line me-2"></i>Editar
-                            </ListboxItem>
-                            <ListboxItem key="delete" className="text-danger" color="danger">
-                                <i className="ri-delete-bin-2-line me-2"></i>Eliminar
-                            </ListboxItem>
-                        </Listbox>
-                    </div>
-                </PopoverContent>
-            </Popover>
+            <CardEditDots 
+                onOpen={onOpen}
+                delOnOpen={delOnOpen}
+            />
         </div>
             
             {/* Modal para modificar el objetivo */}
