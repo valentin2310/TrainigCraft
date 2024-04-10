@@ -1,21 +1,33 @@
 'use client'
 
 import { auth } from "@/firebase/config";
-import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence }  from "firebase/auth"
+import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "firebase/auth"
 import { addUsuarioFromLogin } from "@/app/lib/data";
-import { redirect } from "next/navigation";
 
 export async function googleSingIn() {
+    try {
+        await setPersistence(auth, browserLocalPersistence)
 
-    await setPersistence(auth, browserLocalPersistence)
+        const googleProvider = new GoogleAuthProvider()
+        const result = await signInWithPopup(auth, googleProvider)
 
-    const googleProvider = new GoogleAuthProvider()
-    const result = await signInWithPopup(auth, googleProvider)
+        const idToken = await result.user.getIdToken();
 
-    console.log(result.user)
-    const user = await addUsuarioFromLogin(result.user)
-    console.log(user)
+        await fetch("/api/login", {
+            headers: {
+                Authorization: `Bearer ${idToken}`,
+            },
+        });
 
+        console.log(result.user)
+        const user = await addUsuarioFromLogin(result.user)
+        console.log(user)
+
+        return result.user;
+
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 export async function emailSignIn(email, password) {
@@ -23,8 +35,11 @@ export async function emailSignIn(email, password) {
 }
 
 export async function signOutUser() {
-    const result = await signOut(auth)
-    console.log(result)
-
-    redirect('/')
+    try {
+        const result = await signOut(auth)
+        console.log(result)
+        
+    } catch (error) {
+        console.log(error)
+    }
 }

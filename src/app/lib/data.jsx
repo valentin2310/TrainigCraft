@@ -31,6 +31,8 @@ export async function addUsuarioFromLogin(user) {
 }
 
 export async function getUser(uid) {
+    if (!uid) return null;
+    
     const ref = doc(db, "usuarios", uid)
     const snapshot = await getDoc(ref)
 

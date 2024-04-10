@@ -7,9 +7,19 @@ import FuncionesCard from "@/app/ui/functiones-card"
 import UserCard from "@/app/ui/user-card";
 import { useContext } from "react";
 import { UserContext } from "@/app//providers";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter()
   const user = useContext(UserContext)
+
+  async function handleLogin() {
+    const user = await googleSingIn()
+
+    if (user) {
+      router.push('/dashboard')
+    }
+  }
 
   return (
     <>
@@ -42,7 +52,7 @@ export default function Home() {
                   </Link>
                   :
                   <>
-                    <Button onClick={googleSingIn} color="success" variant="ghost" className="text-2xl shadow py-8 pe-10">
+                    <Button onClick={handleLogin} color="success" variant="ghost" className="text-2xl shadow py-8 pe-10">
                       <i className="ri-google-fill me-2"></i>Iniciar sesión
                     </Button>
                     <p className="max-w-[350px] mt-10 text-medium italic">Inicia sesión con tu cuenta de google para poder acceder a la aplicación y empezar a entrenar!!</p>

@@ -14,7 +14,12 @@ export function Providers({children}) {
 
   useEffect(() => {
       const observer = onAuthStateChanged(auth, async (user) => {
-          const appUser = await getUser(user.uid)
+          const appUser = await getUser(user?.uid)
+          if (!appUser) {
+            setUser(null)
+            return
+          }
+
           setUser(appUser)
       })
 
