@@ -1,7 +1,7 @@
 'use server'
 
 import { z } from 'zod';
-import { destroyObjetivo, storeObjetivo, updateObjetivo } from '@/app/lib/data';
+import { destroyItem, storeObjetivo, updateObjetivo } from '@/app/lib/data';
 
 const SCHEMA_OBJETIVO = z.object({
     titulo: z.string().trim().min(3),
@@ -123,7 +123,7 @@ export async function deleteObjetivo(path) {
 
     // Elimina los datos en firestore
     try {
-        const result = await destroyObjetivo(path);
+        const result = await destroyItem(path);
 
         return {
             success: result

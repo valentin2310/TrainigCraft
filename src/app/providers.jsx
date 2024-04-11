@@ -5,7 +5,7 @@ import {NextUIProvider} from '@nextui-org/react'
 import { createContext, useEffect, useState } from 'react'
 import { getUser } from '@/app/lib/data'
 import { onAuthStateChanged } from 'firebase/auth'
-import { auth } from '@/firebase/config'
+import { auth } from '@/firebase/client-config'
 
 export const UserContext = createContext()
 

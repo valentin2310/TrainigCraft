@@ -1,6 +1,6 @@
 'use client'
 
-import { auth } from "@/firebase/config";
+import { auth } from "@/firebase/client-config";
 import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "firebase/auth"
 import { addUsuarioFromLogin } from "@/app/lib/data";
 

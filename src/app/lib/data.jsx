@@ -1,6 +1,8 @@
-import { firestore as db, auth } from '@/firebase/config'
+import { firestore as db, auth } from '@/firebase/client-config'
 import { collection, getDocs, doc, getDoc, query, where, setDoc, addDoc, Timestamp, orderBy, limit, updateDoc, deleteDoc } from 'firebase/firestore'
 import { generateFromEmail } from 'unique-username-generator'
+
+
 
 export async function addUsuarioFromLogin(user) {
     if (await getUser(user.uid)) return null
@@ -171,11 +173,11 @@ export async function updateObjetivo(path, data) {
 
 }
 
-export async function destroyObjetivo(path) {
-    const objetivo = doc(db, path)
+export async function destroyItem(path) {
+    const item = doc(db, path)
 
     try {
-        await deleteDoc(objetivo)
+        await deleteDoc(item)
         return true
         
     } catch (err) {
@@ -194,6 +196,24 @@ export async function storeEjercicio(data) {
         })
         
         const result = await getDoc(docRef)
+        return result;
+
+    } catch (err) {
+        console.log(err)
+        return null
+    }
+}
+
+export async function updateEjercicio(data) {
+    const ejercicio = doc(db, path);
+
+    try {
+        await updateDoc(ejercicio, {
+            ...data,
+            created_at: Timestamp.now(),
+        })
+        
+        const result = await getDoc(ejercicio)
         return result;
 
     } catch (err) {
