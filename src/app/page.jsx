@@ -71,7 +71,7 @@ export default function Home() {
         </section>
 
         <section className="w-full grid place-items-center mt-10">
-          <div className="w-full max-w-[1200px] px-5 sm:px-10 xl:px-0 sm:grid-cols-2 md:grid grid-cols-3 gap-5">
+          <div className="w-full max-w-[1200px] px-2 sm:px-10 xl:px-0 grid sm:grid-cols-2 md:grid-cols-3 gap-5">
             <FuncionesCard
               titulo={"Crea tu propia rutina"}
               descripcion={"Puedes crear todas las rutinas que quieras sin límites, con todos tus ejercicios favoritos."}
