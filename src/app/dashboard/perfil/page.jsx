@@ -12,8 +12,8 @@ export default function Page() {
         <>
             {/* Datos de usuario */}
             <div className="mb-10">
-                <div className="flex justify-between px-4">
-                    <p>Mi perfil</p>
+                <div className="flex justify-between px-2">
+                    <p className="font-semibold text-xl text-primary">Mi perfil</p>
                     <Button color="primary" variant="ghost"> <i className="ri-edit-2-line m-2"></i>Editar</Button>
                 </div>
                 <div className="flex gap-10 items-center">

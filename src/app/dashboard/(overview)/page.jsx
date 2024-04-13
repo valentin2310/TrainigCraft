@@ -8,26 +8,17 @@ import { MisObjetivosSkeleton } from "@/app/ui/skeletons";
 export default function Page() {
     return (
         <div className="">
-            <div className="buscador w-full bg-secondary text-white p-4 rounded">
-                <Input
-                    isClearable
-                    radius="lg"
-                    placeholder="Busca una rutina o ejercicio..."
-
-                />
-            </div>
-            
-            <div className="mt-5">
+            <div className="mt-0">
                 <MiSemana />
             </div>
 
-            <div className="mt-5">
+            <div className="mt-8">
                 <Suspense fallback={<MisObjetivosSkeleton />}>
                     <MisObjetivos nObjetivos={8} />
                 </Suspense>
             </div>
 
-            <div className="mt-5">
+            <div className="mt-8">
                 <MisRutinas />
             </div>
         </div>

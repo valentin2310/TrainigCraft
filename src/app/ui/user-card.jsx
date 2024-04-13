@@ -2,7 +2,7 @@ import { Avatar } from "@nextui-org/react"
 
 export default function UserCard({ user }) {
     return (
-        <div className="flex gap-5 bg-white/50 backdrop-blur py-4 ps-4 pe-8 rounded-lg shadow">
+        <div className="flex gap-5 bg-white/50 backdrop-blur py-4 px-4 sm:pe-8 rounded-lg shadow">
             {user && 
                 <>
                     <Avatar isBordered color="primary" src={user.photoUrl} size="lg"></Avatar>

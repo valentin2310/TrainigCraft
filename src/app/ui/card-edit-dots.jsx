@@ -7,7 +7,7 @@ export default function CardEditDots({ onOpen, delOnOpen }) {
     return (
         <Popover placement="right" crossOffset={8} className="z-20" isOpen={popIsOpen} onOpenChange={(open) => popSetIsOpen(open)}>
                 <PopoverTrigger>
-                    <div className="px-1 text-xl hover:bg-gray-600 duration-500 h-fit rounded-full cursor-pointer">
+                    <div className="px-1 text-xl hover:bg-gray-400 hover:text-white duration-500 h-fit rounded-full cursor-pointer">
                         <i className="ri-more-2-line"></i>
                     </div>
                 </PopoverTrigger>

@@ -23,16 +23,16 @@ export default function Home() {
 
   return (
     <>
-      <header className="w-full grid place-items-center py-14 px-20 bg-gradient-to-r from-primary to-green-500 text-secondary">
-        <div className="w-full max-w-[1200px] flex gap-5 items-center justify-between">
-          <div className="flex gap-5 items-center">
+      <header className="w-full grid place-items-center py-14 px-5 sm:px-20 bg-gradient-to-r from-primary to-green-500 text-secondary">
+        <div className="w-full max-w-[1200px] flex flex-wrap gap-5 items-center justify-between">
+          <div className="flex flex-wrap gap-5 items-center justify-center sm:justify-normal">
             <Image
               radius="none"
               width={100}
               alt="Logo"
               src="/logo.png"
             />
-            <div className="">
+            <div className="text-center">
               <h1 className="text-5xl font-bold text-white">Training Craft</h1>
               <p className="text-xl ms-2">Crea tus propias rutinas</p>
             </div>
@@ -42,8 +42,8 @@ export default function Home() {
       </header>
 
       <main className="text-secondary pb-40">
-        <section className="w-full min-h-[500px] grid place-items-center">
-            <div className="w-full max-w-[1200px] flex flex-wrap justify-between items-center gap-5">
+        <section className="w-full pt-10 md:pb-10 px-5 sm:px-10 grid place-items-center">
+            <div className="w-full max-w-[1200px] flex justify-between items-center gap-8">
               <div className="text-2xl">
                 <p className="max-w-[350px] mb-10"><span className="font-bold text-primary">Bienvenido a TrainingCraft</span>, la mejor aplicación para crear tus propias rutinas.</p>
                 { user ?
@@ -65,12 +65,13 @@ export default function Home() {
                 width={500}
                 alt="Training image"
                 src="/calisthenic-soldier.jpg"
+                className="hidden md:block"
               />
             </div>
         </section>
 
         <section className="w-full grid place-items-center mt-10">
-          <div className="w-full max-w-[1200px] grid grid-cols-3 gap-5">
+          <div className="w-full max-w-[1200px] px-5 sm:px-10 xl:px-0 sm:grid-cols-2 md:grid grid-cols-3 gap-5">
             <FuncionesCard
               titulo={"Crea tu propia rutina"}
               descripcion={"Puedes crear todas las rutinas que quieras sin límites, con todos tus ejercicios favoritos."}

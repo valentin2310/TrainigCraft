@@ -19,18 +19,18 @@ export default function MisRutinas() {
 
     return (
         <>
-            <div className="w-full flex justify-between items-center">
+            <div className="w-full flex justify-between items-center mb-2">
                 <p className="text-xl text-primary font-semibold">Mis rutinas</p>
                 <div className="flex gap-2">
-                    <Button onPress={onOpen}>
-                        <i className="ri-file-add-line m-2"></i><span className="hidden sm:inline">Añadir</span>
+                    <Button onPress={onOpen} variant="ghost" color="primary" startContent={<i className="ri-file-add-line"></i>}>
+                        <span className="hidden sm:inline">Añadir</span>
                     </Button>
-                    <Button>
-                        <i className="ri-eye-line m-2"></i><span className="hidden sm:inline">Ver todas</span>
+                    <Button variant="ghost" color="primary" startContent={<i className="ri-eye-line"></i>}>
+                        <span className="hidden sm:inline">Ver todas</span>
                     </Button>
                 </div>
             </div>
-            <div className="grid grid-cols-3 gap-3 mt-3">
+            <div className="grid grid-cols-3 gap-3">
                 <div onClick={onOpen} className="p-4 cursor-pointer bg-secondary text-gray-300 rounded shadow text-center hover:bg-dark duration-500">
                     <p className="text-xl mb-4">Crear nueva rutina</p>
                     <i className="ri-file-add-line text-5xl text-white"></i>

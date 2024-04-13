@@ -25,14 +25,14 @@ export default function MisObjetivos({ nObjetivos = 10 }) {
 
     return (
         <>
-             <div className="w-full flex justify-between items-center">
-                <p className="text-xl text-primary font-semibold mb-3">Mis objetivos</p>
+             <div className="w-full flex justify-between items-center mb-2">
+                <p className="text-xl text-primary font-semibold"><i className="ri-focus-2-line me-2"></i>Mis objetivos</p>
                 <div className="flex gap-2">
-                    <Button onPress={onOpen}>
-                        <i className="ri-file-add-line m-2"></i><span className="hidden sm:inline">Añadir</span>
+                    <Button onPress={onOpen} variant="ghost" color="primary" startContent={<i className="ri-file-add-line"></i>}>
+                        <span className="hidden sm:inline">Añadir</span>
                     </Button>
-                    <Button>
-                        <i className="ri-eye-line m-2"></i><span className="hidden sm:inline">Ver todas</span>
+                    <Button variant="ghost" color="primary" startContent={<i className="ri-eye-line"></i>}>
+                        <span className="hidden sm:inline">Ver todas</span>
                     </Button>
                 </div>
              </div>

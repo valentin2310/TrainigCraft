@@ -1,6 +1,6 @@
 import { Rate } from "rsuite"
 import clsx from "clsx"
-import { renderRateCharacter } from "@/app/lib/utils"
+import { renderRateCharacter, dificultadColor } from "@/app/lib/utils"
 import { useDisclosure } from '@nextui-org/react'
 import ObjetivoModalForm from "@/app/ui/objetivos/modal-form"
 import ObjetivoModalDelete from "@/app/ui/objetivos/modal-delete"
@@ -13,7 +13,7 @@ export default function ObjetivoCard({ objetivo }) {
     return (
         <>
         <div className={clsx(
-            "w-full md:w-[500px] bg-gradient-to-br from-secondary to-secondary/90 text-white p-4 rounded-xl shadow border-b-4 border-dark flex justify-between gap-3",
+            "w-full md:w-[500px] bg-gradient-to-tl from-gray-50 to-gray-100 text-secondary p-4 rounded-xl shadow flex justify-between gap-3",
             {
                 'border-primary': objetivo.fecha_completado != null,
             }
@@ -33,11 +33,12 @@ export default function ObjetivoCard({ objetivo }) {
                     <i className="ri-medal-line"></i>
                 </div>
                 <div className="">
-                    <div className="flex gap-3 items-baseline">
-                        <p className="text-xl">{objetivo.titulo}</p>
-                        <Rate allowHalf defaultValue={objetivo.dificultad} readOnly size="xs"  renderCharacter={renderRateCharacter} />
+                    <div className="flex gap-2">
+                        <p className={`text-xl ${dificultadColor(objetivo.dificultad)}`}>{objetivo.titulo}</p>
+                        {/* <Rate allowHalf defaultValue={objetivo.dificultad} readOnly size="xs"  renderCharacter={renderRateCharacter} /> */}
+                        {/* <i className={`ri-fire-fill text-xl ${dificultadColor(objetivo.dificultad)}`}></i> */}
                     </div>
-                    <p className="line-clamp-2 text-gray-300">{objetivo.descripcion ? objetivo.descripcion : 'Sin descripción.'}</p>
+                    <p className="line-clamp-2 text-secondary/90">{objetivo.descripcion ? objetivo.descripcion : 'Sin descripción.'}</p>
                 </div>
             </div>
             <CardEditDots 
