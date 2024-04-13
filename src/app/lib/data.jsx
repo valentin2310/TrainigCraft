@@ -204,7 +204,7 @@ export async function storeEjercicio(data) {
     }
 }
 
-export async function updateEjercicio(data) {
+export async function updateEjercicio(path, data) {
     const ejercicio = doc(db, path);
 
     try {

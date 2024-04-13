@@ -1,5 +1,3 @@
-'use server'
-
 import { z } from 'zod';
 import { destroyItem, storeObjetivo, updateObjetivo } from '@/app/lib/data';
 
@@ -14,12 +12,12 @@ const SCHEMA_OBJETIVO = z.object({
 function formatObjetivo(docSnapshot) {
     const {created_at, ...rest} = docSnapshot.data()
     const formatedDate = new Date(created_at.seconds * 1000 + created_at.nanoseconds / 1000000).toISOString();
-    
+
     return {
         ...rest,
         created_at: formatedDate,
         id: docSnapshot.id,
-        path: docSnapshot.path
+        path: docSnapshot.ref.path
     }
 }
 

@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { storeEjercicio, updateEjercicio } from '@/app/lib/data'
+import { destroyItem, storeEjercicio, updateEjercicio } from '@/app/lib/data'
 
 const SCHEMA_EJERCICIO = z.object({
     nombre: z.string().trim().min(3),
@@ -9,6 +9,7 @@ const SCHEMA_EJERCICIO = z.object({
 })
 
 function formatEjercicio(docSnapshot) {
+    console.log(docSnapshot)
     const {created_at, ...rest} = docSnapshot.data()
     const formatedDate = new Date(created_at.seconds * 1000 + created_at.nanoseconds / 1000000).toISOString();
     
@@ -16,7 +17,7 @@ function formatEjercicio(docSnapshot) {
         ...rest,
         created_at: formatedDate,
         id: docSnapshot.id,
-        path: docSnapshot.path
+        path: docSnapshot.ref.path
     }
 }
 
@@ -93,8 +94,11 @@ export async function editEjercicio(path, prevState, formData) {
 
     // Guardar los datos en firestore
     try {
-        const result = await updateEjercicio(validatedFields.data);
+        const result = await updateEjercicio(path, validatedFields.data);
+        console.log(result)
+
         const formatedData = formatEjercicio(result)
+
 
         return {
             success: true,
@@ -108,4 +112,29 @@ export async function editEjercicio(path, prevState, formData) {
         }
     }
 
+}
+
+export async function deleteEjercicio(path) {
+    if(!path) {
+        return{
+            errors: {
+                'user' : 'Usuario no existe'
+            }
+        }
+    }
+
+    // Elimina los datos en firestore
+    try {
+        const result = await destroyItem(path);
+
+        return {
+            success: result
+        }
+        
+    } catch (err) {
+        console.log(err)
+        return {
+            message: 'Ups.. Hubo un error en la eliminación del objetivo.'
+        }
+    }
 }

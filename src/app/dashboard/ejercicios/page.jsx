@@ -6,11 +6,9 @@ import { Button, useDisclosure } from "@nextui-org/react"
 import { useEffect } from "react"
 import GridEjercicios from "@/app/ui/ejercicios/grid-ejercicios"
 import EjercicioModalForm from "@/app/ui/ejercicios/modal-form"
-import { useMusculos } from "@/app/stores/use-musculos"
 
 export default function Page() {
     const { ejercicios, setEjercicios } = useEjercicios()
-    const { musculos, getDefault: getDefaultMusculos } = useMusculos()
     const {isOpen, onOpen, onClose, onOpenChange} = useDisclosure()
 
     const fetchData = async () => {
@@ -20,7 +18,6 @@ export default function Page() {
     
     useEffect(() => {
         fetchData()
-        getDefaultMusculos()
 
     }, [])
 
@@ -41,7 +38,6 @@ export default function Page() {
                 isOpen={isOpen}
                 onClose={onClose}
                 onOpenChange={onOpenChange}
-                musculos={musculos}
              />
         </>
     )
