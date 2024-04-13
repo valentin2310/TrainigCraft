@@ -1,8 +1,6 @@
 import { firestore as db, auth } from '@/firebase/client-config'
-import { collection, getDocs, doc, getDoc, query, where, setDoc, addDoc, Timestamp, orderBy, limit, updateDoc, deleteDoc } from 'firebase/firestore'
+import { collection, getDocs, doc, getDoc, query, where, setDoc, addDoc, Timestamp, orderBy, limit, updateDoc, deleteDoc, runTransaction, documentId } from 'firebase/firestore'
 import { generateFromEmail } from 'unique-username-generator'
-
-
 
 export async function addUsuarioFromLogin(user) {
     if (await getUser(user.uid)) return null
@@ -67,6 +65,37 @@ async function fetchCollectionData(collectionRef) {
     return data
 }
 
+async function fetchCollectionDataWithId(collectionRef) {
+    const snapshot = await getDocs(collectionRef)
+    const data = [];
+
+    snapshot.forEach((doc) => {
+        const docRef = doc.ref
+
+        data.push({
+            ...doc.data(),
+            id: doc.id,
+        })
+    })
+
+    return data
+}
+
+async function fetchCollectionDataPlain(collectionRef) {
+    const snapshot = await getDocs(collectionRef)
+    const data = [];
+
+    snapshot.forEach((doc) => {
+        const docRef = doc.ref
+
+        data.push({
+            ...doc.data(),
+        })
+    })
+
+    return data
+}
+
 export async function fetchMusculos() {
     try {
         const collectionRef = collection(db, 'musculos')
@@ -92,23 +121,39 @@ export async function fetchDefaultEjercicios() {
 }
 
 export async function fetchDefaultRutinas() {
-    /* const data = [] */
-
-    const rutinasColl = collection(db, 'rutinas')
-    const data = await fetchCollectionData(rutinasColl)
-    return data;
-
+    try {
+        const collectionRef = collection(db, 'rutinas')
+        const data = await fetchCollectionData(collectionRef)
+        return data
+        
+    } catch (error) {
+        console.log(error)
+        return []
+    }
 }
 
-export function fetchRutinas(idUser) {
-    const userRef = doc(db, "usuarios", idUser)
-    const rutinasCollectionRef = collection(db, "rutinas")
+export async function fetchRutinas(idUser) {
+    try {
+        const collectionRef = collection(db, `usuarios/${idUser}/rutinas`)
+        const data = await fetchCollectionData(collectionRef)
+        return data
+        
+    } catch (error) {
+        console.log(error)
+        return []
+    }
+}
 
-    const q = query(rutinasCollectionRef, where("usuario", "==", userRef))
-    fetchCollectionData(q)
-        .then((data) => {
-            return data
-        });
+export async function fetchCategorias(idUser) {
+    try {
+        const collectionRef = collection(db, `usuarios/${idUser}/categorias`)
+        const data = await fetchCollectionData(collectionRef)
+        return data
+        
+    } catch (error) {
+        console.log(error)
+        return []
+    }
 }
 
 export async function fetchObjetivosSinCompletar(idUser, limite = 10) {
@@ -159,7 +204,6 @@ export async function updateObjetivo(path, data) {
     try {
         await updateDoc(objetivo, {
             ...data,
-            created_at: Timestamp.now(),
             fecha_completado: data.completado ? Timestamp.now() : null,
         })
 
@@ -210,7 +254,6 @@ export async function updateEjercicio(path, data) {
     try {
         await updateDoc(ejercicio, {
             ...data,
-            created_at: Timestamp.now(),
         })
         
         const result = await getDoc(ejercicio)
@@ -220,4 +263,69 @@ export async function updateEjercicio(path, data) {
         console.log(err)
         return null
     }
+}
+
+export async function storeRutina(idUser, data) {
+    const collectionRef = collection(db, `usuarios/${idUser}/rutinas`)
+    const collectionCatRef = collection(db, `usuarios/${idUser}/categorias`)
+
+    try {
+        const { categorias, ...rest } = data
+        const dataCategorias = await getCategoriasFromId(collectionCatRef, categorias)
+
+        const docRef = await addDoc(collectionRef, {
+            ...rest,
+            categorias: dataCategorias,
+            created_at: Timestamp.now(),
+            sesiones: 0
+        })
+
+        const result = await getDoc(docRef)
+        
+        return result;
+
+    } catch (err) {
+        console.log(err)
+        return null
+    }
+}
+
+export async function updateRutina(path, data) {
+    try {
+        const rutina = doc(db, path)
+        const user = rutina.parent.parent
+
+        const collectionCatRef = collection(db, `usuarios/${user.id}/categorias`)
+        
+        const { categorias, ...rest } = data
+        const dataCategorias = await getCategoriasFromId(collectionCatRef, categorias)
+        
+        await updateDoc(rutina, {
+            ...rest,
+            categorias: dataCategorias,
+        })
+        
+        const result = await getDoc(rutina)
+        return result;
+
+    } catch (err) {
+        console.log(err)
+        return null
+    }
+}
+
+async function getCategoriasFromId(collection, categorias) {
+    if (!categorias || categorias.length == 0) return []
+
+    try {
+        const queryCategorias = query(collection, where(documentId(), "in", categorias))
+        const dataCategorias = await fetchCollectionDataWithId(queryCategorias)
+        
+        return dataCategorias;
+    
+    } catch (error) {
+        console.log(error)
+        return []
+    }
+
 }

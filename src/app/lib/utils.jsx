@@ -1,4 +1,4 @@
-export const renderRateCharacter = ( value, index ) => {
+export const renderRateCharacter = (value, index) => {
     if (value < index + 1) {
         return <i className="ri-fire-fill text-gray-300"></i>
     }
@@ -6,8 +6,8 @@ export const renderRateCharacter = ( value, index ) => {
     return <i className={`ri-fire-fill ${dificultadColor(value)}`}></i>
 }
 
-export const dificultadColor = ( value ) => {
-    switch(value) {
+export const dificultadColor = (value) => {
+    switch (value) {
         case 0: case 1:
             return 'text-green-500';
         case 2:
@@ -19,4 +19,32 @@ export const dificultadColor = ( value ) => {
         case 5:
             return 'text-rose-800'
     }
+}
+
+export const generarGradient = (categorias) => {
+    let gradient;
+    
+    if (!categorias || categorias.length === 0) {
+        gradient = { backgroundColor: 'white' };
+    } else if (categorias.length === 1) {
+        gradient = { backgroundColor: categorias[0].color };
+    } else {
+        // Ordenar los colores por su cercanía al blanco o negro
+        const sortedColors = categorias.sort((categoria1, categoria2) => {
+            const rgb1 = parseInt(categoria1.color.substring(1), 16);
+            const rgb2 = parseInt(categoria2.color.substring(1), 16);
+            const distanciaBlanco1 = Math.abs(rgb1 - 0xffffff);
+            const distanciaBlanco2 = Math.abs(rgb2 - 0xffffff);
+            return distanciaBlanco1 - distanciaBlanco2;
+        });
+
+        // Crear el gradiente
+        const color1 = sortedColors[0].color;
+        const color2 = sortedColors[categorias.length - 1].color;
+        gradient = {
+            backgroundImage: `linear-gradient(to bottom right, ${color1}, ${color2})`
+        };
+    }
+
+    return gradient;
 }
