@@ -18,7 +18,6 @@ export default function RutinaModalForm({ isOpen, onClose, onOpenChange, idUser 
     const editRutinaWithParams = editRutina.bind(null, rutina?.path)
 
     const [state, formAction] = useFormState(rutina ? editRutinaWithParams : addRutinaWithParams, initialState)
-
     const { pending } = useFormStatus()
 
     useEffect(() => {
@@ -51,10 +50,8 @@ export default function RutinaModalForm({ isOpen, onClose, onOpenChange, idUser 
                                 <p className="font-bold text-white">{rutina ? 'Editar' : 'Crear nueva'} rutina</p>
                             </ModalHeader>
                             <form action={formAction}>
-
                                 <ModalBody className="max-h-[500px] overflow-y-auto">
                                     <div className="my-5 flex flex-col gap-5">
-                                        <input type="hidden" name="ejercicios[]" value={null} />
                                         <Input
                                             name="titulo"
                                             type="text"
@@ -86,7 +83,7 @@ export default function RutinaModalForm({ isOpen, onClose, onOpenChange, idUser 
                                             classNames={{
                                                 trigger: "py-2"
                                             }}
-                                            selectedKeys={rutina?.categorias.map((cat) => (cat.id))}
+                                            defaultSelectedKeys={rutina?.categorias.map((cat) => (cat.id))}
                                             isInvalid={!!state?.errors?.categorias}
                                             errorMessage={state?.errors?.categorias}
                                             renderValue={(items) => (

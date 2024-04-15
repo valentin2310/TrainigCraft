@@ -112,7 +112,7 @@ export default function EjercicioModalForm({ isOpen, onClose, onOpenChange, ejer
                                             classNames={{
                                                 trigger: "py-2"
                                             }}
-                                            selectedKeys={ejercicio?.musculos}
+                                            defaultSelectedKeys={ejercicio?.musculos}
                                             isInvalid={!!state?.errors?.musculos}
                                             errorMessage={state?.errors?.musculos}
                                             renderValue={(items) => (

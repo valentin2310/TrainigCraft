@@ -75,8 +75,6 @@ export async function editRutina(path, prevState, formData) {
         }
     }
 
-    console.log(path)
-
     const rawData = {
         titulo: formData.get('titulo'),
         descripcion: formData.get('descripcion'),
@@ -96,8 +94,6 @@ export async function editRutina(path, prevState, formData) {
     // Guardar los datos en firestore
     try {
         const result = await updateRutina(path, validatedFields.data);
-        console.log(result)
-
         const formatedData = formatRutina(result)
 
         return {
