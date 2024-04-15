@@ -1,8 +1,8 @@
 import { generarGradient } from "@/app/lib/utils"
 import { Chip, useDisclosure } from "@nextui-org/react"
-import CardEditDots from "./card-edit-dots"
-import RutinaModalForm from "./rutinas/modal-form"
-import RutinaModalDelete from "./rutinas/moda-delete"
+import CardEditDots from "@/app/ui/card-edit-dots"
+import RutinaModalForm from "@/app/ui/rutinas/modal-form"
+import RutinaModalDelete from "@/app/ui/rutinas/modal-delete"
 
 export default function RutinaCard({rutina}) {
     const {isOpen, onOpen, onClose, onOpenChange} = useDisclosure()

@@ -1,7 +1,7 @@
 'use client'
 
 import { Button, useDisclosure } from "@nextui-org/react"
-import RutinaCard from "@/app/ui/rutina-card";
+import RutinaCard from "@/app/ui/rutinas/rutina-card";
 import { use, useEffect } from "react";
 import { UserContext } from "@/app/providers";
 import { useRutinas } from "@/app/stores/use-rutinas";

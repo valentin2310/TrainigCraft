@@ -1,7 +1,7 @@
 'use client'
 
 import { fetchRutinas } from "@/app/lib/data"
-import RutinaCard from "@/app/ui/rutina-card"
+import RutinaCard from "@/app/ui/rutinas/rutina-card"
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/app/providers";
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Button } from "@nextui-org/react";
