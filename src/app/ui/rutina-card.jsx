@@ -2,6 +2,7 @@ import { generarGradient } from "@/app/lib/utils"
 import { Chip, useDisclosure } from "@nextui-org/react"
 import CardEditDots from "./card-edit-dots"
 import RutinaModalForm from "./rutinas/modal-form"
+import RutinaModalDelete from "./rutinas/moda-delete"
 
 export default function RutinaCard({rutina}) {
     const {isOpen, onOpen, onClose, onOpenChange} = useDisclosure()
@@ -29,11 +30,19 @@ export default function RutinaCard({rutina}) {
             </div>
         </div>
 
-            {/* Modal para modificar el objetivo */}
+            {/* Modal para modificar */}
             <RutinaModalForm 
                 isOpen={isOpen}
                 onClose={onClose}
                 onOpenChange={onOpenChange}
+                rutina={rutina}
+            />
+
+            {/* Modal para eliminar */}
+            <RutinaModalDelete 
+                isOpen={delIsOpen}
+                onClose={delOnClose}
+                onOpenChange={delOnOpenChange}
                 rutina={rutina}
             />
         </>

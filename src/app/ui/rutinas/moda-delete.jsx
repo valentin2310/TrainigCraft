@@ -1,17 +1,17 @@
 import { Modal, ModalHeader, ModalContent, ModalBody, ModalFooter, Button } from '@nextui-org/react'
-import { deleteObjetivo } from '@/app/lib/objetivo-actions'
+import { deleteRutina } from '@/app/lib/rutina-actions'
 import { useFormState } from 'react-dom'
 import { useEffect } from 'react'
-import { useObjetivos } from '@/app/stores/use-objetivos'
+import { useRutinas } from '@/app/stores/use-rutinas'
 
 const initialState = {
     message: ''
 }
 
-export default function ObjetivoModalDelete({ isOpen, onClose, onOpenChange, objetivo }) {
-    const deleteObjetivoWithPath = deleteObjetivo.bind(null, objetivo?.path)
-    const [state, formAction] = useFormState(deleteObjetivoWithPath, initialState)
-    const { destroyObjetivo } = useObjetivos()
+export default function RutinaModalDelete({ isOpen, onClose, onOpenChange, rutina }) {
+    const deleteRutinaWithParams = deleteRutina.bind(null, rutina?.path)
+    const [ state, formAction ] = useFormState(deleteRutinaWithParams, initialState)
+    const { destroyRutina } = useRutinas()
 
     useEffect(() => {
         // Si se ha podido eliminar el estado será success = true
@@ -20,7 +20,7 @@ export default function ObjetivoModalDelete({ isOpen, onClose, onOpenChange, obj
         }
 
         // Eliminar de la lista
-        destroyObjetivo(objetivo)
+        destroyRutina(rutina)
         onClose()
 
     }, [state])
@@ -32,7 +32,7 @@ export default function ObjetivoModalDelete({ isOpen, onClose, onOpenChange, obj
                     {(onClose) => (
                         <>
                             <ModalHeader className='bg-secondary'>
-                                <p className='font-bold text-white'>¿Estas seguro que quieres eliminar este objetivo?</p>
+                                <p className='font-bold text-white'>¿Estas seguro que quieres eliminar esta rutina?</p>
                             </ModalHeader>
                             <form action={formAction}>
                                 <ModalBody className="max-h-[500px] overflow-y-auto">
@@ -40,7 +40,7 @@ export default function ObjetivoModalDelete({ isOpen, onClose, onOpenChange, obj
                                         {state?.message}
                                         {state?.errors?.user}
                                     </p>
-                                    <p>El objetivo <span className="font-bold">'{objetivo.titulo}'</span> se eliminará permanentemente.</p>
+                                    <p>La rutina <span className="font-bold">'{rutina.titulo}'</span> se eliminará permanentemente.</p>
                                     <i className="ri-close-circle-fill text-red-500 text-[100px] text-center"></i>
                                 </ModalBody>
                                 <ModalFooter>
