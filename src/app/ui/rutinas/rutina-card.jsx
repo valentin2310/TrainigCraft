@@ -26,6 +26,7 @@ export default function RutinaCard({rutina}) {
                 <CardEditDots 
                     onOpen={onOpen}
                     delOnOpen={delOnOpen}
+                    href={`/dashboard/rutinas/${rutina.id}/edit`}
                 />
             </div>
         </div>

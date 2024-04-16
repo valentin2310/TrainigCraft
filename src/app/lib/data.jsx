@@ -1,5 +1,5 @@
 import { firestore as db, auth } from '@/firebase/client-config'
-import { collection, getDocs, doc, getDoc, query, where, setDoc, addDoc, Timestamp, orderBy, limit, updateDoc, deleteDoc, runTransaction, documentId } from 'firebase/firestore'
+import { collection, getDocs, doc, getDoc, query, where, setDoc, addDoc, Timestamp, orderBy, limit, updateDoc, deleteDoc, runTransaction, documentId, writeBatch } from 'firebase/firestore'
 import { generateFromEmail } from 'unique-username-generator'
 
 export async function addUsuarioFromLogin(user) {
@@ -178,6 +178,25 @@ export async function fetchObjetivos(idUser, limite) {
     }
 }
 
+export async function fetchItem(path) {
+    try {
+        const docRef = doc(db, path);
+        const result = await getDoc(docRef)
+
+        return {
+            ...result.data(),
+            path: result.path,
+            id: result.id
+        }
+
+    } catch (error) {
+        console.log(error)
+        return null
+    }
+}
+
+/* #region crud objetivos */
+
 export async function storeObjetivo(idUser, data) {
     const objetivosColl = collection(db, `usuarios/${idUser}/objetivos`)
 
@@ -217,6 +236,8 @@ export async function updateObjetivo(path, data) {
 
 }
 
+/* #region Destroy Item */
+
 export async function destroyItem(path) {
     const item = doc(db, path)
 
@@ -229,6 +250,8 @@ export async function destroyItem(path) {
         return null
     }
 }
+
+/* #region crud ejercicios */
 
 export async function storeEjercicio(data) {
     const collectionRef = collection(db, `ejercicios-default`)
@@ -265,12 +288,16 @@ export async function updateEjercicio(path, data) {
     }
 }
 
+/* #region crud rutina */
+
 export async function storeRutina(idUser, data) {
     const collectionRef = collection(db, `usuarios/${idUser}/rutinas`)
     const collectionCatRef = collection(db, `usuarios/${idUser}/categorias`)
+    /* const collectionEjRef = collection(db, `usuarios/${idUser}/ejercicios`) */
+    const collectionEjRef = collection(db, `ejercicios-default`)
 
     try {
-        const { categorias, ...rest } = data
+        const { categorias, ejercicios, ...rest } = data
         const dataCategorias = await getCategoriasFromId(collectionCatRef, categorias)
 
         const docRef = await addDoc(collectionRef, {
@@ -281,6 +308,7 @@ export async function storeRutina(idUser, data) {
         })
 
         const result = await getDoc(docRef)
+        await setEjerciciosToRutina(docRef, collectionEjRef, ejercicios)
         
         return result;
 
@@ -296,16 +324,20 @@ export async function updateRutina(path, data) {
         const user = rutina.parent.parent
 
         const collectionCatRef = collection(db, `usuarios/${user.id}/categorias`)
+        /* const collectionEjRef = collection(db, `usuarios/${idUser}/ejercicios`) */
+        const collectionEjRef = collection(db, `ejercicios-default`)
         
-        const { categorias, ...rest } = data
+        const { categorias, ejercicios, ...rest } = data
         const dataCategorias = await getCategoriasFromId(collectionCatRef, categorias)
         
-        await updateDoc(rutina, {
+        const docRef = await updateDoc(rutina, {
             ...rest,
             categorias: dataCategorias,
         })
         
         const result = await getDoc(rutina)
+        await setEjerciciosToRutina(docRef, collectionEjRef, ejercicios)
+
         return result;
 
     } catch (err) {
@@ -328,4 +360,40 @@ async function getCategoriasFromId(collection, categorias) {
         return []
     }
 
+}
+
+async function setEjerciciosToRutina(rutinaRef, ejercicioCollection, ejercicios){
+    console.log(ejercicios)
+    if (!ejercicios || ejercicios.length == 0) return
+
+    try {
+        /* La collection de ejercicios de la rutina */
+        const collectionEjRutina = collection(rutinaRef, "ejercicios");
+
+         /* Crear lote de escritura */
+        const batch = writeBatch(db);
+
+        /* Obtener los ejercicios de la bd */
+        const queryEjercicios = query(ejercicioCollection, where(documentId(), "in", ejercicios))
+        const dataEjercicios = await fetchCollectionDataWithId(queryEjercicios);
+
+        /* Limpiar la collection */
+        batch.delete(collectionEjRutina)
+
+        /* Guardarlo */
+        console.log(dataEjercicios)
+        dataEjercicios.forEach((item) => {
+            const docRef = doc(collectionEjRutina, item.id);
+            
+            console.log(item)
+            const { id, ...rest } = item;
+            batch.set(docRef, {...rest})
+        })
+
+        /* Hacer commit del batch */
+        await batch.commit()
+
+    } catch (error) {
+        console.log(error)
+    }
 }

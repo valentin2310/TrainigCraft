@@ -13,6 +13,7 @@ const initialState = {
 export default function RutinaModalForm({ isOpen, onClose, onOpenChange, idUser = null, rutina = null }) {
     const { storeRutina, updateRutina } = useRutinas()
     const { categorias } = usecategorias()
+    const { ejercicios } = useEjercicios()
 
     const addRutinaWithParams = addRutina.bind(null, idUser)
     const editRutinaWithParams = editRutina.bind(null, rutina?.path)
@@ -101,6 +102,14 @@ export default function RutinaModalForm({ isOpen, onClose, onOpenChange, idUser 
                                                     <span style={{color: categoria.color}}>{categoria.nombre}</span>
                                                 </SelectItem>
                                             )}
+                                        </Select>
+                                        <Select
+                                            name="ejercicios[]"
+                                            items={ejercicios}
+                                            label="Ejercicios"
+                                            
+                                        >
+
                                         </Select>
                                     </div>
                                 </ModalBody>

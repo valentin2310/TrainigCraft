@@ -1,7 +1,9 @@
 import { Popover, PopoverContent, PopoverTrigger, Listbox, ListboxItem } from '@nextui-org/react'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
-export default function CardEditDots({ onOpen, delOnOpen }) {
+export default function CardEditDots({ onOpen, delOnOpen, href = null }) {
+    const router = useRouter();
     const [popIsOpen, popSetIsOpen] = useState(false)
 
     return (
@@ -18,7 +20,11 @@ export default function CardEditDots({ onOpen, delOnOpen }) {
                             onAction={(key) => {
                                 switch (key) {
                                     case 'edit':
-                                        onOpen()
+                                        if(href) {
+                                            router.push(href)
+                                        } else {
+                                            onOpen()
+                                        }
                                         break;
                                 
                                     case 'delete':

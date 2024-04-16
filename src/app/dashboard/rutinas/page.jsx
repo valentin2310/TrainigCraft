@@ -8,6 +8,7 @@ import { useRutinas } from "@/app/stores/use-rutinas";
 import { fetchCategorias, fetchRutinas } from "@/app/lib/data";
 import RutinaModalForm from "@/app/ui/rutinas/modal-form";
 import { usecategorias } from "@/app/stores/use-categorias";
+import Link from "next/link";
 
 export default function Page() {
     const user = use(UserContext)
@@ -16,10 +17,10 @@ export default function Page() {
     const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
 
     const fetchData = async () => {
-        const _rutinas = await fetchRutinas(user.id);
+        const _rutinas = await fetchRutinas(user.id)
         setRutinas(_rutinas)
         
-        const _categorias = await fetchCategorias(user.id);
+        const _categorias = await fetchCategorias(user.id)
         setCategorias(_categorias)
     }
 
@@ -38,10 +39,10 @@ export default function Page() {
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2">
-                <div onClick={onOpen} className="p-4 cursor-pointer bg-secondary text-gray-300 rounded shadow text-center hover:bg-dark duration-500">
+                <Link /* onClick={onOpen} */  href="/dashboard/rutinas/create" className="p-4 cursor-pointer bg-secondary text-gray-300 rounded shadow text-center hover:bg-dark duration-500">
                     <p className="text-xl mb-4">Crear nueva rutina</p>
                     <i className="ri-file-add-line text-5xl text-white"></i>
-                </div>
+                </Link>
                 {rutinas && rutinas.map((r) => (
                     <RutinaCard
                         key={r.id}

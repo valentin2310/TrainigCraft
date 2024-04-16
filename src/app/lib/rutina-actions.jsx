@@ -4,13 +4,13 @@ import { destroyItem, storeRutina, updateRutina } from '@/app/lib/data'
 const SCHEMA_RUTINA = z.object({
     titulo: z.string().trim().min(3),
     descripcion: z.string().trim().nullable(),
-    categorias: z.array(z.string()).nullable()
-    /* ejercicios: z.array().nullable() */
+    categorias: z.array(z.string()).nullable(),
+    ejercicios: z.array(z.string()).nonempty()
 })
 
 function formatRutina(docSnapshot) {
     console.log(docSnapshot)
-    const {created_at, ejercicios, ...rest} = docSnapshot.data()
+    const {created_at, ...rest} = docSnapshot.data()
     const formatedDate = new Date(created_at.seconds * 1000 + created_at.nanoseconds / 1000000).toISOString();
     
     return {
@@ -34,7 +34,7 @@ export async function addRutina(idUser, prevState, formData) {
         titulo: formData.get('titulo'),
         descripcion: formData.get('descripcion'),
         categorias: formData.getAll('categorias[]'),
-        /* ejercicios: formData.getAll('ejercicios[]') */
+        ejercicios: formData.getAll('ejercicios[]')
     }
 
     console.log(rawData)
