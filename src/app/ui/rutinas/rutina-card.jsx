@@ -3,14 +3,20 @@ import { Chip, useDisclosure } from "@nextui-org/react"
 import CardEditDots from "@/app/ui/card-edit-dots"
 import RutinaModalForm from "@/app/ui/rutinas/modal-form"
 import RutinaModalDelete from "@/app/ui/rutinas/modal-delete"
+import { useRouter } from "next/navigation"
 
 export default function RutinaCard({rutina}) {
     const {isOpen, onOpen, onClose, onOpenChange} = useDisclosure()
     const {isOpen : delIsOpen, onOpen : delOnOpen, onClose : delOnClose, onOpenChange : delOnOpenChange} = useDisclosure()
+    const router = useRouter()
+
+    const handleClick = () => {
+        router.push(`/dashboard/rutinas/${rutina.id}`)
+    }
 
     return (
         <>
-        <div className="p-1 rounded shadow text-secondary" style={generarGradient(rutina.categorias)}>
+        <div onClick={handleClick} className="p-1 rounded shadow text-secondary cursor-pointer" style={generarGradient(rutina.categorias)}>
             <div className="p-4 w-full h-full flex justify-between bg-gradient-to-tr from-gray-100/90 to-gray-50/85 backdrop-blur">
                 <div className="">
                     <p className="text-xl line-clamp-2">{rutina.titulo}</p>
