@@ -4,7 +4,7 @@ import { use, useEffect, useState } from "react";
 import { useEjercicios } from "@/app/stores/use-ejercicios";
 import { usecategorias } from "@/app/stores/use-categorias";
 import { UserContext } from "@/app/providers";
-import { fetchCategorias, fetchDefaultEjercicios, fetchItem } from "@/app/lib/data";
+import { fetchCategorias, fetchDefaultEjercicios, fetchItem, fetchEjerciciosRutina } from "@/app/lib/data";
 import RutinaForm from "@/app/ui/rutinas/form";
 
 export default function Page({ params }) {
@@ -18,8 +18,8 @@ export default function Page({ params }) {
 
     const fetchData = async () => {
         const _rutina = await fetchItem(`usuarios/${user.id}/rutinas/${idRutina}`)
-        console.log(`usuarios/${user.id}/rutinas/${idRutina}`)
-        console.log(_rutina)
+        const _rutina_ejercicios = await fetchEjerciciosRutina(_rutina.path);
+        _rutina.ejercicios = _rutina_ejercicios;
         setRutina(_rutina)
 
         const _ejercicios = await fetchDefaultEjercicios()
@@ -30,12 +30,11 @@ export default function Page({ params }) {
     }
 
     useEffect(() => {
-        console.log(user)
         if (!user) return
         
         fetchData()
 
-    }, [])
+    }, [user])
 
     return (
         <>

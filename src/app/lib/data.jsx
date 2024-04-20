@@ -185,7 +185,7 @@ export async function fetchItem(path) {
 
         return {
             ...result.data(),
-            path: result.path,
+            path: path,
             id: result.id
         }
 
@@ -293,8 +293,6 @@ export async function updateEjercicio(path, data) {
 export async function storeRutina(idUser, data) {
     const collectionRef = collection(db, `usuarios/${idUser}/rutinas`)
     const collectionCatRef = collection(db, `usuarios/${idUser}/categorias`)
-    /* const collectionEjRef = collection(db, `usuarios/${idUser}/ejercicios`) */
-    const collectionEjRef = collection(db, `ejercicios-default`)
 
     try {
         const { categorias, ejercicios, ...rest } = data
@@ -308,7 +306,7 @@ export async function storeRutina(idUser, data) {
         })
 
         const result = await getDoc(docRef)
-        await setEjerciciosToRutina(docRef, collectionEjRef, ejercicios)
+        await setEjerciciosToRutina(docRef.path, ejercicios)
         
         return result;
 
@@ -324,19 +322,17 @@ export async function updateRutina(path, data) {
         const user = rutina.parent.parent
 
         const collectionCatRef = collection(db, `usuarios/${user.id}/categorias`)
-        /* const collectionEjRef = collection(db, `usuarios/${idUser}/ejercicios`) */
-        const collectionEjRef = collection(db, `ejercicios-default`)
         
         const { categorias, ejercicios, ...rest } = data
         const dataCategorias = await getCategoriasFromId(collectionCatRef, categorias)
         
-        const docRef = await updateDoc(rutina, {
+        await updateDoc(rutina, {
             ...rest,
             categorias: dataCategorias,
         })
         
         const result = await getDoc(rutina)
-        await setEjerciciosToRutina(docRef, collectionEjRef, ejercicios)
+        await setEjerciciosToRutina(path, ejercicios)
 
         return result;
 
@@ -362,32 +358,27 @@ async function getCategoriasFromId(collection, categorias) {
 
 }
 
-async function setEjerciciosToRutina(rutinaRef, ejercicioCollection, ejercicios){
-    console.log(ejercicios)
+async function setEjerciciosToRutina(rutinaPath, ejercicios){
     if (!ejercicios || ejercicios.length == 0) return
 
     try {
         /* La collection de ejercicios de la rutina */
-        const collectionEjRutina = collection(rutinaRef, "ejercicios");
+        const collectionEjRutina = collection(db, rutinaPath, "ejercicios");
 
          /* Crear lote de escritura */
         const batch = writeBatch(db);
 
-        /* Obtener los ejercicios de la bd */
-        const queryEjercicios = query(ejercicioCollection, where(documentId(), "in", ejercicios))
-        const dataEjercicios = await fetchCollectionDataWithId(queryEjercicios);
-
         /* Limpiar la collection */
-        batch.delete(collectionEjRutina)
+        const ejerciciosExistentes = await fetchCollectionData(collectionEjRutina);
+        ejerciciosExistentes.forEach((item) => {
+            const docRef = doc(db, item.path)
+            batch.delete(docRef)
+        })
 
         /* Guardarlo */
-        console.log(dataEjercicios)
-        dataEjercicios.forEach((item) => {
-            const docRef = doc(collectionEjRutina, item.id);
-            
-            console.log(item)
-            const { id, ...rest } = item;
-            batch.set(docRef, {...rest})
+        ejercicios.forEach((item) => {
+            const docRef = doc(collectionEjRutina);
+            batch.set(docRef, item)
         })
 
         /* Hacer commit del batch */
@@ -395,5 +386,20 @@ async function setEjerciciosToRutina(rutinaRef, ejercicioCollection, ejercicios)
 
     } catch (error) {
         console.log(error)
+    }
+}
+
+export async function fetchEjerciciosRutina(rutinaPath) {
+    if (!rutinaPath) return
+
+    try {
+        const collectionRef = collection(db, rutinaPath, "ejercicios");
+        const data = await fetchCollectionData(collectionRef);
+    
+        return data;
+        
+    } catch (error) {
+        console.log(error)
+        return [];
     }
 }

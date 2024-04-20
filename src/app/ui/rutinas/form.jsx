@@ -1,11 +1,13 @@
 'use client'
 
-import { Button, Input, Textarea, Select, SelectItem, Chip } from "@nextui-org/react"
+import { Button, Input, Textarea, Select, SelectItem, Chip, CheckboxGroup, Checkbox, Avatar, cn } from "@nextui-org/react"
 import { use, useEffect, useState } from "react";
 import { useFormState, useFormStatus } from 'react-dom'
 import { addRutina, editRutina } from "@/app/lib/rutina-actions";
 import { useRutinas } from "@/app/stores/use-rutinas";
 import { useRouter } from "next/navigation";
+import clsx from "clsx";
+import RutinaFormEjercicios from "@/app/ui/rutinas/form-ejercicios";
 
 const initialState = {
     message: ''
@@ -13,11 +15,12 @@ const initialState = {
 
 export default function RutinaForm({ idUser = null, rutina = null, ejercicios, categorias }) {
     const router = useRouter()
-
+    
     const { storeRutina, updateRutina } = useRutinas()
+    const [ejerciciosRutina, setEjerciciosRutina] = useState(rutina ? rutina.ejercicios : []);
 
-    const addRutinaWithParams = addRutina.bind(null, idUser)
-    const editRutinaWithParams = editRutina.bind(null, rutina?.path)
+    const addRutinaWithParams = addRutina.bind(null, { idUser: idUser, list: ejerciciosRutina})
+    const editRutinaWithParams = editRutina.bind(null, { path: rutina?.path, list: ejerciciosRutina})
 
     const [state, formAction] = useFormState(rutina ? editRutinaWithParams : addRutinaWithParams, initialState)
     const { pending } = useFormStatus()
@@ -101,27 +104,16 @@ export default function RutinaForm({ idUser = null, rutina = null, ejercicios, c
                         errorMessage={state?.errors?.descripcion}
                     />
                 </div>
-                <div className="my-10 px-10">
-                    <p className="text-small mb-3">Elige los ejercicios</p>
-                    <Select
-                        name="ejercicios[]"
-                        items={ejercicios}
-                        isMultiline={true}
-                        selectionMode="multiple"
-                        labelPlacement="outside"
-                        classNames={{
-                            trigger: "py-2"
-                        }}
-                        isInvalid={!!state?.errors?.ejercicios}
-                        errorMessage={state?.errors?.ejercicios}
-                    >
-                        {(item) => (
-                            <SelectItem key={item.id} value={item.id} textValue={item.nombre}>
-                                <span>{item.nombre}</span>
-                            </SelectItem>
-                        )}
-                    </Select>
+
+                <div className="py-10">
+                    <RutinaFormEjercicios 
+                        ejercicios={ejercicios}
+                        ejerciciosRutina={ejerciciosRutina}
+                        setEjerciciosRutina={setEjerciciosRutina} 
+                        message={state?.errors?.ejercicios}
+                    />
                 </div>
+
                 <Button onClick={cancel} color="danger" variant="light">Cancelar</Button>
                 <Button isLoading={pending} type="submit" color="primary">Guardar</Button>
             </form>

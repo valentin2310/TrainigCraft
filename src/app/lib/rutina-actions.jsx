@@ -5,7 +5,7 @@ const SCHEMA_RUTINA = z.object({
     titulo: z.string().trim().min(3),
     descripcion: z.string().trim().nullable(),
     categorias: z.array(z.string()).nullable(),
-    ejercicios: z.array(z.string()).nonempty()
+    ejercicios: z.array(z.any()).nonempty()
 })
 
 function formatRutina(docSnapshot) {
@@ -21,8 +21,8 @@ function formatRutina(docSnapshot) {
     }
 }
 
-export async function addRutina(idUser, prevState, formData) {
-    if(!idUser) {
+export async function addRutina(params, prevState, formData) {
+    if(!params.idUser) {
         return{
             errors: {
                 'user' : 'Usuario no existe'
@@ -34,7 +34,7 @@ export async function addRutina(idUser, prevState, formData) {
         titulo: formData.get('titulo'),
         descripcion: formData.get('descripcion'),
         categorias: formData.getAll('categorias[]'),
-        ejercicios: formData.getAll('ejercicios[]')
+        ejercicios: params.list
     }
 
     console.log(rawData)
@@ -49,7 +49,7 @@ export async function addRutina(idUser, prevState, formData) {
 
     // Guardar los datos en firestore
     try {
-        const result = await storeRutina(idUser, validatedFields.data);
+        const result = await storeRutina(params.idUser, validatedFields.data);
         const formatedData = formatRutina(result)
 
         return {
@@ -66,8 +66,8 @@ export async function addRutina(idUser, prevState, formData) {
 
 }
 
-export async function editRutina(path, prevState, formData) {
-    if(!path) {
+export async function editRutina(params, prevState, formData) {
+    if(!params.path) {
         return{
             errors: {
                 'user' : 'Usuario no existe'
@@ -75,10 +75,13 @@ export async function editRutina(path, prevState, formData) {
         }
     }
 
+    console.log(params)
+
     const rawData = {
         titulo: formData.get('titulo'),
         descripcion: formData.get('descripcion'),
         categorias: formData.getAll('categorias[]'),
+        ejercicios: params.list,
     }
 
     console.log(rawData)
@@ -93,7 +96,7 @@ export async function editRutina(path, prevState, formData) {
 
     // Guardar los datos en firestore
     try {
-        const result = await updateRutina(path, validatedFields.data);
+        const result = await updateRutina(params.path, validatedFields.data);
         const formatedData = formatRutina(result)
 
         return {
