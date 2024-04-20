@@ -1,10 +1,10 @@
 'use client'
 
-import { fetchDefaultEjercicios, fetchEjerciciosRutina, fetchItem } from "@/app/lib/data";
+import { fetchEjerciciosRutina, fetchItem } from "@/app/lib/data";
 import { UserContext } from "@/app/providers";
-import { useEjercicios } from "@/app/stores/use-ejercicios";
 import { use, useEffect, useState } from "react"
-import RutinaFormEjercicios from "@/app/ui/rutinas/form-ejercicios";
+import { format } from "rsuite/esm/utils/dateUtils";
+import TablaEjerciciosSimple from "@/app/ui/rutinas/tabla-ejercicios-simple";
 
 export default function Page({ params }) {
     const { id: idRutina } = params
@@ -12,7 +12,6 @@ export default function Page({ params }) {
 
     const user = use(UserContext)
 
-    const { ejercicios, setEjercicios } = useEjercicios()
     const [ejerciciosRutina, setEjerciciosRutina] = useState([]);
 
 
@@ -23,9 +22,6 @@ export default function Page({ params }) {
         const _rutina_ejercicios = await fetchEjerciciosRutina(_rutina.path);
         setEjerciciosRutina(_rutina_ejercicios);
 
-        const _ejercicios = await fetchDefaultEjercicios()
-        setEjercicios(_ejercicios)
-        
     }
 
     useEffect(() => {
@@ -35,20 +31,63 @@ export default function Page({ params }) {
 
     }, [user])
 
+    const calcularFecha = (timestamp) => {
+        const { seconds, nanoseconds } = timestamp
+
+        const date = new Date(seconds * 1000 + nanoseconds / 1000000)
+        const formattedDate = format(date, 'd/M/yyyy')
+
+        return formattedDate;
+    }
+
+    const calcularDificultad = () => {
+        if (!ejerciciosRutina || ejerciciosRutina.length == 0) return 0
+
+        let sum = 0;
+
+        ejerciciosRutina.forEach((item) => {
+            sum += item.ejercicio.dificultad
+        })
+
+        return sum / ejerciciosRutina.length
+    }
+
     return (
         <>
-            <div className="mb-10">
-                <h1 className="text-3xl font-semibold text-primary mb-1">{rutina?.titulo}</h1>
-                <p className="max-w-[800px] px-2">{rutina?.descripcion}</p>
+            <div className="bg-gradient-to-b from-dark to-dark/75 text-white py-5 rounded shadow-lg">
+                <div className="mb-10 text-center">
+                    <h1 className="text-3xl font-semibold text-primary mb-1">{rutina?.titulo}</h1>
+                    <p className="px-2">{rutina?.descripcion}</p>
+                </div>
+
+                {/* Stats */}
+                <div className="flex justify-evenly gap-5">
+                    {rutina &&
+                        <>
+                            <div className="flex flex-col items-center justify-center">
+                                <span className="text-xl">{calcularFecha(rutina.created_at)}</span>
+                                <span className="text-tiny">Fecha creación</span>
+                            </div>
+                            <div className="flex flex-col items-center justify-center">
+                                <span className="text-xl">{rutina.sesiones}</span>
+                                <span className="text-tiny">Sesiones</span>
+                            </div>
+                            <div className="flex flex-col items-center justify-center">
+                                <span className="text-xl">{calcularDificultad()}</span>
+                                <span className="text-tiny">Dificultad media</span>
+                            </div>
+                            <div className="flex flex-col items-center justify-center">
+                                <span className="text-xl">3</span>
+                                <span className="text-tiny">Ejercicios</span>
+                            </div>
+                        </>
+                    }
+                </div>
             </div>
 
             <div className="col-span-6 py-10">
-                {rutina && 
-                    <RutinaFormEjercicios
-                        ejercicios={ejercicios}
-                        ejerciciosRutina={ejerciciosRutina}
-                        setEjerciciosRutina={setEjerciciosRutina}
-                    />
+                {rutina &&
+                    <TablaEjerciciosSimple data={ejerciciosRutina} />
                 }
             </div>
         </>
