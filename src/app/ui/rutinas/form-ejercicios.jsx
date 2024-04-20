@@ -4,7 +4,7 @@
 import { useState } from "react";
 import TablaEjercicios from "@/app/ui/rutinas/tabla-ejercicios";
 import { Input, Button, Select, SelectItem } from "@nextui-org/react";
-import { z } from "zod";
+import { z } from "@/zod/zod-es";
 import clsx from "clsx";
 
 const SCHEMA_EJERCICIO_RUTINA = z.object({
@@ -22,7 +22,7 @@ export default function RutinaFormEjercicios({ ejercicios, ejerciciosRutina, set
     const [tipo, setTipo] = useState("reps")
     const [series, setSeries] = useState(1)
     const [repeticiones, setRepeticiones] = useState(1)
-    const [ejercicio, setEjercicio] = useState(0)
+    const [ejercicio, setEjercicio] = useState(undefined)
     const [peso, setPeso] = useState(0)
 
     const handleSubmit = () => {
@@ -68,22 +68,33 @@ export default function RutinaFormEjercicios({ ejercicios, ejerciciosRutina, set
 
     return (
         <>
-            <div className="mb-5">
+            <div className="mb-1 text-small">
                 <p className={clsx({ 'text-red-500' : message })}>Ejercicios de la rutina *</p>
                 {message && <p className="text-red-500 text-tiny">{message}</p>}
             </div>
 
             <div>
-                <div className="grid grid-cols-2 gap-3 mb-3">
-                    <Input
+                <div className="grid grid-cols-9 gap-3 mb-3">
+                    <Select
                         name="tipo"
-                        value={tipo}
-                        onValueChange={setTipo}
-                        label="Tipo de ejercicio"
+                        label="Tipo"
+                        selectedKeys={[tipo]}
+                        onChange={(e) => setTipo(e.target.value)}
                         required
                         isInvalid={!!state?.errors?.tipo}
                         errorMessage={state?.errors?.tipo}
-                    />
+                        className="col-span-1"
+                        classNames={{
+                            trigger: "py-2"
+                        }}
+                    >
+                        <SelectItem key={'reps'} value={'reps'}>
+                            reps
+                        </SelectItem>
+                        <SelectItem key={'tiempo'} value={'tiempo'}>
+                            tiempo
+                        </SelectItem>
+                    </Select>
                     <Input
                         name="series"
                         label="Series"
@@ -93,17 +104,18 @@ export default function RutinaFormEjercicios({ ejercicios, ejerciciosRutina, set
                         required
                         isInvalid={!!state?.errors?.series}
                         errorMessage={state?.errors?.series}
+                        className="col-span-1"
                     />
                     <Select
                         label="Ejercicio"
-                        name="ejercicio"
+                        name="ejercicioId"
                         items={ejercicios}
                         selectedKeys={[ejercicio]}
                         onChange={(e) => setEjercicio(e.target.value)}
-                        labelPlacement="outside"
                         required
-                        isInvalid={!!state?.errors?.ejercicio}
-                        errorMessage={state?.errors?.ejercicio}
+                        isInvalid={!!state?.errors?.ejercicioId}
+                        errorMessage={state?.errors?.ejercicioId}
+                        className="col-span-4"
                         classNames={{
                             trigger: "py-2"
                         }}
@@ -116,25 +128,27 @@ export default function RutinaFormEjercicios({ ejercicios, ejerciciosRutina, set
                     </Select>
                     <Input
                         name="reps"
-                        label="Repeticiones"
+                        label={tipo == 'reps' ? 'Repeticiones' : 'Duración(s)'}
                         type="number"
                         value={repeticiones}
                         onValueChange={setRepeticiones}
                         required
                         isInvalid={!!state?.errors?.repeticiones}
                         errorMessage={state?.errors?.repeticiones}
+                        className="col-span-1"
                     />
                     <Input
                         name="peso"
-                        label="Peso/Lastre"
+                        label="Peso (kg)"
                         type="number"
                         value={peso}
                         onValueChange={setPeso}
                         isInvalid={!!state?.errors?.peso}
                         errorMessage={state?.errors?.peso}
+                        className="col-span-1"
                     />
+                    <Button className="h-14" color="secondary" startContent={<i className="ri-add-circle-fill text-lg"></i>} onClick={handleSubmit}>Añadir</Button>
                 </div>
-                <Button onClick={handleSubmit}>Añadir</Button>
             </div>
 
             <div className="py-3">

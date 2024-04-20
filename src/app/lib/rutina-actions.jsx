@@ -34,7 +34,7 @@ export async function addRutina(params, prevState, formData) {
         titulo: formData.get('titulo'),
         descripcion: formData.get('descripcion'),
         categorias: formData.getAll('categorias[]'),
-        ejercicios: params.list
+        ejercicios: addOrderToEjercicios(params.list)
     }
 
     console.log(rawData)
@@ -81,7 +81,7 @@ export async function editRutina(params, prevState, formData) {
         titulo: formData.get('titulo'),
         descripcion: formData.get('descripcion'),
         categorias: formData.getAll('categorias[]'),
-        ejercicios: params.list,
+        ejercicios: addOrderToEjercicios(params.list),
     }
 
     console.log(rawData)
@@ -136,4 +136,12 @@ export async function deleteRutina(path) {
             message: 'Ups.. Hubo un error en la eliminación del objetivo.'
         }
     }
+}
+
+function addOrderToEjercicios(list) {
+    list.forEach((item, index) => {
+        item.orden = index
+    })
+
+    return list;
 }

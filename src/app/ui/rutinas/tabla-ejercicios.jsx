@@ -5,6 +5,7 @@ import { MaterialReactTable, useMaterialReactTable } from 'material-react-table'
 import { Image, Button } from '@nextui-org/react';
 import { Rate } from 'rsuite';
 import { renderRateCharacter } from '@/app/lib/utils';
+import { MRT_Localization_ES } from '@/app/material-react-table-config/locales/es';
 
 export default function TablaEjercicios({ data, setData }) {
   const columns = useMemo(
@@ -13,8 +14,10 @@ export default function TablaEjercicios({ data, setData }) {
         accessorKey: 'series',
         header: 'Series',
         Cell: ({ row }) => (
-          <>{row.original.series}x{row.original.repeticiones}</>
-        )
+          <>{row.original.series}x{row.original.repeticiones}{row.original.tipo == 'tiempo' && ' seg'}</>
+        ),
+        grow: false,
+        maxSize: 'fit-content'
       },
       {
         accessorKey: 'ejercicio.nombre',
@@ -24,7 +27,8 @@ export default function TablaEjercicios({ data, setData }) {
             <img src="/excercises/img-excercise1.png" className='rounded' alt={ 'Imagen de ' + row.original.ejercicio.nombre } height={35} width={35} />
             <span>{row.original.ejercicio.nombre}</span>
           </div>
-        )
+        ),
+        grow: true
       },
       {
         accessorKey: 'peso',
@@ -36,22 +40,28 @@ export default function TablaEjercicios({ data, setData }) {
               <></>
             }
           </>
-        )
+        ),
+        grow: false,
+        maxSize: 'fit-content'
       },
       {
         accessorKey: 'ejercicio.dificultad',
         header: 'Dificultad',
         Cell: ({ row }) => (
           <Rate value={row.original.ejercicio.dificultad} size='xs' readOnly renderCharacter={renderRateCharacter} />
-        )
+        ),
+        grow: false,
+        maxSize: 'fit-content'
       },
       {
         Cell: ({ row }) => (
           <>
-            <Button color='secondary'>Acción<i className="ri-arrow-down-s-fill ms-2"></i></Button>
+            <Button variant='flat' color='secondary'>Acción<i className="ri-arrow-down-s-fill ms-2"></i></Button>
           </>
         ),
         id: 'actions',
+        grow: false,
+        maxSize: 'fit-content'
       }
     ],
     [],
@@ -85,6 +95,10 @@ export default function TablaEjercicios({ data, setData }) {
           }
         },
       }),
+      localization: MRT_Localization_ES,
+      localization: {
+        move: ''
+      }
   });
 
   //note: you can also pass table options as props directly to <MaterialReactTable /> instead of using useMaterialReactTable

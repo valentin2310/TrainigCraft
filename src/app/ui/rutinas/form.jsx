@@ -52,66 +52,68 @@ export default function RutinaForm({ idUser = null, rutina = null, ejercicios, c
     return (
         <>
             <form action={formAction}>
-                <div className="my-10 grid grid-cols-2 gap-5 px-10">
-                    <Input
-                        name="titulo"
-                        type="text"
-                        label="Titulo *"
-                        labelPlacement="outside"
-                        placeholder="Rutina de.."
-                        required
-                        defaultValue={rutina?.titulo}
-                        isInvalid={!!state?.errors?.titulo}
-                        errorMessage={state?.errors?.titulo}
-                    />
-                    <Select
-                        name="categorias[]"
-                        items={categorias}
-                        label="Categorías"
-                        isMultiline={true}
-                        selectionMode="multiple"
-                        placeholder="Pertenece a la categoría/as.."
-                        labelPlacement="outside"
-                        classNames={{
-                            trigger: "py-2"
-                        }}
-                        defaultSelectedKeys={rutina?.categorias.map((cat) => (cat.id))}
-                        isInvalid={!!state?.errors?.categorias}
-                        errorMessage={state?.errors?.categorias}
-                        renderValue={(items) => (
-                            <div className="flex flex-wrap gap-2">
-                                {items.map((item) => (
-                                    <Chip key={item.key} color="default" variant="bordered" startContent={<i className="ri-circle-fill" style={{ color: item.data.color }}></i>}>
-                                        {item.data.nombre}
-                                    </Chip>
-                                ))}
-                            </div>
-                        )}
-                    >
-                        {(categoria) => (
-                            <SelectItem key={categoria.id} value={categoria.id} textValue={categoria.nombre}>
-                                <span style={{ color: categoria.color }}>{categoria.nombre}</span>
-                            </SelectItem>
-                        )}
-                    </Select>
-                    <Textarea
-                        name="descripcion"
-                        label="Descripción"
-                        labelPlacement="outside"
-                        placeholder="La rutina trata de.."
-                        defaultValue={rutina?.descripcion}
-                        isInvalid={!!state?.errors?.descripcion}
-                        errorMessage={state?.errors?.descripcion}
-                    />
-                </div>
+                <div className="grid xl:grid-cols-10 gap-5 px-5">
+                    <div className="col-span-4 my-10 flex flex-col gap-5">
+                        <Input
+                            name="titulo"
+                            type="text"
+                            label="Titulo *"
+                            labelPlacement="outside"
+                            placeholder="Rutina de.."
+                            required
+                            defaultValue={rutina?.titulo}
+                            isInvalid={!!state?.errors?.titulo}
+                            errorMessage={state?.errors?.titulo}
+                        />
+                        <Select
+                            name="categorias[]"
+                            items={categorias}
+                            label="Categorías"
+                            isMultiline={true}
+                            selectionMode="multiple"
+                            placeholder="Pertenece a la categoría/as.."
+                            labelPlacement="outside"
+                            classNames={{
+                                trigger: "py-2"
+                            }}
+                            defaultSelectedKeys={rutina?.categorias.map((cat) => (cat.id))}
+                            isInvalid={!!state?.errors?.categorias}
+                            errorMessage={state?.errors?.categorias}
+                            renderValue={(items) => (
+                                <div className="flex flex-wrap gap-2">
+                                    {items.map((item) => (
+                                        <Chip key={item.key} color="default" variant="bordered" startContent={<i className="ri-circle-fill" style={{ color: item.data.color }}></i>}>
+                                            {item.data.nombre}
+                                        </Chip>
+                                    ))}
+                                </div>
+                            )}
+                        >
+                            {(categoria) => (
+                                <SelectItem key={categoria.id} value={categoria.id} textValue={categoria.nombre}>
+                                    <span style={{ color: categoria.color }}>{categoria.nombre}</span>
+                                </SelectItem>
+                            )}
+                        </Select>
+                        <Textarea
+                            name="descripcion"
+                            label="Descripción"
+                            labelPlacement="outside"
+                            placeholder="La rutina trata de.."
+                            defaultValue={rutina?.descripcion}
+                            isInvalid={!!state?.errors?.descripcion}
+                            errorMessage={state?.errors?.descripcion}
+                        />
+                    </div>
 
-                <div className="py-10">
-                    <RutinaFormEjercicios 
-                        ejercicios={ejercicios}
-                        ejerciciosRutina={ejerciciosRutina}
-                        setEjerciciosRutina={setEjerciciosRutina} 
-                        message={state?.errors?.ejercicios}
-                    />
+                    <div className="col-span-6 py-10">
+                        <RutinaFormEjercicios 
+                            ejercicios={ejercicios}
+                            ejerciciosRutina={ejerciciosRutina}
+                            setEjerciciosRutina={setEjerciciosRutina} 
+                            message={state?.errors?.ejercicios}
+                        />
+                    </div>
                 </div>
 
                 <Button onClick={cancel} color="danger" variant="light">Cancelar</Button>

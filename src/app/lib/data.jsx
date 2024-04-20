@@ -394,7 +394,8 @@ export async function fetchEjerciciosRutina(rutinaPath) {
 
     try {
         const collectionRef = collection(db, rutinaPath, "ejercicios");
-        const data = await fetchCollectionData(collectionRef);
+        const q = query(collectionRef, orderBy('orden'))
+        const data = await fetchCollectionData(q);
     
         return data;
         
