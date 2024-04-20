@@ -144,6 +144,18 @@ export async function fetchRutinas(idUser) {
     }
 }
 
+export async function fetchEjercicios(idUser) {
+    try {
+        const collectionRef = collection(db, `usuarios/${idUser}/ejercicios`)
+        const data = await fetchCollectionData(collectionRef)
+        return data
+        
+    } catch (error) {
+        console.log(error)
+        return []
+    }
+}
+
 export async function fetchCategorias(idUser) {
     try {
         const collectionRef = collection(db, `usuarios/${idUser}/categorias`)
@@ -253,7 +265,7 @@ export async function destroyItem(path) {
 
 /* #region crud ejercicios */
 
-export async function storeEjercicio(data) {
+export async function storeEjercicioDefault(data) {
     const collectionRef = collection(db, `ejercicios-default`)
 
     try {
@@ -263,6 +275,41 @@ export async function storeEjercicio(data) {
         })
         
         const result = await getDoc(docRef)
+        return result;
+
+    } catch (err) {
+        console.log(err)
+        return null
+    }
+}
+
+export async function storeEjercicio(idUser, data) {
+    const collectionRef = collection(db, `usuarios/${idUser}/ejercicios`)
+
+    try {
+        const docRef = await addDoc(collectionRef, {
+            ...data,
+            created_at: Timestamp.now(),
+        })
+        
+        const result = await getDoc(docRef)
+        return result;
+
+    } catch (err) {
+        console.log(err)
+        return null
+    }
+}
+
+export async function updateEjercicioDefault(path, data) {
+    const ejercicio = doc(db, path);
+
+    try {
+        await updateDoc(ejercicio, {
+            ...data,
+        })
+        
+        const result = await getDoc(ejercicio)
         return result;
 
     } catch (err) {

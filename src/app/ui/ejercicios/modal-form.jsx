@@ -11,13 +11,14 @@ const initialState = {
     message: ''
 }
 
-export default function EjercicioModalForm({ isOpen, onClose, onOpenChange, ejercicio = null }) {
+export default function EjercicioModalForm({ isOpen, onClose, onOpenChange, ejercicio = null, idUser = null }) {
     const { storeEjercicio, updateEjercicio } = useEjercicios()
     const { musculos, getDefault: getDefaultMusculos } = useMusculos()
 
+    const addEjercicioWithParams = addEjercicio.bind(null, idUser)
     const editEjercicioWithPath = editEjercicio.bind(null, ejercicio?.path)
 
-    const [state, formAction] = useFormState(ejercicio ? editEjercicioWithPath : addEjercicio, initialState)
+    const [state, formAction] = useFormState(ejercicio ? editEjercicioWithPath : addEjercicioWithParams, initialState)
 
     const { pending } = useFormStatus()
     const [dificultad, setDificultad] = useState(ejercicio ? ejercicio.dificultad : 1)

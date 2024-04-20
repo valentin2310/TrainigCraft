@@ -21,14 +21,14 @@ function formatEjercicio(docSnapshot) {
     }
 }
 
-export async function addEjercicio(prevState, formData) {
-    /* if(!idUser) {
+export async function addEjercicio(idUser, prevState, formData) {
+    if(!idUser) {
         return{
             errors: {
                 'user' : 'Usuario no existe'
             }
         }
-    } */
+    }
 
     const rawData = {
         nombre: formData.get('nombre'),
@@ -49,7 +49,7 @@ export async function addEjercicio(prevState, formData) {
 
     // Guardar los datos en firestore
     try {
-        const result = await storeEjercicio(validatedFields.data);
+        const result = await storeEjercicio(idUser, validatedFields.data);
         const formatedData = formatEjercicio(result)
 
         return {

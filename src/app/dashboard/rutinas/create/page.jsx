@@ -4,7 +4,7 @@ import { use, useEffect, useMemo, useState } from "react";
 import { useEjercicios } from "@/app/stores/use-ejercicios";
 import { usecategorias } from "@/app/stores/use-categorias";
 import { UserContext } from "@/app/providers";
-import { fetchCategorias, fetchDefaultEjercicios } from "@/app/lib/data";
+import { fetchCategorias, fetchEjercicios } from "@/app/lib/data";
 import RutinaForm from "@/app/ui/rutinas/form";
 
 export default function Page() {
@@ -15,7 +15,7 @@ export default function Page() {
     
 
     const fetchData = async () => {
-        const _ejercicios = await fetchDefaultEjercicios()
+        const _ejercicios = await fetchEjercicios(user.id)
         setEjercicios(_ejercicios)
 
         const _categorias = await fetchCategorias(user.id)

@@ -1,25 +1,30 @@
 'use client'
 
-import { fetchDefaultEjercicios } from "@/app/lib/data"
+import { fetchEjercicios } from "@/app/lib/data"
 import { useEjercicios } from "@/app/stores/use-ejercicios"
 import { Button, useDisclosure } from "@nextui-org/react"
-import { useEffect } from "react"
+import { use, useEffect } from "react"
 import GridEjercicios from "@/app/ui/ejercicios/grid-ejercicios"
 import EjercicioModalForm from "@/app/ui/ejercicios/modal-form"
+import { UserContext } from "@/app/providers"
 
 export default function Page() {
     const { ejercicios, setEjercicios } = useEjercicios()
-    const {isOpen, onOpen, onClose, onOpenChange} = useDisclosure()
+    const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
+
+    const user = use(UserContext)
 
     const fetchData = async () => {
-        const _ejercicios = await fetchDefaultEjercicios();
+        const _ejercicios = await fetchEjercicios(user.id);
         setEjercicios(_ejercicios)
     }
-    
+
     useEffect(() => {
+        if (!user) return
+
         fetchData()
 
-    }, [])
+    }, [user])
 
     return (
         <>
@@ -30,15 +35,25 @@ export default function Page() {
                         <i className="ri-file-add-line m-2"></i><span className="hidden sm:inline">Añadir</span>
                     </Button>
                 </div>
-             </div>
+            </div>
 
-             <GridEjercicios lista={ejercicios} />
+            {ejercicios?.length > 0 &&
+                <GridEjercicios lista={ejercicios} />
+                || <div className="flex flex-col">
+                    <span>No tienes ningún ejercicio creado aún :(</span>
+                    <span>Prueba a crear un nuevo ejercicio.</span>
+                </div>
 
-             <EjercicioModalForm 
-                isOpen={isOpen}
-                onClose={onClose}
-                onOpenChange={onOpenChange}
-             />
+            }
+
+            {user &&
+                <EjercicioModalForm
+                    isOpen={isOpen}
+                    onClose={onClose}
+                    onOpenChange={onOpenChange}
+                    idUser={user.id}
+                />
+            }
         </>
     )
 }
