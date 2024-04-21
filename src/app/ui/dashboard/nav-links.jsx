@@ -27,7 +27,7 @@ const links = [
     },
     {
         name: 'Calendario',
-        href: '/dashboard/rutinas',
+        href: '/dashboard/calendario',
         icon: 'ri-calendar-2-line'
     },
 ]
