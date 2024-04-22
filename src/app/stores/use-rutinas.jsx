@@ -2,7 +2,9 @@ import { create } from "zustand";
 
 export const useRutinas = create((set) => ({
     rutinas: [],
+    filteredRutinas: [],
     setRutinas: (newList) => set({ rutinas: newList }),
+    setFilteredRutinas: (newList) => set({ filteredRutinas: newList }),
     storeRutina: (newItem) => set((state) => ({
         rutinas: [
             { ...newItem },
