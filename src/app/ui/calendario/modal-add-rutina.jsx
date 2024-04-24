@@ -1,8 +1,5 @@
 import { Modal, ModalHeader, ModalContent, ModalBody, ModalFooter, Button, Chip } from '@nextui-org/react'
-import { deleteRutina } from '@/app/lib/rutina-actions'
-import { useFormState } from 'react-dom'
 import { useEffect, useState } from 'react'
-import { useRutinas } from '@/app/stores/use-rutinas'
 import FiltroRutinas from '@/app/ui/rutinas/rutinas-filtro'
 import RutinaCardSimple from '@/app/ui/rutinas/rutina-card-simple'
 import { updateEventos } from '@/app/lib/data'

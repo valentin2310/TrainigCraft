@@ -1,4 +1,3 @@
-import { generarGradient } from "@/app/lib/utils"
 import { Chip } from "@nextui-org/react"
 import clsx from "clsx"
 

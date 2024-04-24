@@ -7,7 +7,7 @@ import esLocale from "@fullcalendar/core/locales/es"
 import CalendarioModalAddRutina from "@/app/ui/calendario/modal-add-rutina";
 import { useDisclosure } from "@nextui-org/react";
 import { useEffect, useState } from "react";
-import { updateEventos } from "@/app/lib/data";
+import CalendarioModalRutinaInfo from "@/app/ui/calendario/modal-rutina-info";
 
 function renderEventContent(eventInfo) {
     return (
@@ -20,7 +20,10 @@ function renderEventContent(eventInfo) {
 
 export default function Calendar({ eventos, setEventos, rutinas, categorias, filteredRutinas, setFilteredRutinas, userId }) {
     const {isOpen, onOpen, onClose, onOpenChange} = useDisclosure()
+    const {isOpen : isOpenSee, onOpen : onOpenSee, onClose : onCloseSee, onOpenChange : onOpenChangeSee} = useDisclosure()
+    
     const [selectedDate, setSelectedDate] = useState(null)
+    const [selectedRutina, setSelectedRutina] = useState(null)
  
     const handleClick = (arg) => {
         /* alert(arg.dateStr) */
@@ -29,29 +32,21 @@ export default function Calendar({ eventos, setEventos, rutinas, categorias, fil
     }
 
     const handleEventClick = (arg) => {
-        console.log(arg.event)
-        // alert(arg)
+        // alert(arg.event)
+        const ev = eventos.find((item) => item.id == arg.event.id)
+        const rutina = rutinas.find((item) => item.id == ev.rutinaId)
+
+        console.log(rutina)
+
+        setSelectedRutina(rutina)
+        setSelectedDate(ev.date)
+        onOpenSee()
     }
 
     const handleEdit = (arg) => {
         console.log(arg.event.start)
         // alert(arg)
     }
-
-    const updateEv = async () => {
-        await updateEventos(userId, eventos);
-        console.log('eventos actualizados', eventos)
-    }
-
-    useEffect(() => {
-        if (!userId) return
-        if (!eventos) return
-
-        /* Guardar eventos */
-        /* updateEv() */
-        console.log(eventos)
-
-    }, [eventos])
 
     return (
         <>
@@ -81,6 +76,12 @@ export default function Calendar({ eventos, setEventos, rutinas, categorias, fil
                 eventos={eventos}
                 setEventos={setEventos}
                 selectedDate={selectedDate}
+            />
+
+            <CalendarioModalRutinaInfo 
+                isOpen={isOpenSee} onClose={onCloseSee} onOpen={onOpenSee} onOpenChange={onOpenChangeSee}
+                rutina={selectedRutina}
+                fecha={selectedDate}
             />
         </>
     )
