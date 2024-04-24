@@ -9,36 +9,13 @@ import { fetchCategorias, fetchRutinas } from "@/app/lib/data";
 import RutinaModalForm from "@/app/ui/rutinas/modal-form";
 import { usecategorias } from "@/app/stores/use-categorias";
 import Link from "next/link";
-import { Input, Select, SelectItem, Chip } from "@nextui-org/react";
+import FiltroRutinas from "@/app/ui/rutinas/rutinas-filtro";
 
 export default function Page() {
     const user = use(UserContext)
     const { rutinas, setRutinas, filteredRutinas, setFilteredRutinas } = useRutinas()
     const { categorias, setCategorias } = usecategorias()
     const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
-
-    /* Filtro */
-    const [filtroName, setFiltroName] = useState('')
-    const [filtroCategoria, setFiltroCategoria] = useState(undefined)
-
-    const filtrar = () => {
-        let newList = rutinas.filter((item) => item.titulo.toLowerCase().includes(filtroName.toLowerCase()))
-
-        if (filtroCategoria) {
-            const _filter_categoria = Array.from(filtroCategoria)
-
-            if (_filter_categoria.length > 0) {
-                newList = newList.filter((item) => {
-                    const _categorias = item.categorias
-                    const hasCategoria = _categorias.find((item) => _filter_categoria.includes(item.id))
-    
-                    return !!hasCategoria;
-                })
-            }
-        }
-
-        setFilteredRutinas(newList)
-    }
 
     const fetchData = async () => {
         const _rutinas = await fetchRutinas(user.id)
@@ -56,17 +33,6 @@ export default function Page() {
 
     }, [user])
 
-    useEffect(() => {
-        if (!rutinas || rutinas.length == 0) return
-
-        const timeout = setTimeout(() => {
-            filtrar()
-
-        }, 800)
-
-        return () => clearTimeout(timeout)
-
-    }, [filtroName, filtroCategoria])
 
     return (
         <>
@@ -76,41 +42,11 @@ export default function Page() {
             </div>
 
             <div className="mb-10 bg-gray-100 grid grid-cols-10 gap-3 p-4 rounded shadow">
-                <Input
-                    label="Filtra por nombre"
-                    placeholder="Rutina de.."
-                    value={filtroName}
-                    onValueChange={setFiltroName}
-                    className="col-span-6"
-                    labelPlacement="outside"
+                <FiltroRutinas 
+                    rutinas={rutinas}
+                    categorias={categorias}
+                    setFilteredRutinas={setFilteredRutinas}
                 />
-                <Select
-                    name="categorias[]"
-                    items={categorias}
-                    label="Categorías"
-                    isMultiline={true}
-                    selectionMode="multiple"
-                    placeholder="Filtro por categoria"
-                    className="col-span-4"
-                    labelPlacement="outside"
-                    selectedKeys={filtroCategoria}
-                    onSelectionChange={setFiltroCategoria}
-                    renderValue={(items) => (
-                        <div className="flex flex-wrap gap-2">
-                            {items.map((item) => (
-                                <Chip key={item.key} color="default" variant="bordered" startContent={<i className="ri-circle-fill" style={{ color: item.data.color }}></i>}>
-                                    {item.data.nombre}
-                                </Chip>
-                            ))}
-                        </div>
-                    )}
-                >
-                    {(categoria) => (
-                        <SelectItem key={categoria.id} value={categoria.id} textValue={categoria.nombre}>
-                            <span style={{ color: categoria.color }}>{categoria.nombre}</span>
-                        </SelectItem>
-                    )}
-                </Select>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2">

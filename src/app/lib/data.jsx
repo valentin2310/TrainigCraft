@@ -48,52 +48,76 @@ export async function getUser(uid) {
 
 // Funcion para leer una colección
 async function fetchCollectionData(collectionRef) {
-    const snapshot = await getDocs(collectionRef)
-    const data = [];
+    try {
+        const snapshot = await getDocs(collectionRef)
 
-    snapshot.forEach((doc) => {
-        const docRef = doc.ref
-        const path = docRef.path
+        if (snapshot.empty) return []
 
-        data.push({
-            ...doc.data(),
-            id: doc.id,
-            path: path
+        const data = [];
+    
+        snapshot.forEach((doc) => {
+            const docRef = doc.ref
+            const path = docRef.path
+    
+            data.push({
+                ...doc.data(),
+                id: doc.id,
+                path: path
+            })
         })
-    })
-
-    return data
+    
+        return data
+        
+    } catch (error) {
+        console.log(error)
+        return []
+    }
 }
 
 async function fetchCollectionDataWithId(collectionRef) {
-    const snapshot = await getDocs(collectionRef)
-    const data = [];
+    try {
+        const snapshot = await getDocs(collectionRef)
 
-    snapshot.forEach((doc) => {
-        const docRef = doc.ref
+        if (snapshot.empty) return []
 
-        data.push({
-            ...doc.data(),
-            id: doc.id,
+        const data = [];
+    
+        snapshot.forEach((doc) => {
+            data.push({
+                ...doc.data(),
+                id: doc.id,
+            })
         })
-    })
+    
+        return data
 
-    return data
+    } catch (error) {
+        console.log(error)
+        return []
+    }
 }
 
 async function fetchCollectionDataPlain(collectionRef) {
-    const snapshot = await getDocs(collectionRef)
-    const data = [];
+    try {
+        const snapshot = await getDocs(collectionRef)
 
-    snapshot.forEach((doc) => {
-        const docRef = doc.ref
+        if (snapshot.empty) return []
 
-        data.push({
-            ...doc.data(),
+        const data = [];
+    
+        snapshot.forEach((doc) => {
+    
+            data.push({
+                ...doc.data(),
+            })
         })
-    })
-
-    return data
+    
+        return data
+        
+    } catch (error) {
+        console.log(error)
+        return []
+    }
 }
 
 export async function fetchMusculos() {
@@ -449,5 +473,61 @@ export async function fetchEjerciciosRutina(rutinaPath) {
     } catch (error) {
         console.log(error)
         return [];
+    }
+}
+
+export async function fetchEventos(userId) {
+    if (!userId) return
+
+    try {
+        const collectionRef = collection(db, `usuarios/${userId}/eventos`)
+        const collectionData = await fetchCollectionDataWithId(collectionRef)
+
+        return collectionData;
+
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function updateEventos(userId, eventos, fecha) {
+    if (!userId || !eventos || !fecha) return
+
+    try {
+        const collectionRef = collection(db, `usuarios/${userId}/eventos`)
+        const queryEventosFecha = query(collectionRef, where('date', '==', fecha))
+        const collectionData = await fetchCollectionDataWithId(queryEventosFecha)
+
+        const batch = writeBatch(db);
+
+        /* Limpiar los eventos de esa fecha */
+        if (collectionData && collection.length > 0) {
+            collectionData.forEach((item) => {
+                const docRef = doc(collectionRef, item.id)
+                batch.delete(docRef)
+            })
+        }
+
+        /* Guardar o actualizar los eventos */
+        if (eventos.length > 0) {
+            eventos.forEach((item) => {
+                const docRef = doc(collectionRef)
+                batch.set(docRef, {
+                    rutinaId: item.rutinaId,
+                    date: item.date,
+                    title: item.title
+                })
+            })
+        }
+
+        /* Hacer commit del batch */
+        await batch.commit()
+
+        const result = await fetchCollectionDataWithId(queryEventosFecha)
+        return result;
+
+
+    } catch (error) {
+        console.log(error)
     }
 }
