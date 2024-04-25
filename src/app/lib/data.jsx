@@ -531,3 +531,18 @@ export async function updateEventos(userId, eventos, fecha) {
         console.log(error)
     }
 }
+
+export default async function destroyEvento(userId, eventoId) {
+    if (!userId || !eventoId) return
+
+    try {
+        const docRef = doc(db, `usuarios/${userId}/eventos/${eventoId}`)
+        await deleteDoc(docRef)
+
+        return true
+
+    } catch (error) {
+        console.log(error)
+        return false
+    }
+}

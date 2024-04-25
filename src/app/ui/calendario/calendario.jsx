@@ -24,6 +24,7 @@ export default function Calendar({ eventos, setEventos, rutinas, categorias, fil
     
     const [selectedDate, setSelectedDate] = useState(null)
     const [selectedRutina, setSelectedRutina] = useState(null)
+    const [selectedEvento, setSelectedEvento] = useState(null)
  
     const handleClick = (arg) => {
         /* alert(arg.dateStr) */
@@ -39,7 +40,7 @@ export default function Calendar({ eventos, setEventos, rutinas, categorias, fil
         console.log(rutina)
 
         setSelectedRutina(rutina)
-        setSelectedDate(ev.date)
+        setSelectedEvento(ev)
         onOpenSee()
     }
 
@@ -80,8 +81,11 @@ export default function Calendar({ eventos, setEventos, rutinas, categorias, fil
 
             <CalendarioModalRutinaInfo 
                 isOpen={isOpenSee} onClose={onCloseSee} onOpen={onOpenSee} onOpenChange={onOpenChangeSee}
+                userId={userId}
                 rutina={selectedRutina}
-                fecha={selectedDate}
+                evento={selectedEvento}
+                eventos={eventos}
+                setEventos={setEventos}
             />
         </>
     )
