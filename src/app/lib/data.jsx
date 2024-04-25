@@ -532,7 +532,39 @@ export async function updateEventos(userId, eventos, fecha) {
     }
 }
 
-export default async function destroyEvento(userId, eventoId) {
+export async function updateEvento(userId, evento, newDate) {
+    if (!userId || !evento || !newDate) return
+
+    try {
+        const collectionRef = collection(db, `usuarios/${userId}/eventos`)
+        /* Eliminar eventos duplicados en la misma fecha */
+        const queryDuplicados = query(collectionRef, where('rutinaId', '==', evento.rutinaId), where('date', '==', newDate))
+        const duplicados = await fetchCollectionDataWithId(queryDuplicados)
+
+        const batch = writeBatch(db)
+
+        if (duplicados && duplicados.length) {
+            duplicados.forEach((item) => {
+                const docRef = doc(collectionRef, item.id)
+                batch.delete(docRef)
+            })
+        }
+
+        const docRef = doc(collectionRef, evento.id)
+        batch.update(docRef, {
+            date: newDate
+        })
+
+        await batch.commit()
+        return true
+
+    } catch (error) {
+        console.log(error)
+        return false
+    }
+}
+
+export async function destroyEvento(userId, eventoId) {
     if (!userId || !eventoId) return
 
     try {

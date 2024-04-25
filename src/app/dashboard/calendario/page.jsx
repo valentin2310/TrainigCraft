@@ -35,9 +35,14 @@ export default function Page() {
 
     return (
         <>
-            <p className="text-3xl mb-3">Calendario</p>
+        <div className="mb-5">
+            <p className="text-3xl font-semibold text-primary mb-3">Calendario</p>
+            <p>Planifica tus entrenamientos de forma sencilla, selecciona el día que quieras y añade la rutina que quieras hacer.</p>
+            <p>También puedes ver la información de las rutinas haciendo click sobre ellas, para tener toda la información detallada, selecciona <span className="text-primary">ver más</span>.</p>
+            <p>Puedes eliminar la rutina para cierto día haciendo click sobre la misma y dandole a <span className="text-red-500">quitar</span>.</p>
+        </div>
 
-            <div className="w-full max-h-[1200px] overflow-y-auto">
+            <div className="w-full">
                 <Calendar 
                     eventos={eventos}
                     setEventos={setEventos}

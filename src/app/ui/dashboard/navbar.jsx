@@ -16,7 +16,7 @@ export default function Navbar() {
     }
 
     return (
-        <header className="w-full sm:h-screen sm:w-[320px] bg-dark px-2 sm:py-10 sm:px-5 text-white">
+        <header className="w-full sm:h-screen sm:w-[250px] bg-dark px-2 sm:py-10 sm:px-5 text-white">
             <div className="hidden sm:grid place-items-center px-4">
                 <p className="text-xl text-primary text-center font-bold">TrainigCraft</p>
                 <Image

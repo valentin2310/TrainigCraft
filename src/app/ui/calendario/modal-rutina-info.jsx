@@ -1,4 +1,4 @@
-import destroyEvento from "@/app/lib/data"
+import { destroyEvento } from "@/app/lib/data"
 import { Modal, ModalHeader, ModalContent, ModalBody, ModalFooter, Button, Chip, Image } from "@nextui-org/react"
 import { useRouter } from "next/navigation"
 
