@@ -7,20 +7,12 @@ import { use, useEffect, useState } from "react"
 import GridEjercicios from "@/app/ui/ejercicios/grid-ejercicios"
 import EjercicioModalForm from "@/app/ui/ejercicios/modal-form"
 import { UserContext } from "@/app/providers"
-import { subirImg } from "@/app/lib/data-storage"
-import UpploadReact from "@/uppload/uploader"
 
 export default function Page() {
     const { ejercicios, setEjercicios } = useEjercicios()
     const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
     const [img, setImg] = useState(null)
 
-    const handleFileChange = async (e) => {
-        const file = e.target.files[0];
-        console.log(file)
-        /* const uploadedUrl = await subirImg(user.id, file)
-        setImg(uploadedUrl); */
-      };
 
     const user = use(UserContext)
 
@@ -46,11 +38,6 @@ export default function Page() {
                     </Button>
                 </div>
             </div>
-
-            {/* <input type="file" onChange={handleFileChange} />
-            {img && <img src={img} alt="Preview" />} */}
-
-            {user && <UpploadReact userId={user.id} />}
 
             {ejercicios?.length > 0 &&
                 <GridEjercicios lista={ejercicios} />

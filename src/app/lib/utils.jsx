@@ -63,3 +63,9 @@ export const generarGradient = (categorias) => {
 
     return gradient;
 }
+
+export const urlToBlob = async (url) => {
+    const response = await fetch(url)
+    const blob = await response.blob()
+    return blob;
+}

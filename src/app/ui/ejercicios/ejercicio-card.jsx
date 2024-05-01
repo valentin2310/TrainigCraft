@@ -16,7 +16,7 @@ export default function EjercicioCard({ ejercicio }) {
                         <Image
                             width={70}
                             alt={`Imagen del ejercicio ${ejercicio.nombre}`}
-                            src="/excercises/img-excercise1.png"
+                            src={ejercicio.imgPath ?? "/excercises/img-excercise1.png"}
                             className={`col-span-1 border-3 ${dificultadColorBorder(ejercicio.dificultad)} `}
                         />
                         <div className="col-span-4">

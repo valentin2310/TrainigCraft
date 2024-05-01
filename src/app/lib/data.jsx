@@ -1,6 +1,8 @@
 import { firestore as db, auth } from '@/firebase/client-config'
 import { collection, getDocs, doc, getDoc, query, where, setDoc, addDoc, Timestamp, orderBy, limit, updateDoc, deleteDoc, runTransaction, documentId, writeBatch } from 'firebase/firestore'
 import { generateFromEmail } from 'unique-username-generator'
+import { urlToBlob } from './utils';
+import { subirImg } from './data-storage';
 
 export async function addUsuarioFromLogin(user) {
     if (await getUser(user.uid)) return null
@@ -311,8 +313,14 @@ export async function storeEjercicio(idUser, data) {
     const collectionRef = collection(db, `usuarios/${idUser}/ejercicios`)
 
     try {
+        const {imgUrl, ...restData} = data
+
+        const blob = await urlToBlob(imgUrl)
+        const uploadedUrl = await subirImg(idUser, blob)
+
         const docRef = await addDoc(collectionRef, {
-            ...data,
+            ...restData,
+            imgPath: uploadedUrl,
             created_at: Timestamp.now(),
         })
         

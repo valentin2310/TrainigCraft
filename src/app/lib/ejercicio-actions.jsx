@@ -5,7 +5,8 @@ const SCHEMA_EJERCICIO = z.object({
     nombre: z.string().trim().min(3),
     descripcion: z.string().trim().nullable(),
     dificultad: z.number().positive().lte(5),
-    musculos: z.array(z.string()).nullable()
+    musculos: z.array(z.string()).nullable(),
+    imgUrl: z.string().nullable()
 })
 
 function formatEjercicio(docSnapshot) {
@@ -34,7 +35,8 @@ export async function addEjercicio(idUser, prevState, formData) {
         nombre: formData.get('nombre'),
         descripcion: formData.get('descripcion'),
         dificultad: formData.get('dificultad') ? parseInt(formData.get('dificultad')) : null,
-        musculos: formData.getAll('musculos[]')
+        musculos: formData.getAll('musculos[]'),
+        imgUrl: formData.get('imgUrl')
     }
 
     console.log(rawData)

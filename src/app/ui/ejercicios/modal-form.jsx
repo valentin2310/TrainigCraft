@@ -6,6 +6,7 @@ import { addEjercicio, editEjercicio } from "@/app/lib/ejercicio-actions";
 import { useFormState, useFormStatus } from 'react-dom'
 import { useEjercicios } from "@/app/stores/use-ejercicios";
 import { useMusculos } from "@/app/stores/use-musculos";
+import UpploadReact from "@/uppload/uploader";
 
 const initialState = {
     message: ''
@@ -22,6 +23,7 @@ export default function EjercicioModalForm({ isOpen, onClose, onOpenChange, ejer
 
     const { pending } = useFormStatus()
     const [dificultad, setDificultad] = useState(ejercicio ? ejercicio.dificultad : 1)
+    const [imgUrl, setImgUrl] = useState(null)
 
     useEffect(() => {
         getDefaultMusculos()
@@ -71,6 +73,10 @@ export default function EjercicioModalForm({ isOpen, onClose, onOpenChange, ejer
                                             isInvalid={!!state?.errors?.nombre}
                                             errorMessage={state?.errors?.nombre}
                                         />
+                                        <div className="w-full grid place-items-center">
+                                            <UpploadReact userId={idUser} setImgUrl={setImgUrl} />
+                                            <input type="hidden" name="imgUrl" value={imgUrl} />
+                                        </div>
                                         <Textarea
                                             name="descripcion"
                                             label="Descripción"
