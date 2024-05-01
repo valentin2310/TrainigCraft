@@ -21,6 +21,21 @@ export const dificultadColor = (value) => {
     }
 }
 
+export const dificultadColorBorder = (value) => {
+    switch (value) {
+        case 0: case 1:
+            return 'border-green-500';
+        case 2:
+            return 'border-blue-500';
+        case 3:
+            return 'border-violet-500';
+        case 4:
+            return 'border-red-500'
+        case 5:
+            return 'border-rose-800'
+    }
+}
+
 export const generarGradient = (categorias) => {
     let gradient;
     
