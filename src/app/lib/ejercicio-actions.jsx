@@ -1,5 +1,6 @@
 import { z } from 'zod'
-import { destroyItem, storeEjercicio, updateEjercicio } from '@/app/lib/data'
+import { destroyItem, fetchItem, storeEjercicio, updateEjercicio } from '@/app/lib/data'
+import { destroyImg } from '@/app/lib/data-storage';
 
 const SCHEMA_EJERCICIO = z.object({
     nombre: z.string().trim().min(3),
@@ -8,12 +9,19 @@ const SCHEMA_EJERCICIO = z.object({
     musculos: z.array(z.string()).nullable(),
     imgUrl: z.string().nullable()
 })
+    .transform((data) => {
+        // Eliminar la propiedad 'imgUrl' si su valor es null o una cadena vacía
+        if (data.imgUrl === null || data.imgUrl === "") {
+            delete data.imgUrl;
+        }
+        return data;
+    });
 
 function formatEjercicio(docSnapshot) {
     console.log(docSnapshot)
-    const {created_at, ...rest} = docSnapshot.data()
+    const { created_at, ...rest } = docSnapshot.data()
     const formatedDate = new Date(created_at.seconds * 1000 + created_at.nanoseconds / 1000000).toISOString();
-    
+
     return {
         ...rest,
         created_at: formatedDate,
@@ -23,10 +31,10 @@ function formatEjercicio(docSnapshot) {
 }
 
 export async function addEjercicio(idUser, prevState, formData) {
-    if(!idUser) {
-        return{
+    if (!idUser) {
+        return {
             errors: {
-                'user' : 'Usuario no existe'
+                'user': 'Usuario no existe'
             }
         }
     }
@@ -44,7 +52,7 @@ export async function addEjercicio(idUser, prevState, formData) {
     const validatedFields = SCHEMA_EJERCICIO.safeParse(rawData)
 
     if (!validatedFields.success) {
-        return{
+        return {
             errors: validatedFields.error.flatten().fieldErrors
         }
     }
@@ -69,10 +77,10 @@ export async function addEjercicio(idUser, prevState, formData) {
 }
 
 export async function editEjercicio(path, prevState, formData) {
-    if(!path) {
-        return{
+    if (!path) {
+        return {
             errors: {
-                'user' : 'Usuario no existe'
+                'user': 'Usuario no existe'
             }
         }
     }
@@ -81,7 +89,8 @@ export async function editEjercicio(path, prevState, formData) {
         nombre: formData.get('nombre'),
         descripcion: formData.get('descripcion'),
         dificultad: formData.get('dificultad') ? parseInt(formData.get('dificultad')) : null,
-        musculos: formData.getAll('musculos[]')
+        musculos: formData.getAll('musculos[]'),
+        imgUrl: formData.get('imgUrl')
     }
 
     console.log(rawData)
@@ -89,7 +98,7 @@ export async function editEjercicio(path, prevState, formData) {
     const validatedFields = SCHEMA_EJERCICIO.safeParse(rawData)
 
     if (!validatedFields.success) {
-        return{
+        return {
             errors: validatedFields.error.flatten().fieldErrors
         }
     }
@@ -117,22 +126,23 @@ export async function editEjercicio(path, prevState, formData) {
 }
 
 export async function deleteEjercicio(path) {
-    if(!path) {
-        return{
+    if (!path) {
+        return {
             errors: {
-                'user' : 'Usuario no existe'
+                'user': 'Usuario no existe'
             }
         }
     }
 
     // Elimina los datos en firestore
     try {
+        await deleteEjercicioImg(path)
         const result = await destroyItem(path);
 
         return {
             success: result
         }
-        
+
     } catch (err) {
         console.log(err)
         return {
@@ -140,3 +150,23 @@ export async function deleteEjercicio(path) {
         }
     }
 }
+
+async function deleteEjercicioImg(ejercicioPath) {
+    try {
+        const item = await fetchItem(ejercicioPath)
+
+        if (!item.imgPath || item.imgPath == '') return 
+
+        let parts = item.imgPath.split('%2F')
+        parts = parts[parts.length-1].split('?')
+        
+        const userId = ejercicioPath.split('/')[1]
+        const imgId = parts[0]
+        const imgRef = `imagenes/${userId}/ejercicios/${imgId}`
+
+        await destroyImg(imgRef)
+
+    } catch (error) {
+        console.log(error)
+    }
+} 

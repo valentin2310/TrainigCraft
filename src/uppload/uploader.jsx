@@ -9,7 +9,7 @@ import { subirImg } from "@/app/lib/data-storage";
 
 const defaultImage = "https://via.placeholder.com/150x150"
 
-export default function UpploadReact({ userId, setImgUrl }) {
+export default function UpploadReact({ userId, imgUrl = null, setImgUrl }) {
     const uploader = new Uppload({
         lang: es,
         maxSize: [500, 500],
@@ -33,14 +33,11 @@ export default function UpploadReact({ userId, setImgUrl }) {
     // Effects
     uploader.use(new Crop({ aspectRatio: 1 }));
 
-    const [url, setUrl] = useState(defaultImage)
+    const [url, setUrl] = useState(imgUrl ?? defaultImage)
     const [ready, setReady] = useState(false)
 
     const handleClick = () => {
         uploader.on("upload", async (url) => {
-            /* const blob = await urlToBlob(url)
-            const uploadedUrl = await subirImg(userId, blob) */
-
             setUrl(url);
             setImgUrl(url);
 

@@ -74,7 +74,7 @@ export default function EjercicioModalForm({ isOpen, onClose, onOpenChange, ejer
                                             errorMessage={state?.errors?.nombre}
                                         />
                                         <div className="w-full grid place-items-center">
-                                            <UpploadReact userId={idUser} setImgUrl={setImgUrl} />
+                                            <UpploadReact userId={idUser} imgUrl={ejercicio?.imgPath ?? null} setImgUrl={setImgUrl} />
                                             <input type="hidden" name="imgUrl" value={imgUrl} />
                                         </div>
                                         <Textarea
