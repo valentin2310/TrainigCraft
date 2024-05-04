@@ -1,11 +1,14 @@
 
 'use client'
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TablaEjercicios from "@/app/ui/rutinas/tabla-ejercicios";
-import { Input, Button, Select, SelectItem } from "@nextui-org/react";
+import { Input, Button, Select, SelectItem, useDisclosure } from "@nextui-org/react";
 import { z } from "@/zod/zod-es";
 import clsx from "clsx";
+import ModalPickEjercicio from "@/app/ui/ejercicios/modal-pick-ejercicio";
+import { useMusculos } from "@/app/stores/use-musculos";
+import { useEjercicios } from "@/app/stores/use-ejercicios";
 
 const SCHEMA_EJERCICIO_RUTINA = z.object({
     tipo: z.string(),
@@ -25,13 +28,24 @@ export default function RutinaFormEjercicios({ ejercicios, ejerciciosRutina, set
     const [ejercicio, setEjercicio] = useState(undefined)
     const [peso, setPeso] = useState(0)
 
+    const [selectedEjercicio, setSelectedEjercicio] = useState(undefined)
+    const { filteredEjercicios, setFilteredEjercicios } = useEjercicios()
+    const { musculos, getDefault } = useMusculos()
+
+    const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
+
+    const fetchData = async () => {
+        setFilteredEjercicios(ejercicios)
+        getDefault()
+    }
+
     const handleSubmit = () => {
         /* Obtener datos del form */
         const rawData = {
             tipo: tipo,
             series: parseInt(series),
             repeticiones: parseInt(repeticiones),
-            ejercicioId: ejercicio,
+            ejercicioId: selectedEjercicio?.id,
             peso: parseFloat(peso),
             ejercicio: null
         }
@@ -49,9 +63,7 @@ export default function RutinaFormEjercicios({ ejercicios, ejerciciosRutina, set
         }
 
         /* Formatear los datos */
-        const selectedEjercicio = ejercicios.find((item) => item.id == rawData.ejercicioId)
-        const { path, ...restDataEjercicio } = selectedEjercicio;
-        rawData.ejercicio = {...restDataEjercicio};
+        rawData.ejercicio = {...selectedEjercicio};
         
         /* Guardar lso datos */
         setEjerciciosRutina([...ejerciciosRutina, rawData]);
@@ -61,10 +73,17 @@ export default function RutinaFormEjercicios({ ejercicios, ejerciciosRutina, set
         setTipo('reps')
         setSeries(1)
         setRepeticiones(1)
-        setEjercicio(null)
+        setSelectedEjercicio(undefined)
         setPeso(0)
 
     }
+
+    useEffect(() => {
+        if (!ejercicios) return
+
+        fetchData()
+
+    }, [ejercicios])
 
     return (
         <>
@@ -117,26 +136,24 @@ export default function RutinaFormEjercicios({ ejercicios, ejerciciosRutina, set
                         errorMessage={state?.errors?.repeticiones}
                         className="col-span-1"
                     />
-                    <Select
+                    <Input
                         label="Ejercicio"
-                        name="ejercicioId"
-                        items={ejercicios}
-                        selectedKeys={[ejercicio]}
-                        onChange={(e) => setEjercicio(e.target.value)}
+                        value={selectedEjercicio?.nombre}
+                        placeholder="Selecciona un ejercicio.."
                         required
+                        isReadOnly
+                        onClick={onOpen}
                         isInvalid={!!state?.errors?.ejercicioId}
                         errorMessage={state?.errors?.ejercicioId}
                         className="col-span-4"
-                        classNames={{
-                            trigger: "py-2"
-                        }}
-                    >
-                        {(item) => (
-                            <SelectItem key={item.id} value={item.id} textValue={item.nombre}>
-                                <span>{item.nombre}</span>
-                            </SelectItem>
-                        )}
-                    </Select>
+                    />
+                    <div className="hidden">
+                        <Input
+                            hidden
+                            name="ejercicioId"
+                            value={selectedEjercicio?.id}
+                        />
+                    </div>
                     <Input
                         name="peso"
                         label="Peso (kg)"
@@ -156,6 +173,14 @@ export default function RutinaFormEjercicios({ ejercicios, ejerciciosRutina, set
             </div>
 
             {/* Modal seleccionar ejercicio */}
+            <ModalPickEjercicio 
+                isOpen={isOpen} onClose={onClose} onOpenChange={onOpenChange}
+                ejercicios={ejercicios} musculos={musculos}
+                filteredEjercicios={filteredEjercicios}
+                setFilteredEjercicios={setFilteredEjercicios}
+                selectedEjercicio={selectedEjercicio}
+                setSelectedEjercicio={setSelectedEjercicio}
+            />
         </>
     )
 }

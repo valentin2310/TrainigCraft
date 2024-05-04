@@ -12,7 +12,7 @@ import FiltroEjercicios from "@/app/ui/ejercicios/ejercicios-filtro"
 
 export default function Page() {
     const { ejercicios, setEjercicios, filteredEjercicios, setFilteredEjercicios } = useEjercicios()
-    const { musculos, setMusculos, getDefault } = useMusculos()
+    const { musculos, getDefault } = useMusculos()
 
     const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
     const [img, setImg] = useState(null)
