@@ -52,7 +52,7 @@ export default function Page() {
                 <Button className="col-span-2" 
                     color="primary" variant="flat" 
                     startContent={<i className="ri-add-circle-line text-lg"></i>}
-                    onClick={onOpenCategoria}
+                    onPress={onOpenCategoria}
                 >
                     Nueva categoría
                 </Button>

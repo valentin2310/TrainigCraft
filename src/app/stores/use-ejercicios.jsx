@@ -3,8 +3,10 @@ import { fetchDefaultEjercicios } from "@/app/lib/data";
 
 export const useEjercicios = create((set) => ({
     ejercicios: [],
+    filteredEjercicios: [],
     default: [],
     setEjercicios: (newList) => set({ ejercicios: newList }),
+    setFilteredEjercicios: (newList) => set({ filteredEjercicios: newList }),
     storeEjercicio: (newEjercicio) => {
         set((state) => ({
             ejercicios: [

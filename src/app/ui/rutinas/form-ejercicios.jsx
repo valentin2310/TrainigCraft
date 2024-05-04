@@ -106,6 +106,17 @@ export default function RutinaFormEjercicios({ ejercicios, ejerciciosRutina, set
                         errorMessage={state?.errors?.series}
                         className="col-span-1"
                     />
+                    <Input
+                        name="reps"
+                        label={tipo == 'reps' ? 'Repeticiones' : 'Duración(s)'}
+                        type="number"
+                        value={repeticiones}
+                        onValueChange={setRepeticiones}
+                        required
+                        isInvalid={!!state?.errors?.repeticiones}
+                        errorMessage={state?.errors?.repeticiones}
+                        className="col-span-1"
+                    />
                     <Select
                         label="Ejercicio"
                         name="ejercicioId"
@@ -127,17 +138,6 @@ export default function RutinaFormEjercicios({ ejercicios, ejerciciosRutina, set
                         )}
                     </Select>
                     <Input
-                        name="reps"
-                        label={tipo == 'reps' ? 'Repeticiones' : 'Duración(s)'}
-                        type="number"
-                        value={repeticiones}
-                        onValueChange={setRepeticiones}
-                        required
-                        isInvalid={!!state?.errors?.repeticiones}
-                        errorMessage={state?.errors?.repeticiones}
-                        className="col-span-1"
-                    />
-                    <Input
                         name="peso"
                         label="Peso (kg)"
                         type="number"
@@ -147,13 +147,15 @@ export default function RutinaFormEjercicios({ ejercicios, ejerciciosRutina, set
                         errorMessage={state?.errors?.peso}
                         className="col-span-1"
                     />
-                    <Button className="h-14" color="secondary" startContent={<i className="ri-add-circle-fill text-lg"></i>} onClick={handleSubmit}>Añadir</Button>
+                    <Button className="h-14" color="primary" variant="flat" startContent={<i className="ri-add-circle-fill text-lg"></i>} onClick={handleSubmit}>Añadir</Button>
                 </div>
             </div>
 
             <div className="py-3">
                 <TablaEjercicios data={ejerciciosRutina} setData={setEjerciciosRutina} />
             </div>
+
+            {/* Modal seleccionar ejercicio */}
         </>
     )
 }

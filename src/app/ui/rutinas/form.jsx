@@ -52,8 +52,8 @@ export default function RutinaForm({ idUser = null, rutina = null, ejercicios, c
     return (
         <>
             <form action={formAction}>
-                <div className="grid xl:grid-cols-10 gap-5 px-5">
-                    <div className="col-span-4 my-10 flex flex-col gap-5">
+                <div className="px-5 py-8 flex flex-col gap-5">
+                    <div className="flex flex-col gap-5 max-w-[800px]">
                         <Input
                             name="titulo"
                             type="text"
@@ -106,7 +106,7 @@ export default function RutinaForm({ idUser = null, rutina = null, ejercicios, c
                         />
                     </div>
 
-                    <div className="col-span-6 py-10">
+                    <div className="">
                         <RutinaFormEjercicios 
                             ejercicios={ejercicios}
                             ejerciciosRutina={ejerciciosRutina}
