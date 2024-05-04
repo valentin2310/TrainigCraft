@@ -497,6 +497,8 @@ export async function fetchEjerciciosRutina(rutinaPath) {
     }
 }
 
+/* #region eventos */
+
 export async function fetchEventos(userId) {
     if (!userId) return
 
@@ -597,5 +599,40 @@ export async function destroyEvento(userId, eventoId) {
     } catch (error) {
         console.log(error)
         return false
+    }
+}
+
+/* #region categorias */
+export async function storeCategoria(idUser, data) {
+    const collectionRef = collection(db, `usuarios/${idUser}/categorias`)
+
+    try {
+        const docRef = await addDoc(collectionRef, {
+            ...data
+        })
+
+        const result = await getDoc(docRef)
+        return result;
+
+    } catch (err) {
+        console.log(err)
+        return null
+    }
+}
+
+export async function updateCategoria(path, data) {
+    try {
+        const categoria = doc(db, path)
+
+        await updateDoc(categoria, {
+            ...data,
+        })
+        
+        const result = await getDoc(categoria)
+        return result;
+
+    } catch (err) {
+        console.log(err)
+        return null
     }
 }

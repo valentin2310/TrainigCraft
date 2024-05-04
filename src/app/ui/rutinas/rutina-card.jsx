@@ -16,14 +16,17 @@ export default function RutinaCard({rutina}) {
 
     return (
         <>
-        <div onClick={handleClick} className="p-1 rounded shadow text-secondary cursor-pointer" style={generarGradient(rutina.categorias)}>
-            <div className="p-4 w-full h-full flex justify-between bg-gradient-to-tr from-gray-100/90 to-gray-50/85 backdrop-blur">
-                <div className="">
-                    <p className="text-xl line-clamp-2">{rutina.titulo}</p>
-                    <p className=" line-clamp-3 text-secondary/90">{rutina.descripcion}</p>
+        <div onClick={handleClick} className="p-1 rounded-xl shadow text-secondary cursor-pointer" style={generarGradient(rutina.categorias)}>
+            <div className="p-3 w-full h-full flex justify-between bg-gradient-to-tr from-gray-100 to-gray-50/95 backdrop-blur rounded-lg">
+                <div className="flex flex-col justify-between">
+                    <div className="">
+                        <p className="text-xl line-clamp-1">{rutina.titulo}</p>
+                        <p className="line-clamp-2 text-secondary/90 ps-1">{rutina.descripcion || '...'}</p>
+                    </div>
+
                     <div className="flex flex-wrap gap-2 mt-3">
                         {rutina.categorias && rutina.categorias?.map((cat) => (
-                            <Chip key={cat.nombre} size="sm" className="border-0" variant="bordered" startContent={<i className="ri-circle-fill" style={{color: cat.color}}></i>}>
+                            <Chip key={cat.nombre} size="sm" className="border-0" variant="bordered" startContent={<i className="ri-price-tag-3-line" style={{color: cat.color}}></i>}>
                                 {cat.nombre}
                             </Chip>
                         ))}

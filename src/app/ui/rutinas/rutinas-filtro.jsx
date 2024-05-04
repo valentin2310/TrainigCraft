@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { Input, Select, SelectItem, Chip } from "@nextui-org/react";
+import { Input, Select, SelectItem, Chip, Button } from "@nextui-org/react";
 
 export default function FiltroRutinas({ rutinas, categorias, setFilteredRutinas }) {
     /* Filtro */
@@ -48,6 +48,7 @@ export default function FiltroRutinas({ rutinas, categorias, setFilteredRutinas 
                 onValueChange={setFiltroName}
                 className="col-span-6"
                 labelPlacement="outside"
+                startContent={<i className="ri-search-line text-primary"></i>}
             />
             <Select
                 name="categorias[]"
@@ -59,11 +60,12 @@ export default function FiltroRutinas({ rutinas, categorias, setFilteredRutinas 
                 className="col-span-4"
                 labelPlacement="outside"
                 selectedKeys={filtroCategoria}
+                startContent={<i className="ri-price-tag-3-line text-primary"></i>}
                 onSelectionChange={setFiltroCategoria}
                 renderValue={(items) => (
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-2 py-1">
                         {items.map((item) => (
-                            <Chip key={item.key} color="default" variant="bordered" startContent={<i className="ri-circle-fill" style={{ color: item.data.color }}></i>}>
+                            <Chip key={item.key} variant="flat">
                                 {item.data.nombre}
                             </Chip>
                         ))}
@@ -72,7 +74,7 @@ export default function FiltroRutinas({ rutinas, categorias, setFilteredRutinas 
             >
                 {(categoria) => (
                     <SelectItem key={categoria.id} value={categoria.id} textValue={categoria.nombre}>
-                        <span style={{ color: categoria.color }}>{categoria.nombre}</span>
+                        <span><i className="ri-price-tag-3-line text-primary me-1" style={{ color: categoria.color }}></i>{categoria.nombre}</span>
                     </SelectItem>
                 )}
             </Select>

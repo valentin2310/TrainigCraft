@@ -30,11 +30,11 @@ export default function Page() {
 
     return (
         <>
-            <div className="w-full flex justify-between items-center mb-10">
-                <p className="text-xl text-primary font-semibold mb-3">Mis ejercicios</p>
+            <div className="w-full flex flex-col mb-10">
+                <h1 className="text-2xl text-primary font-semibold mb-3">Mis ejercicios</h1>
                 <div className="flex gap-2">
-                    <Button onPress={onOpen}>
-                        <i className="ri-file-add-line m-2"></i><span className="hidden sm:inline">Añadir</span>
+                    <Button variant="ghost" color="primary" onPress={onOpen}>
+                        <i className="ri-file-add-line text-lg"></i><span className="hidden sm:inline">Añadir</span>
                     </Button>
                 </div>
             </div>
