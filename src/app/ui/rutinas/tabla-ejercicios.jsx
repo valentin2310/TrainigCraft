@@ -1,13 +1,19 @@
 'use client'
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { MaterialReactTable, useMaterialReactTable } from 'material-react-table';
-import { Image, Button } from '@nextui-org/react';
+import { Image, Button, useDisclosure, Popover, PopoverTrigger, PopoverContent } from '@nextui-org/react';
 import { Rate } from 'rsuite';
 import { renderRateCharacter } from '@/app/lib/utils';
 import { MRT_Localization_ES } from '@/app/material-react-table-config/locales/es';
 
 export default function TablaEjercicios({ data, setData }) {
+  const eliminarItem = (index) => {
+    const aux = [...table.options.data]
+    aux.splice(index, 1)
+    setData(aux)
+  }
+
   const columns = useMemo(
     () => [
       {
@@ -24,7 +30,7 @@ export default function TablaEjercicios({ data, setData }) {
         header: 'Ejercicio',
         Cell: ({ row }) => (
           <div className='flex gap-3 items-center'>
-            <img src="/excercises/img-excercise1.png" className='rounded' alt={ 'Imagen de ' + row.original.ejercicio.nombre } height={35} width={35} />
+            <img src="/excercises/img-excercise1.png" className='rounded' alt={'Imagen de ' + row.original.ejercicio.nombre} height={35} width={35} />
             <span>{row.original.ejercicio.nombre}</span>
           </div>
         ),
@@ -56,7 +62,19 @@ export default function TablaEjercicios({ data, setData }) {
       {
         Cell: ({ row }) => (
           <>
-            <Button variant='flat' color='secondary'>Acción<i className="ri-arrow-down-s-fill ms-2"></i></Button>
+            <Popover placement="bottom" showArrow>
+              <PopoverTrigger>
+                <Button title='Eliminar' color='danger' variant='flat' isIconOnly startContent={<i className="ri-delete-bin-2-line"></i>}></Button>
+              </PopoverTrigger>
+              <PopoverContent>
+                <div className="px-1 py-2">
+                  <div className="text-small font-bold mb-2">¿Estas seguro que quieres quitar este ejercicio?</div>
+                  <div className="flex flex-wrap justify-end gap-3">
+                    <Button color='danger' variant='flat' onClick={() => eliminarItem(row.index)}>Eliminar</Button>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
           </>
         ),
         id: 'actions',
@@ -70,7 +88,7 @@ export default function TablaEjercicios({ data, setData }) {
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns,
-    data, 
+    data,
     autoResetPageIndex: true,
     enableColumnOrdering: false,
     enableSorting: false,
@@ -80,25 +98,25 @@ export default function TablaEjercicios({ data, setData }) {
     enableTopToolbar: false,
     enableBottomToolbar: false,
     enableColumnActions: false,
-    muiTableContainerProps: { sx: { maxHeight: '400px' }},
+    muiTableContainerProps: { sx: { maxHeight: '400px' } },
     enableRowOrdering: true,
     muiRowDragHandleProps: ({ table }) => ({
-        onDragEnd: () => {
-          const { draggingRow, hoveredRow } = table.getState();
-          if (hoveredRow && draggingRow) {
-            data.splice(
-              hoveredRow.index,
-              0,
-              data.splice(draggingRow.index, 1)[0],
-            );
-            setData([...data]);
-          }
-        },
-      }),
-      localization: MRT_Localization_ES,
-      localization: {
-        move: ''
-      }
+      onDragEnd: () => {
+        const { draggingRow, hoveredRow } = table.getState();
+        if (hoveredRow && draggingRow) {
+          data.splice(
+            hoveredRow.index,
+            0,
+            data.splice(draggingRow.index, 1)[0],
+          );
+          setData([...data]);
+        }
+      },
+    }),
+    localization: MRT_Localization_ES,
+    localization: {
+      move: ''
+    }
   });
 
   //note: you can also pass table options as props directly to <MaterialReactTable /> instead of using useMaterialReactTable

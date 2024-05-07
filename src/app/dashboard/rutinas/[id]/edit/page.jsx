@@ -45,6 +45,7 @@ export default function Page({ params }) {
 
             {rutina && 
                 <RutinaForm 
+                    idUser={user?.id}
                     rutina={rutina}
                     categorias={categorias}
                     ejercicios={ejercicios}

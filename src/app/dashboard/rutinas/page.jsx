@@ -35,6 +35,11 @@ export default function Page() {
 
     }, [user])
 
+    useEffect(() => {
+        return () => setFilteredRutinas(rutinas)
+
+    }, [setRutinas])
+
 
     return (
         <>

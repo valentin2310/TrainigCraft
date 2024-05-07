@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Input, Textarea, Select, SelectItem, Chip, CheckboxGroup, Checkbox, Avatar, cn } from "@nextui-org/react"
+import { Button, Input, Textarea, Select, SelectItem, Chip, CheckboxGroup, Checkbox, Avatar, cn, useDisclosure } from "@nextui-org/react"
 import { use, useEffect, useState } from "react";
 import { useFormState, useFormStatus } from 'react-dom'
 import { addRutina, editRutina } from "@/app/lib/rutina-actions";
@@ -8,12 +8,13 @@ import { useRutinas } from "@/app/stores/use-rutinas";
 import { useRouter } from "next/navigation";
 import clsx from "clsx";
 import RutinaFormEjercicios from "@/app/ui/rutinas/form-ejercicios";
+import CategoriaModalForm from "@/app/ui/rutinas/modal-form-categoria";
 
 const initialState = {
     message: ''
 }
 
-export default function RutinaForm({ idUser = null, rutina = null, ejercicios, categorias }) {
+export default function RutinaForm({ idUser, rutina = null, ejercicios, categorias }) {
     const router = useRouter()
     
     const { storeRutina, updateRutina } = useRutinas()
@@ -24,6 +25,10 @@ export default function RutinaForm({ idUser = null, rutina = null, ejercicios, c
 
     const [state, formAction] = useFormState(rutina ? editRutinaWithParams : addRutinaWithParams, initialState)
     const { pending } = useFormStatus()
+
+    const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
+    const { isOpen : isOpenCategoria, onOpen : onOpenCategoria, onClose : onCloseCategoria, onOpenChange : onOpenChangeCategoria } = useDisclosure()
+
 
     const cancel = () => {
         router.push('/dashboard/rutinas')
@@ -53,48 +58,56 @@ export default function RutinaForm({ idUser = null, rutina = null, ejercicios, c
         <>
             <form action={formAction}>
                 <div className="px-5 py-8 flex flex-col gap-5">
-                    <div className="flex flex-col gap-5 max-w-[800px]">
-                        <Input
-                            name="titulo"
-                            type="text"
-                            label="Titulo *"
-                            labelPlacement="outside"
-                            placeholder="Rutina de.."
-                            required
-                            defaultValue={rutina?.titulo}
-                            isInvalid={!!state?.errors?.titulo}
-                            errorMessage={state?.errors?.titulo}
-                        />
-                        <Select
-                            name="categorias[]"
-                            items={categorias}
-                            label="Categorías"
-                            isMultiline={true}
-                            selectionMode="multiple"
-                            placeholder="Pertenece a la categoría/as.."
-                            labelPlacement="outside"
-                            classNames={{
-                                trigger: "py-2"
-                            }}
-                            defaultSelectedKeys={rutina?.categorias.map((cat) => (cat.id))}
-                            isInvalid={!!state?.errors?.categorias}
-                            errorMessage={state?.errors?.categorias}
-                            renderValue={(items) => (
-                                <div className="flex flex-wrap gap-2">
-                                    {items.map((item) => (
-                                        <Chip key={item.key} color="default" variant="bordered" startContent={<i className="ri-circle-fill" style={{ color: item.data.color }}></i>}>
-                                            {item.data.nombre}
-                                        </Chip>
-                                    ))}
-                                </div>
-                            )}
-                        >
-                            {(categoria) => (
-                                <SelectItem key={categoria.id} value={categoria.id} textValue={categoria.nombre}>
-                                    <span style={{ color: categoria.color }}>{categoria.nombre}</span>
-                                </SelectItem>
-                            )}
-                        </Select>
+                    <div className="flex flex-col gap-5">
+                        <div className="grid lg:grid-cols-2 gap-3">
+                            <Input
+                                name="titulo"
+                                type="text"
+                                label="Titulo *"
+                                labelPlacement="outside"
+                                placeholder="Rutina de.."
+                                required
+                                defaultValue={rutina?.titulo}
+                                isInvalid={!!state?.errors?.titulo}
+                                errorMessage={state?.errors?.titulo}
+                            />
+                            <div className="flex gap-2 items-end">
+                                <Select
+                                    name="categorias[]"
+                                    items={categorias}
+                                    label="Categorías"
+                                    isMultiline={true}
+                                    selectionMode="multiple"
+                                    placeholder="Pertenece a la categoría/as.."
+                                    labelPlacement="outside"
+                                    defaultSelectedKeys={rutina?.categorias.map((cat) => (cat.id))}
+                                    isInvalid={!!state?.errors?.categorias}
+                                    errorMessage={state?.errors?.categorias}
+                                    renderValue={(items) => (
+                                        <div className="flex flex-wrap gap-2">
+                                            {items.map((item) => (
+                                                <Chip key={item.key} variant="flat" startContent={<i className="ri-price-tag-3-line text-primary" style={{ color: item.data.color }}></i>}>
+                                                    {item.data.nombre}
+                                                </Chip>
+                                            ))}
+                                        </div>
+                                    )}
+                                >
+                                    {(categoria) => (
+                                        <SelectItem key={categoria.id} value={categoria.id} textValue={categoria.nombre}>
+                                            <span><i className="ri-price-tag-3-line text-primary me-1" style={{ color: categoria.color }}></i>{categoria.nombre}</span>
+                                        </SelectItem>
+                                    )}
+                                </Select>
+                                <Button className="ps-5 pe-8" 
+                                    color="primary" variant="flat" 
+                                    startContent={<i className="ri-add-circle-line text-lg"></i>}
+                                    onPress={onOpenCategoria}
+                                >
+                                    Nueva categoría
+                                </Button>
+                            </div>
+                        </div>
                         <Textarea
                             name="descripcion"
                             label="Descripción"
@@ -119,6 +132,14 @@ export default function RutinaForm({ idUser = null, rutina = null, ejercicios, c
                 <Button onClick={cancel} color="danger" variant="light">Cancelar</Button>
                 <Button isLoading={pending} type="submit" color="primary">Guardar</Button>
             </form>
+
+            {/* Modal crear categorias */}
+            <CategoriaModalForm
+                isOpen={isOpenCategoria}
+                onClose={onCloseCategoria}
+                onOpenChange={onOpenChangeCategoria}
+                idUser={idUser}
+            />
         </>
     )
 }
