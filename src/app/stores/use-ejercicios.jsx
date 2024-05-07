@@ -7,32 +7,32 @@ export const useEjercicios = create((set) => ({
     default: [],
     setEjercicios: (newList) => set({ ejercicios: newList }),
     setFilteredEjercicios: (newList) => set({ filteredEjercicios: newList }),
-    storeEjercicio: (newEjercicio) => {
-        set((state) => ({
-            ejercicios: [
-                {
-                    ...newEjercicio
-                },
-                ...state.ejercicios,
-            ]
-        }))
-    },
-    updateEjercicio: (newEjercicio) => {
-        set((state) => ({
-            ejercicios: state.ejercicios.map((obj) => {
-                if (obj.id == newEjercicio.id) {
-                    return {
-                        ...newEjercicio
-                    }
-                } else {
-                    return obj
-                }
-            })
-        }))
-    },
+    storeEjercicio: (newEjercicio) => set((state) => ({
+        ejercicios: [
+            {
+                ...newEjercicio
+            },
+            ...state.ejercicios,
+        ],
+        filteredEjercicios: [
+            {
+                ...newEjercicio
+            },
+            ...state.filteredEjercicios,
+        ],
+    })),
+    updateEjercicio: (newEjercicio) => set((state) => ({
+        ejercicios: state.ejercicios.map((obj) => {
+            return obj.id == newEjercicio.id ? {...newEjercicio} : obj
+        }),
+        filteredEjercicios: state.filteredEjercicios.map((obj) => {
+            return obj.id == newEjercicio.id ? {...newEjercicio} : obj
+        }),
+    })),
     destroyEjercicio: (oldEjercicio) => {
         set((state) => ({
-            ejercicios: state.ejercicios.filter((obj) => obj.id != oldEjercicio.id)
+            ejercicios: state.ejercicios.filter((obj) => obj.id != oldEjercicio.id),
+            filteredEjercicios: state.filteredEjercicios.filter((obj) => obj.id != oldEjercicio.id),
         }))
     },
     getDefault: async () => {
@@ -40,7 +40,7 @@ export const useEjercicios = create((set) => ({
             const data = await fetchDefaultEjercicios()
             set({ default: data })
 
-        } catch(error) {
+        } catch (error) {
             console.log(error)
         }
     }
