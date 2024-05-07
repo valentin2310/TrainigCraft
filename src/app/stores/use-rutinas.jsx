@@ -9,14 +9,22 @@ export const useRutinas = create((set) => ({
         rutinas: [
             { ...newItem },
             ...state.rutinas
+        ],
+        filteredRutinas: [
+            { ...newItem },
+            ...state.filteredRutinas
         ]
     })),
     updateRutina: (newItem) => set((state) => ({
         rutinas: state.rutinas.map((obj) => {
             return obj.id == newItem.id ? { ...newItem } : obj
-        })
+        }),
+        filteredRutinas: state.filteredRutinas.map((obj) => {
+            return obj.id == newItem.id ? { ...newItem } : obj
+        }),
     })),
     destroyRutina: (oldItem) => set((state) => ({
-        rutinas: state.rutinas.filter((obj) => obj.id != oldItem.id)
+        rutinas: state.rutinas.filter((obj) => obj.id != oldItem.id),
+        filteredRutinas: state.filteredRutinas.filter((obj) => obj.id != oldItem.id),
     }))
 }))
