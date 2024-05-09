@@ -87,7 +87,7 @@ export default function RutinaFormEjercicios({ ejercicios, ejerciciosRutina, set
 
     return (
         <>
-            <div className="mb-1 text-small">
+            <div className="mb-3 text-small">
                 <p className={clsx({ 'text-red-500' : message })}>Ejercicios de la rutina *</p>
                 {message && <p className="text-red-500 text-tiny">{message}</p>}
             </div>
@@ -104,7 +104,7 @@ export default function RutinaFormEjercicios({ ejercicios, ejerciciosRutina, set
                         errorMessage={state?.errors?.tipo}
                         className="col-span-1"
                         classNames={{
-                            trigger: "py-2"
+                            trigger: "py-2",
                         }}
                     >
                         <SelectItem key={'reps'} value={'reps'}>

@@ -59,7 +59,7 @@ export default function RutinaForm({ idUser, rutina = null, ejercicios, categori
             <form action={formAction}>
                 <div className="px-5 py-8 flex flex-col gap-5">
                     <div className="flex flex-col gap-5">
-                        <div className="grid lg:grid-cols-2 gap-3">
+                        <div className="grid lg:grid-cols-2 items-start gap-3">
                             <Input
                                 name="titulo"
                                 type="text"
@@ -101,7 +101,7 @@ export default function RutinaForm({ idUser, rutina = null, ejercicios, categori
                                 </Select>
                                 <Button className="ps-5 pe-8" 
                                     color="primary" variant="flat" 
-                                    startContent={<i className="ri-add-circle-line text-lg"></i>}
+                                    startContent={<i className="ri-add-circle-line text-lg ps-3"></i>}
                                     onPress={onOpenCategoria}
                                 >
                                     Nueva categoría
@@ -129,8 +129,10 @@ export default function RutinaForm({ idUser, rutina = null, ejercicios, categori
                     </div>
                 </div>
 
-                <Button onClick={cancel} color="danger" variant="light">Cancelar</Button>
-                <Button isLoading={pending} type="submit" color="primary">Guardar</Button>
+                <div className="flex gap-3">
+                    <Button onClick={cancel} color="danger" size="lg" variant="light">Cancelar</Button>
+                    <Button isLoading={pending} type="submit" size="lg" color="primary" startContent={<i className="ri-save-2-line text-xl"></i>}>Guardar</Button>
+                </div>
             </form>
 
             {/* Modal crear categorias */}
