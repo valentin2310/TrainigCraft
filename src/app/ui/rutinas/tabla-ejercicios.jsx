@@ -30,7 +30,7 @@ export default function TablaEjercicios({ data, setData }) {
         header: 'Ejercicio',
         Cell: ({ row }) => (
           <div className='flex gap-3 items-center'>
-            <img src="/excercises/img-excercise1.png" className='rounded' alt={'Imagen de ' + row.original.ejercicio.nombre} height={35} width={35} />
+            <img src={row.original.ejercicio?.imgPath ?? "/excercises/img-excercise1.png"} className='rounded' alt={'Imagen de ' + row.original.ejercicio.nombre} height={35} width={35} />
             <span>{row.original.ejercicio.nombre}</span>
           </div>
         ),
