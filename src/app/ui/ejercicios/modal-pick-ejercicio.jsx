@@ -1,10 +1,17 @@
-import { Modal, ModalHeader, ModalContent, ModalBody, ModalFooter, Button, Chip } from '@nextui-org/react'
-import { useEffect, useState } from 'react'
+'use client'
+
+import { Modal, ModalHeader, ModalContent, ModalBody, ModalFooter, Button, Chip, useDisclosure } from '@nextui-org/react'
+import { use, useEffect, useState } from 'react'
 import FiltroEjercicios from './ejercicios-filtro'
 import EjercicioCardSimple from './ejercicio-card-simple'
+import EjercicioModalForm from './modal-form'
+import { UserContext } from '@/app/providers'
 
 export default function ModalPickEjercicio({ isOpen, onClose, onOpenChange, ejercicios, musculos, filteredEjercicios, setFilteredEjercicios, selectedEjercicio = null, setSelectedEjercicio }) {
+    const user = use(UserContext)
+    
     const [selected, setSelected] = useState(undefined)
+    const { isOpen : isOpenCreateEjercicio, onOpen : onOpenCreateEjercicio, onClose : onCloseCreateEjercicio, onOpenChange : onOpenChangeCreateEjercicio } = useDisclosure()
 
     const addSelected = (value) => {
         if (isSelected(value.id)) {
@@ -30,7 +37,7 @@ export default function ModalPickEjercicio({ isOpen, onClose, onOpenChange, ejer
 
     useEffect(() => {
         if (isOpen == false) return
-        
+
         setFilteredEjercicios(ejercicios)
 
         if (selectedEjercicio) {
@@ -52,7 +59,7 @@ export default function ModalPickEjercicio({ isOpen, onClose, onOpenChange, ejer
                             <form >
                                 <ModalBody className="max-h-[500px] overflow-y-auto">
                                     <div className="mb-3 grid grid-cols-10 gap-3 py-2">
-                                        <FiltroEjercicios 
+                                        <FiltroEjercicios
                                             ejercicios={ejercicios}
                                             musculos={musculos}
                                             setFilteredEjercicios={setFilteredEjercicios}
@@ -60,9 +67,13 @@ export default function ModalPickEjercicio({ isOpen, onClose, onOpenChange, ejer
                                     </div>
 
                                     <div className="grid grid-cols-2 gap-2">
+                                        <div onClick={onOpenCreateEjercicio} className="p-4 cursor-pointer bg-secondary text-gray-300 rounded-xl shadow text-center border-2 border-gray-100 hover:bg-dark duration-500">
+                                            <p className="text-xl mb-4">Crear nuevo ejercicio</p>
+                                            <i className="ri-file-add-line text-5xl text-primary"></i>
+                                        </div>
                                         {filteredEjercicios && filteredEjercicios.map((item) => (
                                             <div key={item.id} className="" onClick={() => addSelected(item)}>
-                                                <EjercicioCardSimple 
+                                                <EjercicioCardSimple
                                                     ejercicio={item}
                                                     selected={isSelected(item.id)}
                                                 />
@@ -79,6 +90,15 @@ export default function ModalPickEjercicio({ isOpen, onClose, onOpenChange, ejer
                     )}
                 </ModalContent>
             </Modal>
+
+            {user && 
+                <EjercicioModalForm
+                    isOpen={isOpenCreateEjercicio}
+                    onClose={onCloseCreateEjercicio}
+                    onOpenChange={onOpenChangeCreateEjercicio}
+                    idUser={user.id}
+                />
+            }
         </>
     )
 }

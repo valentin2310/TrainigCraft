@@ -2,7 +2,7 @@ import { Chip, Image, useDisclosure } from '@nextui-org/react'
 import { dificultadColor, dificultadColorBorder } from '@/app/lib/utils'
 import clsx from 'clsx'
 
-export default function EjercicioCard({ ejercicio, selected = false }) {
+export default function EjercicioCardSimple({ ejercicio, selected = false }) {
     return (
         <>
             <div className={clsx(

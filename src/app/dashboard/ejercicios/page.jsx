@@ -4,11 +4,11 @@ import { fetchEjercicios } from "@/app/lib/data"
 import { useEjercicios } from "@/app/stores/use-ejercicios"
 import { Button, useDisclosure } from "@nextui-org/react"
 import { use, useEffect, useState } from "react"
-import GridEjercicios from "@/app/ui/ejercicios/grid-ejercicios"
 import EjercicioModalForm from "@/app/ui/ejercicios/modal-form"
 import { UserContext } from "@/app/providers"
 import { useMusculos } from "@/app/stores/use-musculos"
 import FiltroEjercicios from "@/app/ui/ejercicios/ejercicios-filtro"
+import EjercicioCard from "@/app/ui/ejercicios/ejercicio-card"
 
 export default function Page() {
     const { ejercicios, setEjercicios, filteredEjercicios, setFilteredEjercicios } = useEjercicios()
@@ -40,13 +40,7 @@ export default function Page() {
                 <h1 className="text-2xl text-primary font-semibold">Mis ejercicios</h1>
             </div>
 
-            <div className="mb-5 bg-gray-50 grid grid-cols-11 items-end gap-3 p-4 rounded shadow">
-                <Button className="col-span-1 h-full" 
-                    color="primary" variant="flat" onPress={onOpen}
-                    startContent={<i className="ri-file-add-line text-lg"></i>}
-                >
-                    <span className="hidden sm:inline">Añadir</span>
-                </Button>
+            <div className="mb-5 bg-gray-50 grid grid-cols-10 items-end gap-3 p-4 rounded shadow">
                 <FiltroEjercicios 
                     ejercicios={ejercicios}
                     musculos={musculos}
@@ -55,10 +49,14 @@ export default function Page() {
             </div>
 
             {ejercicios?.length > 0 &&
-                <GridEjercicios lista={filteredEjercicios} />
-                || <div className="flex flex-col">
-                    <span>No tienes ningún ejercicio creado aún :(</span>
-                    <span>Prueba a crear un nuevo ejercicio.</span>
+                <div className="grid md:grid-cols-3 2xl:grid-cols-5 gap-3">
+                    <div onClick={onOpen} className="p-4 cursor-pointer bg-secondary text-gray-300 rounded-xl shadow text-center border-2 border-gray-100 hover:bg-dark duration-500">
+                        <p className="text-xl mb-4">Crear nuevo ejercicio</p>
+                        <i className="ri-file-add-line text-5xl text-primary"></i>
+                    </div>
+                    {filteredEjercicios?.length > 0 && filteredEjercicios.map((ej) => (
+                        <EjercicioCard key={ej.id} ejercicio={ej} />
+                    ))}
                 </div>
 
             }
