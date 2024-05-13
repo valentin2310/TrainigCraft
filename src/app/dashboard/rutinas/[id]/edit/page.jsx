@@ -18,7 +18,7 @@ export default function Page({ params }) {
 
     const fetchData = async () => {
         const _rutina = await fetchItem(`usuarios/${user.id}/rutinas/${idRutina}`)
-        const _rutina_ejercicios = await fetchEjerciciosRutina(_rutina.path);
+        const _rutina_ejercicios = await fetchEjerciciosRutina(_rutina.ejercicios);
         _rutina.ejercicios = _rutina_ejercicios;
         setRutina(_rutina)
 

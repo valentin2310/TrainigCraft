@@ -387,7 +387,7 @@ export async function storeRutina(idUser, data) {
     const collectionCatRef = collection(db, `usuarios/${idUser}/categorias`)
 
     try {
-        const { categorias, ejercicios, ...rest } = data
+        const { categorias, ...rest } = data
         const dataCategorias = await getCategoriasFromId(collectionCatRef, categorias)
 
         const docRef = await addDoc(collectionRef, {
@@ -398,7 +398,6 @@ export async function storeRutina(idUser, data) {
         })
 
         const result = await getDoc(docRef)
-        await setEjerciciosToRutina(docRef.path, ejercicios)
         
         return result;
 
@@ -415,7 +414,7 @@ export async function updateRutina(path, data) {
 
         const collectionCatRef = collection(db, `usuarios/${user.id}/categorias`)
         
-        const { categorias, ejercicios, ...rest } = data
+        const { categorias, ...rest } = data
         const dataCategorias = await getCategoriasFromId(collectionCatRef, categorias)
         
         await updateDoc(rutina, {
@@ -424,8 +423,6 @@ export async function updateRutina(path, data) {
         })
         
         const result = await getDoc(rutina)
-        await setEjerciciosToRutina(path, ejercicios)
-
         return result;
 
     } catch (err) {
@@ -481,7 +478,7 @@ async function setEjerciciosToRutina(rutinaPath, ejercicios){
     }
 }
 
-export async function fetchEjerciciosRutina(rutinaPath) {
+export async function fetchEjerciciosRutinaOld(rutinaPath) {
     if (!rutinaPath) return
 
     try {
@@ -494,6 +491,32 @@ export async function fetchEjerciciosRutina(rutinaPath) {
     } catch (error) {
         console.log(error)
         return [];
+    }
+}
+
+export async function fetchEjerciciosRutina(ejercicios) {
+    if (!ejercicios || ejercicios.length == 0) return []
+
+    try {
+        const promesas = ejercicios.map(async item => {
+            const docRef = doc(db, item.ejercicioData.path)
+            const docSnap = await getDoc(docRef)
+
+            if(docSnap.exists()) {
+                return {
+                    ...item,
+                    ejercicio: {
+                        ...docSnap.data()
+                    }
+                }
+            }
+        })
+
+        const resultados = await Promise.all(promesas)
+        return resultados
+        
+    } catch (error) {
+        console.log(error)
     }
 }
 

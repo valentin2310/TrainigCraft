@@ -34,7 +34,17 @@ export async function addRutina(params, prevState, formData) {
         titulo: formData.get('titulo'),
         descripcion: formData.get('descripcion'),
         categorias: formData.getAll('categorias[]'),
-        ejercicios: addOrderToEjercicios(params.list)
+        ejercicios: addOrderToEjercicios(params.list.map((item) => {
+            const {ejercicio, ...rest} = item
+            return {
+                ...rest,
+                ejercicioData: {
+                    id: ejercicio.id,
+                    path: ejercicio.path,
+                    isDefault: ejercicio.path.includes('ejercicios-default')
+                }
+            }
+        }))
     }
 
     console.log(rawData)
@@ -60,7 +70,7 @@ export async function addRutina(params, prevState, formData) {
     } catch (err) {
         console.log(err)
         return {
-            message: 'Ups.. Hubo un error en la creación del objetivo.'
+            message: 'Ups.. Hubo un error en la creación de la rutina.'
         }
     }
 
@@ -81,7 +91,18 @@ export async function editRutina(params, prevState, formData) {
         titulo: formData.get('titulo'),
         descripcion: formData.get('descripcion'),
         categorias: formData.getAll('categorias[]'),
-        ejercicios: addOrderToEjercicios(params.list),
+        ejercicios: addOrderToEjercicios(params.list.map((item) => {
+            const {ejercicio, ...rest} = item
+            if (item.ejercicioData) return {...rest}
+            return {
+                ...rest,
+                ejercicioData: {
+                    id: ejercicio.id,
+                    path: ejercicio.path,
+                    isDefault: ejercicio.path.includes('ejercicios-default')
+                }
+            }
+        }))
     }
 
     console.log(rawData)
@@ -107,7 +128,7 @@ export async function editRutina(params, prevState, formData) {
     } catch (err) {
         console.log(err)
         return {
-            message: 'Ups.. Hubo un error en la creación del objetivo.'
+            message: 'Ups.. Hubo un error en la creación de la rutina.'
         }
     }
 
