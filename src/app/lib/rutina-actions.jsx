@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { destroyItem, storeRutina, updateRutina } from '@/app/lib/data'
+import { destroyItem, softDeleteItem, storeRutina, updateRutina } from '@/app/lib/data'
 
 const SCHEMA_RUTINA = z.object({
     titulo: z.string().trim().min(3),
@@ -145,7 +145,7 @@ export async function deleteRutina(path) {
 
     // Elimina los datos en firestore
     try {
-        const result = await destroyItem(path);
+        const result = await softDeleteItem(path);
 
         return {
             success: result
@@ -154,7 +154,7 @@ export async function deleteRutina(path) {
     } catch (err) {
         console.log(err)
         return {
-            message: 'Ups.. Hubo un error en la eliminación del objetivo.'
+            message: 'Ups.. Hubo un error en la eliminación del ejercicio.'
         }
     }
 }

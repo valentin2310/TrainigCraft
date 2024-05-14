@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { destroyItem, fetchItem, storeEjercicio, updateEjercicio } from '@/app/lib/data'
+import { destroyItem, fetchItem, softDeleteItem, storeEjercicio, updateEjercicio } from '@/app/lib/data'
 import { destroyImg } from '@/app/lib/data-storage';
 
 const SCHEMA_EJERCICIO = z.object({
@@ -136,8 +136,8 @@ export async function deleteEjercicio(path) {
 
     // Elimina los datos en firestore
     try {
-        await deleteEjercicioImg(path)
-        const result = await destroyItem(path);
+        /* await deleteEjercicioImg(path) */
+        const result = await softDeleteItem(path);
 
         return {
             success: result

@@ -173,7 +173,8 @@ export async function fetchRutinas(idUser) {
 export async function fetchEjercicios(idUser) {
     try {
         const collectionRef = collection(db, `usuarios/${idUser}/ejercicios`)
-        const data = await fetchCollectionData(collectionRef)
+        const q = query(collectionRef, where('isDeleted', '!=', true))
+        const data = await fetchCollectionData(q)
         return data
         
     } catch (error) {
@@ -277,10 +278,27 @@ export async function updateObjetivo(path, data) {
 /* #region Destroy Item */
 
 export async function destroyItem(path) {
-    const item = doc(db, path)
+    if (!path) return false
 
     try {
+        const item = doc(db, path)
         await deleteDoc(item)
+        return true
+        
+    } catch (err) {
+        console.log(err)
+        return null
+    }
+}
+
+export async function softDeleteItem(path) {
+    if (!path) return false
+
+    try {
+        const item = doc(db, path)
+        await updateDoc(item, {
+            isDeleted: true
+        })
         return true
         
     } catch (err) {
@@ -298,6 +316,7 @@ export async function storeEjercicioDefault(data) {
         const docRef = await addDoc(collectionRef, {
             ...data,
             created_at: Timestamp.now(),
+            isDeleted: false
         })
         
         const result = await getDoc(docRef)
@@ -325,6 +344,7 @@ export async function storeEjercicio(idUser, data) {
             ...restData,
             ...(imgUrl && { imgPath: uploadedUrl }),
             created_at: Timestamp.now(),
+            isDeleted: false
         })
         
         const result = await getDoc(docRef)
@@ -368,7 +388,7 @@ export async function updateEjercicio(path, data) {
 
         await updateDoc(ejercicio, {
             ...restData,
-            ...(imgUrl && { imgPath: uploadedUrl })
+            ...(imgUrl && { imgPath: uploadedUrl }),
         })
         
         const result = await getDoc(ejercicio)
