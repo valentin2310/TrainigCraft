@@ -160,9 +160,8 @@ async function deleteEjercicioImg(ejercicioPath) {
         let parts = item.imgPath.split('%2F')
         parts = parts[parts.length-1].split('?')
         
-        const userId = ejercicioPath.split('/')[1]
         const imgId = parts[0]
-        const imgRef = `imagenes/${userId}/ejercicios/${imgId}`
+        const imgRef = `imagenes/ejercicios/${imgId}`
 
         await destroyImg(imgRef)
 

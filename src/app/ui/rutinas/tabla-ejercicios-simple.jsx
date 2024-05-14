@@ -23,7 +23,7 @@ export default function TablaEjerciciosSimple({ data }) {
         header: 'Ejercicio',
         Cell: ({ row }) => (
           <div className='flex gap-3 items-center'>
-            <img src={row.original.ejercicio?.imgPath ?? "/excercises/img-excercise1.png"} className='rounded' alt={ 'Imagen de ' + row.original.ejercicio.nombre } height={35} width={35} />
+            <img src={row.original.ejercicio?.imgPath ?? "/excercises/img-excercise1.png"} className='rounded' alt={ 'Imagen de ' + row.original.ejercicio.nombre } height={80} width={80} />
             <span>{row.original.ejercicio.nombre}</span>
           </div>
         ),
@@ -69,7 +69,7 @@ export default function TablaEjerciciosSimple({ data }) {
     enableTopToolbar: false,
     enableBottomToolbar: false,
     enableColumnActions: false,
-    muiTableContainerProps: { sx: { maxHeight: '400px' }},
+    muiTableContainerProps: { sx: { maxHeight: '1200px' }},
       localization: MRT_Localization_ES,
   });
 

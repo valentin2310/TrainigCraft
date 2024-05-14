@@ -338,7 +338,7 @@ export async function storeEjercicio(idUser, data) {
 
         if (imgUrl) {
             const blob = await urlToBlob(imgUrl)
-            uploadedUrl = await subirImg(idUser, blob)
+            uploadedUrl = await subirImg(blob)
         }
 
         const docRef = await addDoc(collectionRef, {
@@ -376,7 +376,6 @@ export async function updateEjercicioDefault(path, data) {
 
 export async function updateEjercicio(path, data) {
     const ejercicio = doc(db, path);
-    const idUser = path.split("/")[1]
 
     try {
         const {imgUrl, ...restData} = data
@@ -384,7 +383,7 @@ export async function updateEjercicio(path, data) {
 
         if (imgUrl) {
             const blob = await urlToBlob(imgUrl)
-            uploadedUrl = await subirImg(idUser, blob)
+            uploadedUrl = await subirImg(blob)
         }
 
         await updateDoc(ejercicio, {

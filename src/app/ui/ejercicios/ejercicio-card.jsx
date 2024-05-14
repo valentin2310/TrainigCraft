@@ -16,21 +16,22 @@ export default function EjercicioCard({ ejercicio }) {
                         <Image
                             alt={`Imagen del ejercicio ${ejercicio.nombre}`}
                             src={ejercicio.imgPath ?? "/excercises/img-excercise1.png"}
-                            className={`col-span-2 border-3 ${dificultadColorBorder(ejercicio.dificultad)} `}
+                            fallbackSrc={"/excercises/img-excercise1.png"}
+                            className={`col-span-2 border-3 ${dificultadColorBorder(ejercicio.dificultad)}`}
                         />
                         <div className="col-span-2">
                             <p className="text-md font-bold line-clamp-1">{ejercicio.nombre}</p>
                             <p className="mb-2 text-small">
                                 <span className="line-clamp-2">{ejercicio.descripcion}</span>
                             </p>
-                            {ejercicio.musculos &&
-                                <div className="flex overflow-x-auto gap-1 text-xs">
-                                 {ejercicio.musculos.map((musculo) => (
+                            {ejercicio.musculos?.length > 0 &&
+                                <div className="flex overflow-x-auto gap-1 text-xs italic line-clamp-1">
+                                 {/* {ejercicio.musculos.map((musculo) => (
                                         <Chip key={musculo} size="sm" color="primary" className='border-0 p-0' variant="dot">
                                             {musculo}
                                         </Chip>
-                                    ))}
-                                    {/* { ejercicio.musculos.join(', ') } */}
+                                    ))} */}
+                                    - { ejercicio.musculos.join(', ') }
                                 </div>
                             }
                         </div>

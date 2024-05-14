@@ -2,8 +2,8 @@ import { storage } from "@/firebase/client-config";
 import { deleteObject, getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { v4 as uuidv4 } from "uuid";
 
-export async function subirImg(userId, img) {  
-    const ejerciciosRef = ref(storage, `imagenes/${userId}/ejercicios`)
+export async function subirImg(img) {  
+    const ejerciciosRef = ref(storage, `imagenes/ejercicios`)
     const imgRef = ref(ejerciciosRef, uuidv4())
 
     const imgSnapshot = await uploadBytes(imgRef, img)

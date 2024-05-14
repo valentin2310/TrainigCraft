@@ -5,7 +5,6 @@ import "uppload/dist/uppload.css"
 import "uppload/dist/themes/light.css"
 import { Button } from "@nextui-org/react";
 import { useState } from "react";
-import { subirImg } from "@/app/lib/data-storage";
 
 const defaultImage = "https://via.placeholder.com/150x150"
 
