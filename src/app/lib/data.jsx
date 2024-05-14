@@ -161,7 +161,8 @@ export async function fetchDefaultRutinas() {
 export async function fetchRutinas(idUser) {
     try {
         const collectionRef = collection(db, `usuarios/${idUser}/rutinas`)
-        const data = await fetchCollectionData(collectionRef)
+        const q = query(collectionRef, where('isDeleted', '!=', true))
+        const data = await fetchCollectionData(q)
         return data
         
     } catch (error) {
@@ -414,7 +415,8 @@ export async function storeRutina(idUser, data) {
             ...rest,
             categorias: dataCategorias,
             created_at: Timestamp.now(),
-            sesiones: 0
+            sesiones: 0,
+            idDeleted: false
         })
 
         const result = await getDoc(docRef)
