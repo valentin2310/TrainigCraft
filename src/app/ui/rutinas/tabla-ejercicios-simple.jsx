@@ -24,7 +24,10 @@ export default function TablaEjerciciosSimple({ data }) {
         Cell: ({ row }) => (
           <div className='flex gap-3 items-center'>
             <img src={row.original.ejercicio?.imgPath ?? "/excercises/img-excercise1.png"} className='rounded' alt={ 'Imagen de ' + row.original.ejercicio.nombre } height={80} width={80} />
-            <span>{row.original.ejercicio.nombre}</span>
+            <div className="">
+              <p className='text-sm line-clamp-1'>{row.original.ejercicio.nombre}</p>
+              <p className='text-xs line-clamp-2'>{row.original.ejercicio.descripcion}</p>
+            </div>
           </div>
         ),
         grow: true

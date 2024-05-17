@@ -5,6 +5,9 @@ import { UserContext } from "@/app/providers";
 import { use, useEffect, useState } from "react"
 import { format } from "rsuite/esm/utils/dateUtils";
 import TablaEjerciciosSimple from "@/app/ui/rutinas/tabla-ejercicios-simple";
+import { Button } from "@nextui-org/react";
+import { dificultadColor } from "@/app/lib/utils";
+import { useRouter } from "next/navigation";
 
 export default function Page({ params }) {
     const { id: idRutina } = params
@@ -14,6 +17,7 @@ export default function Page({ params }) {
 
     const [ejerciciosRutina, setEjerciciosRutina] = useState([]);
 
+    const router = useRouter()
 
     const fetchData = async () => {
         const _rutina = await fetchItem(`usuarios/${user.id}/rutinas/${idRutina}`)
@@ -53,6 +57,10 @@ export default function Page({ params }) {
         return sum / ejerciciosRutina.length
     }
 
+    const handleClick = () => {
+        router.push(`/sesiones?rutina=${rutina.id}`)
+    }
+
     return (
         <>
             <div className="bg-gradient-to-b from-dark to-dark/75 text-white py-5 rounded shadow-lg">
@@ -62,7 +70,7 @@ export default function Page({ params }) {
                 </div>
 
                 {/* Stats */}
-                <div className="flex justify-evenly gap-5">
+                <div className="flex justify-center gap-20">
                     {rutina &&
                         <>
                             <div className="flex flex-col items-center justify-center">
@@ -74,11 +82,13 @@ export default function Page({ params }) {
                                 <span className="text-tiny">Sesiones</span>
                             </div>
                             <div className="flex flex-col items-center justify-center">
-                                <span className="text-xl">{calcularDificultad()}</span>
+                                <span className="text-xl">{calcularDificultad()}<i className={`ri-fire-fill ${dificultadColor(calcularDificultad())}`}></i></span>
                                 <span className="text-tiny">Dificultad media</span>
                             </div>
                             <div className="flex flex-col items-center justify-center">
-                                <span className="text-xl">3</span>
+                                <span className="text-xl">
+                                    {rutina.ejercicios && rutina.ejercicios.length || 0}
+                                </span>
                                 <span className="text-tiny">Ejercicios</span>
                             </div>
                         </>
@@ -86,7 +96,9 @@ export default function Page({ params }) {
                 </div>
             </div>
 
-            <div className="col-span-6 py-10">
+            <Button onClick={handleClick} className="mt-5" variant="solid" color="primary" startContent={<i className="ri-play-large-fill"></i>}>Empezar entrenamiento</Button>
+
+            <div className="py-5">
                 {rutina &&
                     <TablaEjerciciosSimple data={ejerciciosRutina} />
                 }

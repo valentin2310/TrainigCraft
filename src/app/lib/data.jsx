@@ -415,7 +415,7 @@ export async function storeRutina(idUser, data) {
             categorias: dataCategorias,
             created_at: Timestamp.now(),
             sesiones: 0,
-            idDeleted: false
+            isDeleted: false
         })
 
         const result = await getDoc(docRef)
