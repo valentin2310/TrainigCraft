@@ -58,7 +58,7 @@ export default function Page({ params }) {
     }
 
     const handleClick = () => {
-        router.push(`/sesiones?rutina=${rutina.id}`)
+        router.push(`/sesiones/${rutina.id}`)
     }
 
     return (
