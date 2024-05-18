@@ -30,7 +30,8 @@ export default function TablaEjerciciosSimple({ data }) {
             </div>
           </div>
         ),
-        grow: true
+        grow: true,
+        size: 400
       },
       {
         accessorKey: 'peso',
@@ -53,6 +54,7 @@ export default function TablaEjerciciosSimple({ data }) {
           <Rate value={row.original.ejercicio.dificultad} size='xs' readOnly renderCharacter={renderRateCharacter} />
         ),
         grow: false,
+        size: 80,
         maxSize: 'fit-content'
       },
     ],

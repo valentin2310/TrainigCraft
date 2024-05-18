@@ -70,26 +70,26 @@ export default function Page({ params }) {
                 </div>
 
                 {/* Stats */}
-                <div className="flex justify-center gap-20">
+                <div className="flex justify-center gap-3 sm:gap-5 md:gap-20">
                     {rutina &&
                         <>
                             <div className="flex flex-col items-center justify-center">
-                                <span className="text-xl">{calcularFecha(rutina.created_at)}</span>
-                                <span className="text-tiny">Fecha creación</span>
+                                <span className="text-md md:text-xl">{calcularFecha(rutina.created_at)}</span>
+                                <span className="text-xs md:text-tiny">Creación</span>
                             </div>
                             <div className="flex flex-col items-center justify-center">
-                                <span className="text-xl">{rutina.sesiones}</span>
-                                <span className="text-tiny">Sesiones</span>
+                                <span className="text-md md:text-xl">{rutina.sesiones}</span>
+                                <span className="text-xs md:text-tiny">Sesiones</span>
                             </div>
                             <div className="flex flex-col items-center justify-center">
-                                <span className="text-xl">{calcularDificultad()}<i className={`ri-fire-fill ${dificultadColor(calcularDificultad())}`}></i></span>
-                                <span className="text-tiny">Dificultad media</span>
+                                <span className="text-md md:text-xl">{calcularDificultad()}<i className={`ri-fire-fill ${dificultadColor(calcularDificultad())}`}></i></span>
+                                <span className="text-xs md:text-tiny">Dificultad media</span>
                             </div>
                             <div className="flex flex-col items-center justify-center">
-                                <span className="text-xl">
+                                <span className="text-md md:text-xl">
                                     {rutina.ejercicios && rutina.ejercicios.length || 0}
                                 </span>
-                                <span className="text-tiny">Ejercicios</span>
+                                <span className="text-xs md:text-tiny">Ejercicios</span>
                             </div>
                         </>
                     }
