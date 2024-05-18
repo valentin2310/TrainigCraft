@@ -1,13 +1,14 @@
 'use client'
 
-import { fetchEjerciciosRutina, fetchItem } from "@/app/lib/data";
+import { fetchEjerciciosRutina, fetchItem, storeSesionEntrenamiento } from "@/app/lib/data";
 import { UserContext } from "@/app/providers";
-import { use, useEffect, useState } from "react"
+import { use, useEffect, useRef, useState } from "react"
 import { Button, Image, CircularProgress, Input, useDisclosure, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function Page({ params }) {
     const searchParams = useSearchParams()
+    const router = useRouter()
     const idRutina = searchParams.get('rutina')
 
     const [rutina, setRutina] = useState(null)
@@ -23,8 +24,11 @@ export default function Page({ params }) {
     const [tiempoDescanso, setTiempoDescanso] = useState(60);
     const [descanso, setDescanso] = useState(60);
 
+    const [pausa, setPausa] = useState(false)
+    const [cronometro, setCronometro] = useState(0);
+    const cronometroRef = useRef(null)
+
     const [serieActual, setSerieActual] = useState(1);
-    const [serieActualDatos, setSerieActualDatos] = useState(null);
     const [repeticionesSerie, setRepeticionesSerie] = useState(0);
     const [pesoSerie, setPesoSerie] = useState(0);
     const [rpeSerie, setRpeSerie] = useState(0);
@@ -35,6 +39,7 @@ export default function Page({ params }) {
     const [registroSesion, setRegistroSesion] = useState([]);
 
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen : isOpenExit, onOpen : onOpenExit, onClose : onCloseExit } = useDisclosure();
 
     const fetchData = async () => {
         console.log(idRutina)
@@ -61,6 +66,8 @@ export default function Page({ params }) {
     }
 
     const guardarSerie = () => {
+        const registro = registroSesion;
+
         let serie;
         if (serieActual == 1) {
             serie = {
@@ -68,7 +75,7 @@ export default function Page({ params }) {
                 datosSesion: []
             }
         } else {
-            serie = { ...serieActualDatos }
+            serie = registroSesion.find(item => item.orden == ejercicioActual.orden)
             console.log(serie)
         }
 
@@ -76,25 +83,66 @@ export default function Page({ params }) {
             serie: parseInt(serieActual),
             repeticiones: parseInt(repeticionesSerie),
             peso: parseFloat(pesoSerie),
-            rpe: parseInt(rpeSerie)
+            rpe: parseInt(rpeSerie),
+            eficacia: repeticionesSerie/ejercicioActual.repeticiones * 100
         })
 
-        console.log(serie)
+        if (serieActual == 1) {
+            registro.push(serie)
+        } else {
+            registro.map(item => {
+                if (item.orden == ejercicioActual.orden) return { ...serie }
+                return item
+            })
+        }
 
-        setSerieActualDatos(serie)
+        setRegistroSesion([...registro]);
+    }
+
+    const guardarSesion = () => {
+        /* 
+            Datos de la rutina
+            Sesion de entrenamiento
+            Tiempo
+            RPE y Eficiencia media
+            Estado de completado de la rutina 
+        */
+
+        const progreso = calcularRutinaProgreso()
+        const media = calcularMedia()
+        
+        const sesion = {
+            datosRutina: {
+                titulo: rutina.titulo,
+                created_at: rutina.created_at,
+                categorias: [...rutina.categorias],
+                descripcion: rutina.descripcion,
+                rutinaId: rutina.id,
+                isDefault: !(rutina.path && rutina.path.includes('usuarios'))
+            },
+            registro: [...registroSesion],
+            duracion: cronometro,
+            completado: progreso >= 100 ? true : false,
+            progreso: progreso,
+            rpe: media.rpe,
+            eficacia: media.eficacia
+        }
+
+        storeSesionEntrenamiento(user.id, sesion);
+
     }
 
     const siguienteEjercicio = () => {
-        /* Guardar las series del ejercicio actual en el registro de la sesion */
-        setRegistroSesion([...registroSesion, serieActualDatos])
-        console.log([...registroSesion, serieActualDatos]);
         /* Cambiar el ejercicio actual por el siguiente ejercicio en la lista */
         const nextEjercicio = ejerciciosRutina.find(item => item.orden > ejercicioActual.orden)
 
         /* Terminar la sesion */
         if (!nextEjercicio) {
+            setPausa(true)
             /* Guardar en la bd los datos de la sesion */
+            guardarSesion()
             /* Mostrar un modal con los datos de la sesion */
+            onOpen()
             /* En el modal tener un boton que redirija al usuario a la pagina de la rutina */
             setEjercicioActual(null)
             return
@@ -113,7 +161,7 @@ export default function Page({ params }) {
             setEficacia(0)
             return
         }
-        
+
         let rpeTotal = 0;
         let eficaciaTotal = 0;
         let cantidad = 0;
@@ -126,12 +174,11 @@ export default function Page({ params }) {
                 eficaciaTotal += serieEficacia >= 100 ? 100 : serieEficacia
             })
         })
-        
-        console.log('cantidad', cantidad)
-        console.log('rpeTotal', rpeTotal)
-        console.log('eficaciaTotal', eficaciaTotal)
-        setREPMedia(cantidad == 0 ? 0 : rpeTotal / cantidad)
-        setEficacia(cantidad == 0 ? 0 : eficaciaTotal / cantidad)
+
+        return {
+            rpe: cantidad == 0 ? 0 : rpeTotal / cantidad,
+            eficacia: cantidad == 0 ? 0 : eficaciaTotal / cantidad
+        }
     }
 
     const calcularRutinaProgreso = () => {
@@ -148,8 +195,25 @@ export default function Page({ params }) {
 
         /* Calcular % */
         const progreso = (seriesTotales == 0 ? 0 : seriesCompletadas / seriesTotales) * 100
-        console.log(seriesTotales, seriesCompletadas, progreso)
-        setRutinaProgreso(progreso)
+        return progreso;
+    }
+
+    const formatTime = (time) => {
+        const getSeconds = `0${time % 60}`.slice(-2);
+        const minutes = Math.floor(time / 60);
+        const getMinutes = `0${minutes % 60}`.slice(-2);
+        const getHours = `0${Math.floor(time / 3600)}`.slice(-2);
+        return `${getHours}:${getMinutes}:${getSeconds}`;
+    };
+
+    const handleExit = () => {
+        router.push(`/dashboard/rutinas/${idRutina}`)
+    }
+
+    const handleSaveAndExit = () => {
+        if (rutinaProgreso > 0)
+            guardarSesion()
+        handleExit()
     }
 
     useEffect(() => {
@@ -170,8 +234,10 @@ export default function Page({ params }) {
         } else if (descanso <= 0) {
             /* Guardar datos serie */
             guardarSerie()
-            calcularMedia()
-            calcularRutinaProgreso()
+            const media = calcularMedia()
+            setREPMedia(media.rpe)
+            setEficacia(media.eficacia)
+            setRutinaProgreso(calcularRutinaProgreso())
 
             if (serieActual + 1 > ejercicioActual.series) {
                 /* Siguiente ejercicio */
@@ -190,15 +256,28 @@ export default function Page({ params }) {
 
     }, [isDescanso, descanso])
 
+    useEffect(() => {
+        if (!pausa) {
+            cronometroRef.current = setInterval(() => {
+                setCronometro(prevTime => prevTime + 1)
+            }, 1000)
+        } else {
+            clearInterval(cronometroRef.current)
+        }
+
+        return () => clearInterval(cronometroRef.current)
+
+    }, [pausa])
+
     return (
-        <div className="h-screen overflow-y-auto bg-dark/95">
+        <div className="h-screen overflow-y-auto bg-dark/95 pb-10">
             <div className="grid place-items-center text-white">
                 <div className="w-full max-w-[1200px] flex flex-col justify-between items-center">
                     <div className="w-full flex justify-between p-5">
-                        <p className="text-3xl bold">00:00:00</p>
+                        <p className="text-3xl bold">{formatTime(cronometro)}</p>
                         <div className="flex gap-2 text-2xl">
                             <Button isIconOnly variant="light" startContent={<i className="ri-folder-video-fill text-2xl text-white"></i>}></Button>
-                            <Button onPress={onOpen} isIconOnly color="danger" variant="flat" startContent={<i className="ri-close-line text-red-500 text-2xl"></i>}></Button>
+                            <Button onPress={onOpenExit} isIconOnly color="danger" variant="flat" startContent={<i className="ri-close-line text-red-500 text-2xl"></i>}></Button>
                         </div>
                     </div>
                 </div>
@@ -338,7 +417,7 @@ export default function Page({ params }) {
             <Modal
                 size="full"
                 isDismissable={false}
-                /* hideCloseButton */
+                hideCloseButton
                 isOpen={isOpen}
                 onClose={onClose}
                 className="bg-dark"
@@ -401,7 +480,86 @@ export default function Page({ params }) {
                                             </div>
                                         </div>
                                         <div className="mt-8">
-                                            <Button className="w-full" color="success" variant="flat" size="lg">Terminar rutina</Button>
+                                            <Button onClick={handleExit} className="w-full" color="success" variant="flat" size="lg">Terminar rutina</Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ModalBody>
+                        </>
+                    )}
+                </ModalContent>
+            </Modal>
+
+            {/* Modal salir de sesion */}
+            <Modal
+                size="full"
+                isDismissable={false}
+                hideCloseButton
+                isOpen={isOpenExit}
+                onClose={onCloseExit}
+                className="bg-dark"
+            >
+                <ModalContent>
+                    {(onClose) => (
+                        <>
+                            <ModalBody>
+                                <div className="w-full h-full grid place-items-center">
+                                    <div className="">
+                                        <div className="text-white flex flex-col items-center">
+                                            <CircularProgress
+                                                label="Rutina completada"
+                                                size="lg"
+                                                value={rutinaProgreso}
+                                                maxValue={100}
+                                                showValueLabel
+                                                strokeWidth={4}
+                                                color="primary"
+                                                classNames={{
+                                                    svg: "w-48 h-48 drop-shadow-md",
+                                                    indicator: "stroke-primary",
+                                                    track: "stroke-white/10",
+                                                    value: "text-[2rem] font-semibold text-white",
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="flex justify-center gap-3 mt-3">
+                                            <div className="text-white flex flex-col items-center">
+                                                <CircularProgress
+                                                    label="Eficacia"
+                                                    value={eficacia}
+                                                    maxValue={100}
+                                                    showValueLabel
+                                                    strokeWidth={4}
+                                                    color="primary"
+                                                    classNames={{
+                                                        svg: "w-24 h-24 drop-shadow-md",
+                                                        indicator: "stroke-primary",
+                                                        track: "stroke-white/10",
+                                                        value: "text-lg font-semibold text-white",
+                                                    }}
+                                                />
+                                            </div>
+                                            <div className="text-white flex flex-col items-center">
+                                                <CircularProgress
+                                                    label="RPE medio"
+                                                    value={RPEMedia}
+                                                    maxValue={10}
+                                                    showValueLabel
+                                                    strokeWidth={4}
+                                                    color="primary"
+                                                    classNames={{
+                                                        svg: "w-24 h-24 drop-shadow-md",
+                                                        indicator: "stroke-primary",
+                                                        track: "stroke-white/10",
+                                                        value: "text-lg font-semibold text-white",
+                                                    }}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="mt-8 flex flex-col gap-3">
+                                            <Button onPress={onCloseExit} className="w-full" color="primary" variant="flat" size="lg">Continuar con la rutina</Button>
+                                            <Button onClick={handleSaveAndExit} className="w-full text-red-500"  color="secondary" variant="flat" size="lg">Terminar y guardar rutina</Button>
+                                            <Button onClick={handleExit} className="w-full" color="danger" variant="flat" size="lg">Terminar y descartar rutina</Button>
                                         </div>
                                     </div>
                                 </div>

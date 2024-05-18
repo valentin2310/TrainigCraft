@@ -1,5 +1,5 @@
 import { firestore as db, auth } from '@/firebase/client-config'
-import { collection, getDocs, doc, getDoc, query, where, setDoc, addDoc, Timestamp, orderBy, limit, updateDoc, deleteDoc, runTransaction, documentId, writeBatch } from 'firebase/firestore'
+import { collection, getDocs, doc, getDoc, query, where, setDoc, addDoc, Timestamp, orderBy, limit, updateDoc, deleteDoc, runTransaction, documentId, writeBatch, increment } from 'firebase/firestore'
 import { generateFromEmail } from 'unique-username-generator'
 import { urlToBlob } from './utils';
 import { subirImg } from './data-storage';
@@ -678,5 +678,36 @@ export async function updateCategoria(path, data) {
     } catch (err) {
         console.log(err)
         return null
+    }
+}
+
+export async function storeSesionEntrenamiento(idUser, data) {
+    const collectionRef = collection(db, `usuarios/${idUser}/sesiones`)
+
+    try {
+        const docRef = await addDoc(collectionRef, {
+            ...data,
+            created_at: Timestamp.now()
+        })
+
+        const result = await getDoc(docRef)
+        await updateDatosSesionRutina(idUser, data.datosRutina)
+
+        return result;
+        
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function updateDatosSesionRutina(idUser, data) {
+    try {
+        const docRef = doc(db, data.isDefault ? `rutinas/${data.rutinaId}` : `usuarios/${idUser}/rutinas/${data.rutinaId}`)
+        await updateDoc(docRef, {
+            sesiones: increment(1)
+        })
+        
+    } catch (error) {
+        console.log(error)
     }
 }
