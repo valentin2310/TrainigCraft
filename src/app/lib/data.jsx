@@ -582,7 +582,9 @@ export async function updateEventos(userId, eventos, fecha) {
                 batch.set(docRef, {
                     rutinaId: item.rutinaId,
                     date: item.date,
-                    title: item.title
+                    title: item.title,
+                    isCompletado: false,
+                    sesionId: null
                 })
             })
         }
@@ -692,6 +694,7 @@ export async function storeSesionEntrenamiento(idUser, data) {
 
         const result = await getDoc(docRef)
         await updateDatosSesionRutina(idUser, data.datosRutina)
+        await crearEventoDeSesionEntrenamiento(idUser, result)
 
         return result;
         
@@ -707,6 +710,41 @@ export async function updateDatosSesionRutina(idUser, data) {
             sesiones: increment(1)
         })
         
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function crearEventoDeSesionEntrenamiento(idUser, sesionSnaphot) {
+    try {
+        const sesion = sesionSnaphot.data()
+        const sesionId = sesionSnaphot.id
+        const today = (new Date()).toISOString().split('T')[0]
+
+        const collectionRef = collection(db, `usuarios/${idUser}/eventos`);
+        const queryFindRutinaDia = query(collectionRef, where('rutinaId', '==', sesion.datosRutina.rutinaId), where('date', '==', today), where('isCompletado', '==', false), limit(1))
+        
+        const eventos = await fetchCollectionDataWithId(queryFindRutinaDia)
+        const eventoRutina = eventos[0]
+
+        if (eventoRutina) {
+            /* Actualizar evento, marcar como completado y añadir id de la sesion de entrenamiento */
+            const rutinaDoc = doc(db, `usuarios/${idUser}/eventos/${eventoRutina.id}`)
+            await updateDoc(rutinaDoc, {
+                isCompletado: true,
+                sesionId: sesionId
+            })
+
+        } else {
+            await setDoc(doc(collectionRef), {
+                date: today,
+                title: sesion.datosRutina.titulo,
+                rutinaId: sesion.datosRutina.rutinaId,
+                isCompletado: true,
+                sesionId: sesionId
+            })
+        }
+
     } catch (error) {
         console.log(error)
     }

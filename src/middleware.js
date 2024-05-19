@@ -50,6 +50,7 @@ export const config = {
         "/api/login",
         "/api/logout",
         "/dashboard",
+        '/sesiones',
         "/dashboard/:path*"
     ],
 };
