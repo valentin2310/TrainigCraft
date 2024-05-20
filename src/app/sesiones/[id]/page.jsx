@@ -5,37 +5,36 @@ import { UserContext } from "@/app/providers";
 import { use, useEffect, useRef, useState } from "react"
 import { Button, Image, CircularProgress, Input, useDisclosure, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
+import { useSesionEntrenamiento } from "@/app/stores/use-sesion-entrenamiento";
 
 export default function Page({ params }) {
     const { id: idRutina } = params
     const router = useRouter()
 
-    const [rutina, setRutina] = useState(null)
+    const { 
+        rutina, setRutina, 
+        ejercicioActual, setEjercicioActual, 
+        ejerciciosRestantes, setEjerciciosRestantes, 
+        serieActual, setSerieActual,
+        repeticionesSerie, setRepeticionesSerie,
+        pesoSerie, setPesoSerie,
+        rpeSerie, setRpeSerie,
+        RPEMedia, setRPEMedia,
+        eficacia, setEficacia,
+        rutinaProgreso, setRutinaProgreso,
+        registroSesion, setRegistroSesion,
+        ejerciciosRutina, setEjerciciosRutina, 
+        isDescanso, setIsDescanso,
+        tiempoDescanso, setTiempoDescanso,
+        descanso, setDescanso,
+        duracion, addDuracion,
+        reset : resetStoreSesion
+    } = useSesionEntrenamiento()
 
     const user = use(UserContext)
 
-    const [ejerciciosRutina, setEjerciciosRutina] = useState([]);
-
-    const [ejercicioActual, setEjercicioActual] = useState(null);
-    const [ejerciciosRestantes, setEjerciciosRestantes] = useState([]);
-
-    const [isDescanso, setIsDescanso] = useState(false);
-    const [tiempoDescanso, setTiempoDescanso] = useState(60);
-    const [descanso, setDescanso] = useState(60);
-
     const [pausa, setPausa] = useState(false)
-    const [cronometro, setCronometro] = useState(0);
     const cronometroRef = useRef(null)
-
-    const [serieActual, setSerieActual] = useState(1);
-    const [repeticionesSerie, setRepeticionesSerie] = useState(0);
-    const [pesoSerie, setPesoSerie] = useState(0);
-    const [rpeSerie, setRpeSerie] = useState(0);
-
-    const [RPEMedia, setREPMedia] = useState(0)
-    const [eficacia, setEficacia] = useState(0)
-    const [rutinaProgreso, setRutinaProgreso] = useState(0)
-    const [registroSesion, setRegistroSesion] = useState([]);
 
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: isOpenExit, onOpen: onOpenExit, onClose: onCloseExit } = useDisclosure();
@@ -120,7 +119,7 @@ export default function Page({ params }) {
                 isDefault: !(rutina.path && rutina.path.includes('usuarios'))
             },
             registro: [...registroSesion],
-            duracion: cronometro,
+            duracion: duracion,
             completado: progreso >= 100 ? true : false,
             progreso: progreso,
             rpe: media.rpe,
@@ -156,7 +155,7 @@ export default function Page({ params }) {
 
     const calcularMedia = () => {
         if (registroSesion.length == 0) {
-            setREPMedia(0)
+            setRPEMedia(0)
             setEficacia(0)
             return
         }
@@ -205,7 +204,11 @@ export default function Page({ params }) {
         return `${getHours}:${getMinutes}:${getSeconds}`;
     };
 
-    const handleExit = () => {
+    const handleExit = async () => {
+        /* Borrar el store de la sesion, para reiniciarla */
+        useSesionEntrenamiento.persist.clearStorage()
+        resetStoreSesion()
+
         router.push(`/dashboard/rutinas/${idRutina}`)
     }
 
@@ -227,14 +230,14 @@ export default function Page({ params }) {
 
         if (isDescanso && descanso > 0) {
             timer = setInterval(() => {
-                setDescanso(prevTiempo => prevTiempo - 1)
+                setDescanso(descanso - 1)
             }, 1000)
 
         } else if (descanso <= 0) {
             /* Guardar datos serie */
             guardarSerie()
             const media = calcularMedia()
-            setREPMedia(media.rpe)
+            setRPEMedia(media.rpe)
             setEficacia(media.eficacia)
             setRutinaProgreso(calcularRutinaProgreso())
 
@@ -243,7 +246,7 @@ export default function Page({ params }) {
                 setSerieActual(1)
                 siguienteEjercicio()
             } else {
-                setSerieActual(serie => serie + 1)
+                setSerieActual(serieActual + 1)
             }
 
             /* Parar descanso */
@@ -258,7 +261,7 @@ export default function Page({ params }) {
     useEffect(() => {
         if (!pausa) {
             cronometroRef.current = setInterval(() => {
-                setCronometro(prevTime => prevTime + 1)
+                addDuracion()
             }, 1000)
         } else {
             clearInterval(cronometroRef.current)
@@ -274,7 +277,7 @@ export default function Page({ params }) {
             <div className="grid place-items-center text-white">
                 <div className="w-full max-w-[1200px] flex flex-col justify-between items-center">
                     <div className="w-full flex justify-between p-5">
-                        <p className="text-3xl bold">{formatTime(cronometro)}</p>
+                        <p className="text-3xl bold">{formatTime(duracion)}</p>
                         <div className="flex gap-2 text-2xl">
                             <Button isIconOnly variant="light" startContent={<i className="ri-folder-video-fill text-2xl text-white"></i>}></Button>
                             <Button onPress={onOpenExit} isIconOnly color="danger" variant="flat" startContent={<i className="ri-close-line text-red-500 text-2xl"></i>}></Button>
@@ -303,8 +306,8 @@ export default function Page({ params }) {
                                     }}
                                 />
                                 <div className="flex gap-10 justify-center">
-                                    <Button onClick={() => setDescanso(prevTiempo => prevTiempo - 10)} variant="light" className="text-white">-10 seg</Button>
-                                    <Button onClick={() => setDescanso(prevTiempo => prevTiempo + 10)} variant="light" className="text-white">+10 seg</Button>
+                                    <Button onClick={() => setDescanso(descanso - 10)} variant="light" className="text-white">-10 seg</Button>
+                                    <Button onClick={() => setDescanso(descanso + 10)} variant="light" className="text-white">+10 seg</Button>
                                 </div>
                                 <div className="mt-8 flex flex-col gap-3">
                                     <p className="text-xl"><i className="ri-questionnaire-line text-primary me-2"></i>Como te ha salido el ejercicio?</p>
