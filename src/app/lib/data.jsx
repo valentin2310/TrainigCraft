@@ -749,3 +749,16 @@ export async function crearEventoDeSesionEntrenamiento(idUser, sesionSnaphot) {
         console.log(error)
     }
 }
+
+export async function fetchSesionesEntrenamientoRutina(idUser, idRutina) {
+    try {
+        const collectionRef = collection(db, `usuarios/${idUser}/sesiones`)
+        const querySesionesRutina = query(collectionRef, where('datosRutina.rutinaId', '==', idRutina))
+        const lista = await fetchCollectionDataPlain(querySesionesRutina)
+
+        return lista;
+        
+    } catch (error) {
+        console.log(error)
+    }
+}

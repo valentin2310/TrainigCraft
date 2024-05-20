@@ -1,13 +1,17 @@
 'use client'
 
-import { fetchEjerciciosRutina, fetchItem } from "@/app/lib/data";
+import { fetchEjerciciosRutina, fetchItem, fetchSesionesEntrenamientoRutina } from "@/app/lib/data";
 import { UserContext } from "@/app/providers";
 import { use, useEffect, useState } from "react"
 import { format } from "rsuite/esm/utils/dateUtils";
 import TablaEjerciciosSimple from "@/app/ui/rutinas/tabla-ejercicios-simple";
-import { Button } from "@nextui-org/react";
-import { dificultadColor } from "@/app/lib/utils";
+import { Button, Tabs, Tab, Image, Chip, useDisclosure } from "@nextui-org/react";
+import { dificultadColor, formatSecondsToTime } from "@/app/lib/utils";
 import { useRouter } from "next/navigation";
+import CardEditDots from "@/app/ui/card-edit-dots";
+import RutinaModalForm from "@/app/ui/rutinas/modal-form";
+import RutinaModalDelete from "@/app/ui/rutinas/modal-delete";
+import clsx from "clsx";
 
 export default function Page({ params }) {
     const { id: idRutina } = params
@@ -16,16 +20,24 @@ export default function Page({ params }) {
     const user = use(UserContext)
 
     const [ejerciciosRutina, setEjerciciosRutina] = useState([]);
+    const [sesionesRutina, setSesionesRutina] = useState([])
+
+    const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
+    const { isOpen: delIsOpen, onOpen: delOnOpen, onClose: delOnClose, onOpenChange: delOnOpenChange } = useDisclosure()
 
     const router = useRouter()
 
     const fetchData = async () => {
         const _rutina = await fetchItem(`usuarios/${user.id}/rutinas/${idRutina}`)
         setRutina(_rutina)
+        console.log(_rutina)
 
         const _rutina_ejercicios = await fetchEjerciciosRutina(_rutina.ejercicios);
         setEjerciciosRutina(_rutina_ejercicios);
-        console.log(_rutina_ejercicios)
+
+        const _sesiones = await fetchSesionesEntrenamientoRutina(user.id, idRutina);
+        setSesionesRutina(_sesiones)
+        console.log(_sesiones)
 
     }
 
@@ -58,51 +70,112 @@ export default function Page({ params }) {
     }
 
     const handleClick = () => {
-        router.push(`/sesiones/${rutina.id}`)
+        router.push(`/sesiones/${rutina?.id}`)
     }
 
     return (
         <>
-            <div className="bg-gradient-to-b from-dark to-dark/75 text-white py-5 rounded shadow-lg">
-                <div className="mb-10 text-center">
+            <div className="flex justify-between bg-gradient-to-br from-gray-100 to-gray-50 rounded shadow p-3 text-center">
+                <div className=""></div>
+                <div className="">
                     <h1 className="text-3xl font-semibold text-primary mb-1">{rutina?.titulo}</h1>
-                    <p className="px-2">{rutina?.descripcion}</p>
-                </div>
+                    <p className="px-2 text-lg"><i className="ri-information-2-line text-primary me-2"></i>{rutina?.descripcion ?? 'Sin descripcion..'}</p>
+                    <div className="px-2">
+                        {rutina?.categorias && rutina.categorias.map((categoria) => (
+                            <Chip key={categoria.color} variant="light" startContent={<i className="ri-price-tag-3-line text-primary" style={{ color: categoria.color }}></i>}>
+                                {categoria.nombre}
+                            </Chip>
+                        ))}
+                    </div>
+                    <div className="px-2 mt-4">
+                        {/* Stats */}
+                        <div className="px-2 flex justify-center gap-3 sm:gap-5 md:gap-20">
+                            {rutina &&
+                                <>
+                                    <div className="flex flex-col items-center justify-center">
+                                        <span className="text-md md:text-xl">{calcularFecha(rutina.created_at)}</span>
+                                        <span className="text-xs md:text-tiny">Creación</span>
+                                    </div>
+                                    <div className="flex flex-col items-center justify-center">
+                                        <span className="text-md md:text-xl">{rutina.sesiones}</span>
+                                        <span className="text-xs md:text-tiny">Sesiones</span>
+                                    </div>
+                                    <div className="flex flex-col items-center justify-center">
+                                        <span className="text-md md:text-xl">{calcularDificultad()}<i className={`ri-fire-fill ${dificultadColor(calcularDificultad())}`}></i></span>
+                                        <span className="text-xs md:text-tiny">Dificultad media</span>
+                                    </div>
+                                    <div className="flex flex-col items-center justify-center">
+                                        <span className="text-md md:text-xl">
+                                            {rutina.ejercicios && rutina.ejercicios.length || 0}
+                                        </span>
+                                        <span className="text-xs md:text-tiny">Ejercicios</span>
+                                    </div>
+                                </>
+                            }
+                        </div>
+                    </div>
+                    <div className="mt-3">
+                        <Button onClick={handleClick} className="mt-2" variant="solid" color="secondary" startContent={<i className="ri-play-large-fill text-primary"></i>}>Empezar entrenamiento</Button>
 
-                {/* Stats */}
-                <div className="flex justify-center gap-3 sm:gap-5 md:gap-20">
-                    {rutina &&
-                        <>
-                            <div className="flex flex-col items-center justify-center">
-                                <span className="text-md md:text-xl">{calcularFecha(rutina.created_at)}</span>
-                                <span className="text-xs md:text-tiny">Creación</span>
-                            </div>
-                            <div className="flex flex-col items-center justify-center">
-                                <span className="text-md md:text-xl">{rutina.sesiones}</span>
-                                <span className="text-xs md:text-tiny">Sesiones</span>
-                            </div>
-                            <div className="flex flex-col items-center justify-center">
-                                <span className="text-md md:text-xl">{calcularDificultad()}<i className={`ri-fire-fill ${dificultadColor(calcularDificultad())}`}></i></span>
-                                <span className="text-xs md:text-tiny">Dificultad media</span>
-                            </div>
-                            <div className="flex flex-col items-center justify-center">
-                                <span className="text-md md:text-xl">
-                                    {rutina.ejercicios && rutina.ejercicios.length || 0}
-                                </span>
-                                <span className="text-xs md:text-tiny">Ejercicios</span>
-                            </div>
-                        </>
-                    }
+                    </div>
                 </div>
+                <CardEditDots
+                    onOpen={onOpen}
+                    delOnOpen={delOnOpen}
+                    href={`/dashboard/rutinas/${rutina?.id}/edit`}
+                />
             </div>
 
-            <Button onClick={handleClick} className="mt-5" variant="solid" color="primary" startContent={<i className="ri-play-large-fill"></i>}>Empezar entrenamiento</Button>
-
-            <div className="py-5">
-                {rutina &&
-                    <TablaEjerciciosSimple data={ejerciciosRutina} />
-                }
+            <div className="w-full mt-3">
+                <Tabs aria-label="Opciones" color="primary">
+                    <Tab key="ejercicios" title="Ejercicios">
+                        <div className="">
+                            {rutina &&
+                                <TablaEjerciciosSimple data={ejerciciosRutina} />
+                            }
+                        </div>
+                    </Tab>
+                    <Tab key="estadisticas" title="Estadisticas">
+                        <div className="grid md:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 gap-3">
+                            {sesionesRutina && sesionesRutina.map((item, index) => (
+                                <div key={index} className="p-3 bg-gray-50 rounded shadow">
+                                    <div className="flex gap-3 text-lg">
+                                        <p className={clsx(
+                                            "text-lg",
+                                            { "text-primary": item.completado },
+                                            { "text-red-500": !item.completado },
+                                        )}>{Math.round(item.progreso)}%</p>
+                                        <p>- {item.datosRutina.titulo}</p>
+                                    </div>
+                                    <div className="flex gap-3 px-2">
+                                        <p><i className="font-bold ri-calendar-line me-2"></i>{calcularFecha(item.created_at)}</p>
+                                        <p><i className="font-bold ri-timer-line me-2"></i>{formatSecondsToTime(item.duracion)}</p>
+                                        <p><span className="font-bold me-2">Eficacia</span>{Math.round(item.eficacia)}%</p>
+                                        <p><span className="font-bold me-2">RPE</span>{Math.round(item.rpe)}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </Tab>
+                </Tabs>
             </div>
+
+            {/* Modal para modificar */}
+            <RutinaModalForm
+                isOpen={isOpen}
+                onClose={onClose}
+                onOpenChange={onOpenChange}
+                rutina={rutina}
+            />
+
+            {/* Modal para eliminar */}
+            <RutinaModalDelete
+                isOpen={delIsOpen}
+                onClose={delOnClose}
+                onOpenChange={delOnOpenChange}
+                rutina={rutina}
+            />
+
         </>
     )
 }
