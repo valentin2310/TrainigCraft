@@ -562,7 +562,7 @@ export async function updateEventos(userId, eventos, fecha) {
 
     try {
         const collectionRef = collection(db, `usuarios/${userId}/eventos`)
-        const queryEventosFecha = query(collectionRef, where('date', '==', fecha))
+        const queryEventosFecha = query(collectionRef, where('date', '==', fecha), where('isCompletado', '==', false))
         const collectionData = await fetchCollectionDataWithId(queryEventosFecha)
 
         const batch = writeBatch(db);

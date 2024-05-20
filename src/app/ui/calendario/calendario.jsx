@@ -10,11 +10,21 @@ import { useDisclosure, Image } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import CalendarioModalRutinaInfo from "@/app/ui/calendario/modal-rutina-info";
 import { updateEvento } from "@/app/lib/data";
+import clsx from "clsx";
+import { ToastContainer, toast } from "react-toastify";
 
 function renderEventContent(eventInfo) {
+    let fecha = new Date()
+    fecha = fecha.setDate(new Date(eventInfo.event.start).getDate() + 1)
+    fecha = new Date(fecha)
     return (
         <>
-            <div className="p-1 bg-primary font-semibold">
+            <div className={clsx(
+                "p-1 font-semibold",
+                { 'bg-blue-500' : !eventInfo.event.extendedProps.isCompletado && fecha >= new Date() },
+                { 'bg-red-500' : !eventInfo.event.extendedProps.isCompletado && fecha < new Date() },
+                { 'bg-primary' : eventInfo.event.extendedProps.isCompletado },
+            )}>
                 <span className="text-tiny">{eventInfo.event.title}</span>
             </div>
         </>
@@ -31,6 +41,10 @@ export default function Calendar({ eventos, setEventos, rutinas, categorias, fil
 
     const handleClick = (arg) => {
         /* alert(arg.dateStr) */
+        if (arg.dateStr < (new Date()).toISOString().split('T')[0]) {
+            toast.error("Debes elegir una fecha mayor a la actual.")
+            return
+        }
         setSelectedDate(arg.dateStr)
         onOpen()
     }
@@ -53,12 +67,19 @@ export default function Calendar({ eventos, setEventos, rutinas, categorias, fil
         fecha = fecha.setDate(new Date(arg.event.start).getDate() + 1)
         fecha = new Date(fecha)
 
+        /* Si es un evento anterior al actual no hacer nada */
+        if (fecha < new Date() || arg.event.extendedProps.isCompletado) {
+            arg.revert()
+            return;
+        }
+
         const newFecha = fecha.toISOString().split('T')[0]
         const ev = eventos.find((item) => item.id == arg.event.id)
 
         const isDuplicated = eventos.find((item) => item.rutinaId == ev.rutinaId && item.date == newFecha)
 
-        if (isDuplicated) {
+        /* Si el evento esta duplicado o la nueva fecha es anterior a la actual no hacer nada */
+        if (isDuplicated || newFecha < new Date()) {
             arg.revert()
             return
         }
@@ -118,6 +139,7 @@ export default function Calendar({ eventos, setEventos, rutinas, categorias, fil
                 eventos={eventos}
                 setEventos={setEventos}
             />
+            <ToastContainer />
         </>
     )
 }

@@ -40,11 +40,11 @@ export default function CalendarioModalAddRutina({ isOpen, onClose, onOpenChange
         const _list = selected.map((item) => ({
             rutinaId: item.rutinaId,
             title: item.titulo ?? item.title,
-            date: selectedDate ?? new Date.toISOString().split('T')[0]
+            date: selectedDate ?? new Date.toISOString().split('T')[0],
         }))
 
         const newEventos = await updateEventos(userId, _list, selectedDate);
-        const _demas_eventos = eventos.filter((item) => item.date != selectedDate);
+        const _demas_eventos = eventos.filter((item) => item.date != selectedDate || item.isCompletado);
 
         setEventos([..._demas_eventos, ...newEventos])
         onClose()
@@ -55,7 +55,7 @@ export default function CalendarioModalAddRutina({ isOpen, onClose, onOpenChange
         
         setFilteredRutinas(rutinas)
 
-        const _list = eventos.filter((item) => item.date == selectedDate);
+        const _list = eventos.filter((item) => item.date == selectedDate && !item.isCompletado);
         setSelected(_list)
 
         return

@@ -1,6 +1,7 @@
 import { destroyEvento } from "@/app/lib/data"
 import { Modal, ModalHeader, ModalContent, ModalBody, ModalFooter, Button, Chip, Image } from "@nextui-org/react"
 import { useRouter } from "next/navigation"
+import { useEffect } from "react"
 
 export default function CalendarioModalRutinaInfo({ isOpen, onClose, onOpenChange, userId, rutina, evento, eventos, setEventos }) {
     const router = useRouter()
@@ -53,7 +54,9 @@ export default function CalendarioModalRutinaInfo({ isOpen, onClose, onOpenChang
                                 </div>
                             </ModalBody>
                             <ModalFooter>
-                                <Button onClick={handleQuitar} color="danger">Quitar</Button>
+                                {(!evento.isCompletado && evento.date >= (new Date).toISOString().split('T')[0]) &&
+                                    <Button onClick={handleQuitar} color="danger">Quitar</Button>
+                                }
                                 <Button variant="light" color="secondary" onPress={onClose}>Cerrar</Button>
                                 <Button onClick={handleVerMas} color="primary">Ver más</Button>
                             </ModalFooter>

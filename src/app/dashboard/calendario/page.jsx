@@ -24,6 +24,7 @@ export default function Page() {
 
         const _eventos = await fetchEventos(user.id);
         setEventos(_eventos)
+        console.log(_eventos)
     }
 
     useEffect(() => {

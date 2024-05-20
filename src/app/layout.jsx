@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import 'remixicon/fonts/remixicon.css'
 import 'rsuite/Rate/styles/index.css';
+import 'react-toastify/dist/ReactToastify.css';
 import { Providers } from "@/app/providers";
 
 const inter = Inter({ subsets: ["latin"] });
