@@ -34,6 +34,7 @@
     "react-color": "^2.19.3",
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
+    "react-multi-carousel": "^2.8.5",
     "react-toastify": "^10.0.5",
     "remixicon": "^4.2.0",
     "rsuite": "^5.58.1",

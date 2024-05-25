@@ -13,7 +13,7 @@ export default function ObjetivoCard({ objetivo }) {
     return (
         <>
         <div className={clsx(
-            "w-full md:w-[500px] bg-gradient-to-tl from-gray-50 to-gray-100 text-secondary p-4 rounded-xl shadow flex justify-between gap-3",
+            "w-full h-full bg-gradient-to-tl from-gray-50 to-gray-100 text-secondary p-4 rounded-xl shadow flex justify-between gap-3",
             {
                 'border-primary': objetivo.fecha_completado != null,
             }
