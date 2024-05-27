@@ -7,19 +7,20 @@ export default function GridObjetivos({ lista }) {
         <>
             <Carousel
                 additionalTransfrom={0}
-                arrows
+                arrows={false}
                 autoPlaySpeed={3000}
-                centerMode={true}
+                centerMode={false}
                 className=""
                 containerClass="container-with-dots"
                 dotListClass=""
                 draggable
                 focusOnSelect={false}
                 infinite={false}
-                itemClass="px-3"
+                itemClass="px-1 sm:px-3"
                 keyBoardControl
                 minimumTouchDrag={80}
                 pauseOnHover
+                partialVisbile
                 renderArrowsWhenDisabled={false}
                 renderButtonGroupOutside={false}
                 renderDotsOutside={false}
@@ -45,7 +46,7 @@ export default function GridObjetivos({ lista }) {
                             max: 1024,
                             min: 464
                         },
-                        items: 2,
+                        items: 1,
                         partialVisibilityGutter: 30
                     }
                 }}
@@ -55,7 +56,7 @@ export default function GridObjetivos({ lista }) {
                 shouldResetAutoplay
                 showDots={false}
                 sliderClass=""
-                slidesToSlide={2}
+                slidesToSlide={1}
                 swipeable
             >
                 {lista && lista.map((objetivo) => (
