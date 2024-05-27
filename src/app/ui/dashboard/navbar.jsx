@@ -16,7 +16,7 @@ export default function Navbar() {
     }
 
     return (
-        <header className="w-full sm:h-screen sm:w-[250px] bg-dark px-2 sm:py-10 sm:px-5 text-white">
+        <header className="w-full h-full sm:min-h-screen sm:w-[250px] bg-dark px-2 sm:py-5 md:py-10 sm:px-5 text-white">
             <div className="hidden sm:grid place-items-center px-4">
                 <p className="text-xl text-primary text-center font-bold">TrainigCraft</p>
                 <Image
@@ -28,15 +28,15 @@ export default function Navbar() {
                 />
                 <hr className="w-full" />
             </div>
-            <div className="flex sm:flex-col gap-3 overflow-x-auto py-2 sm:py-8">
+            <div className="flex sm:flex-col gap-1 sm:gap-3 overflow-x-auto py-2 sm:py-8">
                 <NavLinks />
             </div>
             <button
                 type="submit"
                 onClick={handleLogout}
-                className={'hidden sm:block text-start w-full py-2 px-4 text-red-500 bg-secondary rounded-lg border-b-2 border-red-500 hover:bg-red-500 hover:text-white duration-500'}
+                className={'hidden sm:block text-start w-full py-1 sm:py-2 px-2 sm:px-4 text-red-500 bg-secondary rounded-lg border-b-2 border-red-500 hover:bg-red-500 hover:text-white duration-500'}
             >
-                <i className={`ri-logout-circle-r-line sm:me-2`}></i><span className="hidden sm:inline">Cerrar sesión</span>
+                <i className={`ri-logout-circle-r-line sm:me-2 text-xs sm:text-medium`}></i><span className="hidden sm:inline text-[0.60rem] sm:text-sm md:text-medium">Cerrar sesión</span>
             </button>
         </header>
     )
