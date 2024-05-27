@@ -16,7 +16,7 @@ export default function GridObjetivos({ lista }) {
                 draggable
                 focusOnSelect={false}
                 infinite={false}
-                itemClass="px-1 sm:px-3"
+                itemClass="px-1 sm:px-1 xl:px-3"
                 keyBoardControl
                 minimumTouchDrag={80}
                 pauseOnHover
@@ -46,7 +46,7 @@ export default function GridObjetivos({ lista }) {
                             max: 1024,
                             min: 464
                         },
-                        items: 1,
+                        items: 2,
                         partialVisibilityGutter: 30
                     }
                 }}
