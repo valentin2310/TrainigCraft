@@ -158,10 +158,15 @@ export async function fetchDefaultRutinas() {
     }
 }
 
-export async function fetchRutinas(idUser) {
+export async function fetchRutinas(idUser, limite = null) {
     try {
         const collectionRef = collection(db, `usuarios/${idUser}/rutinas`)
         const q = query(collectionRef, where('isDeleted', '!=', true))
+        if (limite) {
+            const queryLimit = query(q, limit(limite));
+            const data = await fetchCollectionData(queryLimit)
+            return data;
+        }
         const data = await fetchCollectionData(q)
         return data
         

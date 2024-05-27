@@ -16,7 +16,7 @@ export default function RutinaCard({rutina}) {
 
     return (
         <>
-        <div onClick={handleClick} className="p-1 rounded-xl shadow text-secondary cursor-pointer" style={generarGradient(rutina.categorias)}>
+        <div onClick={handleClick} className="p-1 h-full rounded-xl shadow text-secondary cursor-pointer" style={generarGradient(rutina.categorias)}>
             <div className="p-3 w-full h-full flex justify-between bg-gradient-to-tr from-gray-100 to-gray-50/95 backdrop-blur rounded-lg">
                 <div className="flex flex-col justify-between">
                     <div className="">
