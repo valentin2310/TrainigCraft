@@ -24,7 +24,7 @@ export default function Home() {
   return (
     <>
       <header className="w-full grid place-items-center py-14 px-5 sm:px-20 bg-gradient-to-r from-primary to-green-500 text-secondary">
-        <div className="w-full max-w-[1200px] flex flex-wrap gap-5 items-center justify-between">
+        <div className="w-full max-w-[1200px] flex flex-wrap gap-5 items-center justify-center md:justify-between">
           <div className="flex flex-wrap gap-5 items-center justify-center sm:justify-normal">
             <Image
               radius="none"
@@ -43,8 +43,8 @@ export default function Home() {
 
       <main className="text-secondary pb-40">
         <section className="w-full pt-10 md:pb-10 px-5 sm:px-10 grid place-items-center">
-            <div className="w-full max-w-[1200px] flex justify-between items-center gap-8">
-              <div className="text-2xl">
+            <div className="w-full max-w-[1200px] flex justify-center md:justify-between items-center md:gap-8">
+              <div className="text-2xl text-center md:text-start">
                 <p className="max-w-[350px] mb-10"><span className="font-bold text-primary">Bienvenido a TrainingCraft</span>, la mejor aplicación para crear tus propias rutinas.</p>
                 { user ?
                   <Link href={'/dashboard'} isBlock showAnchorIcon color="success" className="text-2xl border-2 border-primary rounded-xl shadow py-4 px-8">
