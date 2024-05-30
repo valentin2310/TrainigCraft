@@ -771,3 +771,16 @@ export async function fetchSesionesEntrenamientoRutina(idUser, idRutina) {
         console.log(error)
     }
 }
+
+export async function fetchSesionesEntrenamiento(idUser) {
+    try {
+        const collectionRef = collection(db, `usuarios/${idUser}/sesiones`)
+        const q = query(collectionRef, orderBy('created_at', 'desc'))
+        const lista = await fetchCollectionDataPlain(q)
+
+        return lista;
+        
+    } catch (error) {
+        console.log(error)
+    }
+}

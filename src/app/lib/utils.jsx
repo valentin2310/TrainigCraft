@@ -1,3 +1,5 @@
+import { format } from "rsuite/esm/utils/dateUtils";
+
 export const renderRateCharacter = (value, index) => {
     if (value < index + 1) {
         return <i className="ri-fire-fill text-gray-300"></i>
@@ -77,3 +79,15 @@ export const formatSecondsToTime = (time) => {
     const getHours = `0${Math.floor(time / 3600)}`.slice(-2);
     return `${getHours}:${getMinutes}:${getSeconds}`;
 };
+
+export const calcularFecha = (timestamp) => {
+    console.log(timestamp)
+    const { seconds, nanoseconds } = timestamp
+
+    const date = new Date(seconds * 1000 + nanoseconds / 1000000)
+    console.log(date)
+    const formattedDate = format(date, 'd/M/yyyy')
+    console.log(formattedDate)
+
+    return formattedDate;
+}

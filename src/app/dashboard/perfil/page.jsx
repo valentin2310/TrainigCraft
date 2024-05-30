@@ -3,6 +3,7 @@
 import { UserContext } from "@/app/providers"
 import MisEstadisticas from "@/app/ui/perfil/mis-estadisticas"
 import MisObjetivosGrid from "@/app/ui/perfil/mis-objetivos-grid"
+import MisSesiones from "@/app/ui/perfil/mis-sesiones"
 import { Button, Avatar, Link, Tabs, Tab } from "@nextui-org/react"
 import { Suspense, useContext } from "react"
 
@@ -61,7 +62,7 @@ export default function Page() {
                     <Tab key="estadisticas" title={
                         <>
                             <div className="flex items-center space-x-2">
-                                <i className="ri-line-chart-line"></i>
+                                <i className="ri-bar-chart-2-line"></i>
                                 <span>Estadisticas</span>
                             </div>
                         </>
@@ -78,6 +79,7 @@ export default function Page() {
                         </>
                     }>
                         <div className="mt-3"></div>
+                        <MisSesiones />
                     </Tab>
                 </Tabs>
             </div>

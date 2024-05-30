@@ -12,13 +12,13 @@ export default function Page() {
                 <MiSemana />
             </div>
 
-            <div className="mt-8">
+            <div className="mt-12">
                 <Suspense fallback={<MisObjetivosSkeleton />}>
                     <MisObjetivos nObjetivos={8} />
                 </Suspense>
             </div>
 
-            <div className="mt-8">
+            <div className="mt-12">
                 <MisRutinas />
             </div>
         </div>

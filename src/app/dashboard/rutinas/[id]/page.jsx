@@ -12,6 +12,7 @@ import CardEditDots from "@/app/ui/card-edit-dots";
 import RutinaModalForm from "@/app/ui/rutinas/modal-form";
 import RutinaModalDelete from "@/app/ui/rutinas/modal-delete";
 import clsx from "clsx";
+import SesionCard from "@/app/ui/sesiones/sesion-card";
 
 export default function Page({ params }) {
     const { id: idRutina } = params
@@ -138,22 +139,7 @@ export default function Page({ params }) {
                     <Tab key="estadisticas" title="Estadisticas">
                         <div className="grid md:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 gap-3">
                             {sesionesRutina && sesionesRutina.map((item, index) => (
-                                <div key={index} className="p-3 bg-gray-50 rounded shadow">
-                                    <div className="flex gap-3 text-lg">
-                                        <p className={clsx(
-                                            "text-lg",
-                                            { "text-primary": item.completado },
-                                            { "text-red-500": !item.completado },
-                                        )}>{Math.round(item.progreso)}%</p>
-                                        <p>- {item.datosRutina.titulo}</p>
-                                    </div>
-                                    <div className="flex gap-3 px-2">
-                                        <p><i className="font-bold ri-calendar-line me-2"></i>{calcularFecha(item.created_at)}</p>
-                                        <p><i className="font-bold ri-timer-line me-2"></i>{formatSecondsToTime(item.duracion)}</p>
-                                        <p><span className="font-bold me-2">Eficacia</span>{Math.round(item.eficacia)}%</p>
-                                        <p><span className="font-bold me-2">RPE</span>{Math.round(item.rpe)}</p>
-                                    </div>
-                                </div>
+                                <SesionCard key={index} sesion={item} />
                             ))}
                         </div>
                     </Tab>
