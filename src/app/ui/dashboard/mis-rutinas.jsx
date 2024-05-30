@@ -58,22 +58,29 @@ export default function MisRutinas() {
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 xl:gap-3">
-                {/* <Link href="/dashboard/rutinas/create" className="p-4 w-full h-full flex flex-col cursor-pointer bg-secondary text-gray-300 rounded-xl shadow text-center hover:bg-dark duration-500">
-                    <p className="text-xl mb-4">Crear nueva rutina</p>
-                    <i className="ri-file-add-line text-5xl text-primary"></i>
-                </Link> */}
                 {rutinas && rutinas.map((rutina) => {
                     return (
                         <RutinaCard key={rutina.id} rutina={rutina} />
                     )
                 })}
+                {(rutinas && rutinas.length > 0) &&
+                    <Link href="/dashboard/rutinas" className="p-4 w-full h-full flex flex-col cursor-pointer bg-secondary text-gray-300 rounded-xl shadow text-center hover:bg-dark duration-500">
+                        <p className="text-xl mb-4">Ver todas las rutinas</p>
+                        <i className="ri-eye-line text-5xl text-primary"></i>
+                    </Link>
+                    ||
+                    <Link href="/dashboard/rutinas/create" className="p-4 w-full h-full flex flex-col cursor-pointer bg-secondary text-gray-300 rounded-xl shadow text-center hover:bg-dark duration-500">
+                        <p className="text-xl mb-4">Crear nueva rutina</p>
+                        <i className="ri-file-add-line text-5xl text-primary"></i>
+                    </Link>
+                }
             </div>
 
             {/*  <div className="grid grid-cols-3 gap-3">
                 
             </div> */}
 
-           
+
         </>
     )
 }
