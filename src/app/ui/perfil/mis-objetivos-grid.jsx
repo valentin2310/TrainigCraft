@@ -32,18 +32,16 @@ export default function MisObjetivosGrid() {
                 <p className="text-lg xl:text-xl text-primary font-semibold">TODOS LOS OBJETIVOS</p>
                 <div className="flex gap-1 sm:gap-2">
                     <Button className="sm:hidden rounded-full" size="sm" onPress={onOpen} variant="flat" color="primary" isIconOnly startContent={<i className="ri-add-circle-line"></i>} />
-                    <Button className="sm:hidden rounded-full" size="sm" variant="flat" color="primary" isIconOnly startContent={<i className="ri-eye-line"></i>} />
                     
                     <Button className="hidden sm:flex" onPress={onOpen} variant="flat" color="primary" startContent={<i className="ri-add-circle-line text-lg"></i>}>
                         <span>Añadir</span>
                     </Button>
-                    {/* <Button className="hidden sm:flex" variant="flat" color="primary" startContent={<i className="ri-eye-line text-lg"></i>}>
-                        <span>Ver todas</span>
-                    </Button> */}
                 </div>
              </div>
             
-            <GridObjetivos lista={objetivos} />
+            <div className="max-h-[550px] md:max-h-none overflow-y-auto">
+                <GridObjetivos lista={objetivos} />
+            </div>
 
             {user && 
                 <ObjetivoModalForm 

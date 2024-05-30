@@ -3,7 +3,7 @@ import ObjetivoCard from "@/app/ui/objetivos/objetivo-card"
 export default function GridObjetivos({ lista }) {
     return (
         <>
-            <div className="grid grid-cols-3 gap-3" >
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3" >
                 {lista && lista.map((objetivo) => (
                     <ObjetivoCard key={objetivo.id} objetivo={objetivo} />
                 ))}
