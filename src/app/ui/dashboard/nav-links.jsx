@@ -50,7 +50,7 @@ export default function NavLinks() {
                             )}
                         >
                             <i className={`${link.icon} sm:me-2 text-xs sm:text-medium md:text-lg`}></i>
-                            <span className="text-[0.60rem] sm:text-sm md:text-medium">{link.name}</span>
+                            <span className="text-[0.60rem] sm:text-sm">{link.name}</span>
                         </Link>
                     )
                 })

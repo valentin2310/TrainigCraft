@@ -5,6 +5,7 @@ export const useObjetivos = create((set) => ({
     objetivos: [],
     cant: 10,
     updateCant: (newCant) => set({ cant: newCant }),
+    setObjetivos: (newList) => set({ objetivos: newList }),
     storeObjetivo: (newObjetivo) => {
         set((state) => ({
             objetivos: [

@@ -79,7 +79,7 @@ export async function editObjetivo(path, prevState, formData) {
         descripcion: formData.get('descripcion'),
         dificultad: formData.get('dificultad') ? parseInt(formData.get('dificultad')) : null,
         importancia: formData.get('importancia') ? parseInt(formData.get('importancia')) : null,
-        completado: formData.get('completado'),
+        completado: formData.get('completado') ? true : false,
     }
 
     const validatedFields = SCHEMA_OBJETIVO.safeParse(rawData)

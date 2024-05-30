@@ -36,7 +36,7 @@ export default function Navbar() {
                 onClick={handleLogout}
                 className={'hidden sm:block text-start w-full py-1 sm:py-2 px-2 sm:px-4 text-red-500 bg-secondary rounded-lg border-b-2 border-red-500 hover:bg-red-500 hover:text-white duration-500'}
             >
-                <i className={`ri-logout-circle-r-line sm:me-2 text-xs sm:text-medium`}></i><span className="hidden sm:inline text-[0.60rem] sm:text-sm md:text-medium">Cerrar sesión</span>
+                <i className={`ri-logout-circle-r-line sm:me-2 text-xs sm:text-medium`}></i><span className="hidden sm:inline text-[0.60rem] sm:text-sm">Cerrar sesión</span>
             </button>
         </header>
     )

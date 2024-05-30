@@ -1,8 +1,8 @@
 'use client'
 
 import { UserContext } from "@/app/providers"
-import MisObjetivos from "@/app/ui/dashboard/mis-objetivos"
-import { Button, Avatar, Link } from "@nextui-org/react"
+import MisObjetivosGrid from "@/app/ui/perfil/mis-objetivos-grid"
+import { Button, Avatar, Link, Tabs, Tab } from "@nextui-org/react"
 import { Suspense, useContext } from "react"
 
 export default function Page() {
@@ -39,8 +39,28 @@ export default function Page() {
                 </div>
             </div>
 
-            {/* Objetivos */}
-            <MisObjetivos nObjetivos={20} />
+            <div className="w-full mt-3">
+                <Tabs aria-label="Opciones" color="primary">
+                    <Tab key="objetivos" title={
+                        <>
+                            <div className="flex items-center space-x-2">
+                                <i className="ri-focus-2-line"></i>
+                                <span>Objetivos</span>
+                            </div>
+                        </>
+                    }>
+                       <MisObjetivosGrid />
+                        
+                    </Tab>
+                    <Tab key="estadisticas" title="Estadisticas">
+                       
+                    </Tab>
+                    <Tab key="historial" title="Historial">
+                       
+                    </Tab>
+                </Tabs>
+            </div>
+
         </>
     )
 }
