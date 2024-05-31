@@ -12,6 +12,7 @@ import CalendarioModalRutinaInfo from "@/app/ui/calendario/modal-rutina-info";
 import { updateEvento } from "@/app/lib/data";
 import clsx from "clsx";
 import { ToastContainer, toast } from "react-toastify";
+import '@/styles/fullcalendar.css'
 
 function renderEventContent(eventInfo) {
     let fecha = new Date(eventInfo.event.start)
@@ -102,10 +103,11 @@ export default function Calendar({ eventos, setEventos, rutinas, categorias, fil
             <FullCalendar
                 plugins={[dayGridPlugin, multiMonthPlugin, interactionPlugin]}
                 initialView="dayGridMonth"
+                height={800}
                 locale={esLocale}
                 firstDay={1}
                 dayHeaderFormat={{
-                    weekday: 'long'
+                    weekday: 'short'
                 }}
                 events={eventos}
                 dateClick={handleClick}
@@ -114,7 +116,7 @@ export default function Calendar({ eventos, setEventos, rutinas, categorias, fil
                 editable={true}
                 eventDrop={handleEdit}
                 headerToolbar={{
-                    start: 'multiMonthYear dayGridMonth',
+                    start: 'multiMonthYear,dayGridMonth',
                     center: 'title',
                     end: 'today prev,next'
                 }}
