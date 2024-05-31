@@ -13,7 +13,6 @@ export default function FiltroEjercicios({ ejercicios, musculos, setFilteredEjer
 
         if (filtroMusculos) {
             const _filterMusculos = Array.from(filtroMusculos)
-            console.log(_filterMusculos)
 
             if (_filterMusculos.length > 0) {
                 newList = newList.filter((item) => {
