@@ -11,10 +11,10 @@ export default function Page({ params }) {
     const { id: idRutina } = params
     const router = useRouter()
 
-    const { 
-        rutina, setRutina, 
-        ejercicioActual, setEjercicioActual, 
-        ejerciciosRestantes, setEjerciciosRestantes, 
+    const {
+        rutina, setRutina,
+        ejercicioActual, setEjercicioActual,
+        ejerciciosRestantes, setEjerciciosRestantes,
         serieActual, setSerieActual,
         repeticionesSerie, setRepeticionesSerie,
         pesoSerie, setPesoSerie,
@@ -23,12 +23,12 @@ export default function Page({ params }) {
         eficacia, setEficacia,
         rutinaProgreso, setRutinaProgreso,
         registroSesion, setRegistroSesion,
-        ejerciciosRutina, setEjerciciosRutina, 
+        ejerciciosRutina, setEjerciciosRutina,
         isDescanso, setIsDescanso,
         tiempoDescanso, setTiempoDescanso,
         descanso, setDescanso,
         duracion, addDuracion,
-        reset : resetStoreSesion
+        reset: resetStoreSesion
     } = useSesionEntrenamiento()
 
     const user = use(UserContext)
@@ -279,14 +279,14 @@ export default function Page({ params }) {
                     <div className="w-full flex justify-between p-5">
                         <p className="text-3xl bold">{formatTime(duracion)}</p>
                         <div className="flex gap-2 text-2xl">
-                            <Button isIconOnly variant="light" startContent={<i className="ri-folder-video-fill text-2xl text-white"></i>}></Button>
-                            <Button onPress={onOpenExit} isIconOnly color="danger" variant="flat" startContent={<i className="ri-close-line text-red-500 text-2xl"></i>}></Button>
+                            {/* <Button isIconOnly variant="light" startContent={<i className="ri-folder-video-fill text-2xl text-white"></i>}></Button> */}
+                            <Button onClick={onOpenExit} isIconOnly color="danger" variant="flat" startContent={<i className="ri-close-line text-red-500 text-2xl"></i>}></Button>
                         </div>
                     </div>
                 </div>
             </div>
             {ejercicioActual &&
-                <div className="relative h-[70vh] w-full grid place-items-center text-white bg-dark">
+                <div className="relative h-[70vh] w-full overflow-y-hidden grid place-items-center text-white bg-dark">
                     {isDescanso &&
                         <div className="relative h-full grid place-items-center">
                             <div className="z-50 flex flex-col items-center gap-2">
@@ -369,7 +369,7 @@ export default function Page({ params }) {
                                         alt={`Imagen del ejercicio ${ejercicioActual.ejercicio.nombre}`}
                                         src={ejercicioActual.ejercicio.imgPath ?? "/excercises/img-excercise1.png"}
                                         fallbackSrc={"/excercises/img-excercise1.png"}
-                                        className="absolute top-0 h-full mx-auto"
+                                        className="absolute top-0 w-full sm:w-fit md:h-full md:mx-auto"
                                         radius="none"
                                         removeWrapper
                                     />
@@ -391,27 +391,31 @@ export default function Page({ params }) {
                 <div className="w-full max-w-[1200px] px-5 bg-dark rounded-xl shadow p-5">
                     <p className="w-full text-white py-5 px-8 uppercase">Siguientes ejercicios</p>
                     <div className="w-full flex flex-col gap-3 text-white">
-                        {ejerciciosRestantes && ejerciciosRestantes.map(item => (
-                            <div key={item.orden} className="w-full flex gap-5 bg-secondary p-3 shadow rounded-xl">
-                                <Image
-                                    width={100}
-                                    height={100}
-                                    alt={`Imagen del ejercicio ${item.ejercicio.nombre}`}
-                                    src={item.ejercicio.imgPath ?? "/excercises/img-excercise1.png"}
-                                    fallbackSrc={"/excercises/img-excercise1.png"}
-                                    radius="lg"
-                                />
-                                <div className="flex flex-col justify-center">
-                                    <p>{item.ejercicio.nombre}</p>
-                                    <div className="flex gap-3 text-xl">
-                                        <p>{item.series}x{item.repeticiones}{item.tipo == 'tiempo' && 'seg'}</p>
-                                        {item.peso > 0 &&
-                                            <p> · {item.peso}kg</p>
-                                        }
+                        {(ejerciciosRestantes && ejerciciosRestantes.length > 0) &&
+                            ejerciciosRestantes.map(item => (
+                                <div key={item.orden} className="w-full flex gap-5 bg-secondary p-3 shadow rounded-xl">
+                                    <Image
+                                        width={100}
+                                        height={100}
+                                        alt={`Imagen del ejercicio ${item.ejercicio.nombre}`}
+                                        src={item.ejercicio.imgPath ?? "/excercises/img-excercise1.png"}
+                                        fallbackSrc={"/excercises/img-excercise1.png"}
+                                        radius="lg"
+                                    />
+                                    <div className="flex flex-col justify-center">
+                                        <p>{item.ejercicio.nombre}</p>
+                                        <div className="flex gap-3 text-xl">
+                                            <p>{item.series}x{item.repeticiones}{item.tipo == 'tiempo' && 'seg'}</p>
+                                            {item.peso > 0 &&
+                                                <p> · {item.peso}kg</p>
+                                            }
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))
+                            ||
+                            <p className="p-5 bg-primary/25 rounded-xl"><i className="ri-information-2-line text-primary text-lg me-2"></i>Este es tu último ejercicio para terminar el entrenamento</p>
+                        }
                     </div>
                 </div>
             </div>

@@ -660,8 +660,6 @@ export async function destroyEvento(userId, eventoId) {
 export async function fetchEventosSemanal(userId) {
     if (!userId) return
     const {startOfWeek, endOfWeek} = getStartAndEndOfWeek()
-    console.log('ini', startOfWeek)
-    console.log('fin', endOfWeek)
 
     try {
         const collectionRef = collection(db, `usuarios/${userId}/eventos`)

@@ -37,6 +37,22 @@ export default function Page({ params }) {
         setEjerciciosRutina(_rutina_ejercicios);
 
         const _sesiones = await fetchSesionesEntrenamientoRutina(user.id, idRutina);
+        _sesiones.sort((b, a) => {
+            if (a.created_at.seconds < b.created_at.seconds) {
+                return -1;
+            }
+            if (a.created_at.seconds > b.created_at.seconds) {
+                return 1;
+            }
+            // Si los segundos son iguales, comparas los nanosegundos
+            if (a.created_at.nanoseconds < b.created_at.nanoseconds) {
+                return -1;
+            }
+            if (a.created_at.nanoseconds > b.created_at.nanoseconds) {
+                return 1;
+            }
+            return 0; // son iguales
+        });
         setSesionesRutina(_sesiones)
         console.log(_sesiones)
 
@@ -76,11 +92,13 @@ export default function Page({ params }) {
 
     return (
         <>
-            <div className="flex justify-between bg-gradient-to-br from-gray-100 to-gray-50 rounded shadow p-3 text-center">
+            <div className="w-full flex justify-between bg-gradient-to-br from-gray-100 to-gray-50 rounded shadow p-3 text-center">
                 <div className=""></div>
                 <div className="">
-                    <h1 className="text-3xl font-semibold text-primary mb-1">{rutina?.titulo}</h1>
-                    <p className="px-2 text-lg"><i className="ri-information-2-line text-primary me-2"></i>{rutina?.descripcion ?? 'Sin descripcion..'}</p>
+                    <h1 className="text-xl md:text-3xl font-semibold text-primary mb-1">{rutina?.titulo}</h1>
+                    {rutina?.descripcion &&
+                        <p className="px-2 text-lg"><i className="ri-information-2-line text-primary me-2"></i>{rutina?.descripcion ?? 'Sin descripcion..'}</p>
+                    }
                     <div className="px-2">
                         {rutina?.categorias && rutina.categorias.map((categoria) => (
                             <Chip key={categoria.color} variant="light" startContent={<i className="ri-price-tag-3-line text-primary" style={{ color: categoria.color }}></i>}>
@@ -90,7 +108,7 @@ export default function Page({ params }) {
                     </div>
                     <div className="px-2 mt-4">
                         {/* Stats */}
-                        <div className="px-2 flex justify-center gap-3 sm:gap-5 md:gap-20">
+                        <div className="px-2 flex justify-center items-start gap-3 sm:gap-5 md:gap-20">
                             {rutina &&
                                 <>
                                     <div className="flex flex-col items-center justify-center">
@@ -117,7 +135,6 @@ export default function Page({ params }) {
                     </div>
                     <div className="mt-3">
                         <Button onClick={handleClick} className="mt-2" variant="solid" color="secondary" startContent={<i className="ri-play-large-fill text-primary"></i>}>Empezar entrenamiento</Button>
-
                     </div>
                 </div>
                 <CardEditDots
@@ -138,9 +155,13 @@ export default function Page({ params }) {
                     </Tab>
                     <Tab key="estadisticas" title="Estadisticas">
                         <div className="grid md:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 gap-3">
-                            {sesionesRutina && sesionesRutina.map((item, index) => (
-                                <SesionCard key={index} sesion={item} />
-                            ))}
+                            {(sesionesRutina && sesionesRutina.length > 0) &&
+                                sesionesRutina.map((item, index) => (
+                                    <SesionCard key={index} sesion={item} />
+                                ))
+                                ||
+                                <p><i className="ri-information-2-line text-primary text-lg me-2"></i>No tienes ninguna sesión de entrenamiento con esta rutina.</p>
+                            }
                         </div>
                     </Tab>
                 </Tabs>
