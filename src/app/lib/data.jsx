@@ -1,7 +1,7 @@
 import { firestore as db, auth } from '@/firebase/client-config'
 import { collection, getDocs, doc, getDoc, query, where, setDoc, addDoc, Timestamp, orderBy, limit, updateDoc, deleteDoc, runTransaction, documentId, writeBatch, increment } from 'firebase/firestore'
 import { generateFromEmail } from 'unique-username-generator'
-import { urlToBlob } from './utils';
+import { getStartAndEndOfWeek, urlToBlob } from './utils';
 import { subirImg } from './data-storage';
 
 export async function addUsuarioFromLogin(user) {
@@ -654,6 +654,25 @@ export async function destroyEvento(userId, eventoId) {
     } catch (error) {
         console.log(error)
         return false
+    }
+}
+
+export async function fetchEventosSemanal(userId) {
+    if (!userId) return
+    const {startOfWeek, endOfWeek} = getStartAndEndOfWeek()
+    console.log('ini', startOfWeek)
+    console.log('fin', endOfWeek)
+
+    try {
+        const collectionRef = collection(db, `usuarios/${userId}/eventos`)
+        const q = query(collectionRef, where("date", ">=", startOfWeek), where("date", "<=", endOfWeek))
+        const lista = await fetchCollectionDataPlain(q)
+
+        return lista;
+        
+    } catch (error) {
+        console.log(error)
+        return []   
     }
 }
 

@@ -40,7 +40,7 @@ export const dificultadColorBorder = (value) => {
 
 export const generarGradient = (categorias) => {
     let gradient;
-    
+
     if (!categorias || categorias.length === 0) {
         gradient = { backgroundColor: 'white' };
     } else if (categorias.length === 1) {
@@ -90,4 +90,23 @@ export const calcularFecha = (timestamp) => {
     console.log(formattedDate)
 
     return formattedDate;
+}
+
+
+export const getStartAndEndOfWeek = () => {
+    const currentDate = new Date();
+    const day = currentDate.getDay();
+    const diff = currentDate.getDate() - day + (day === 0 ? -6 : 1); // Ajusta el cálculo para que el lunes sea el primer día
+
+    const firstDay = new Date(currentDate.setDate(diff));
+    const lastDay = new Date(firstDay);
+    lastDay.setDate(lastDay.getDate() + 6); // Añade 6 días para obtener el último día de la semana
+
+    // Formatear las fechas en yyyy-M-d
+    const formatDate = (date) => date.toISOString().split('T')[0];
+
+    return {
+        startOfWeek: formatDate(firstDay),
+        endOfWeek: formatDate(lastDay),
+    };
 }
