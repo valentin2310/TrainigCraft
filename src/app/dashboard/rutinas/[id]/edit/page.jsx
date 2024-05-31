@@ -38,9 +38,8 @@ export default function Page({ params }) {
 
     return (
         <>
-            <div className="mb-10">
+            <div className="mb-3">
                 <h1 className="text-3xl font-semibold text-primary mb-1">Editar la rutina "{rutina?.titulo}"</h1>
-                <p className="max-w-[800px] px-2">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Sit voluptatem, vitae impedit quae magni quasi error consequuntur corporis.</p>
             </div>
 
             {rutina && 

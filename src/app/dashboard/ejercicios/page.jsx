@@ -47,11 +47,14 @@ export default function Page() {
                     setFilteredEjercicios={setFilteredEjercicios}
                 />
             </div>
-
-            <div className="grid md:grid-cols-3 2xl:grid-cols-5 gap-3">
-                <div onClick={onOpen} className="p-4 cursor-pointer bg-secondary text-gray-300 rounded-xl shadow text-center border-2 border-gray-100 hover:bg-dark duration-500">
-                    <p className="text-xl mb-4">Crear nuevo ejercicio</p>
-                    <i className="ri-file-add-line text-5xl text-primary"></i>
+{/* sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 */}
+{/* md:grid-cols-3 2xl:grid-cols-5 */}
+            <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-7 gap-3">
+                <div onClick={onOpen} className="p-4 cursor-pointer grid place-items-center bg-secondary text-gray-300 rounded-xl shadow text-center border-2 border-gray-100 hover:bg-dark duration-500">
+                    <div className="">
+                        <p className="text-xl mb-4">Crear nuevo ejercicio</p>
+                        <i className="ri-file-add-line text-5xl text-primary"></i>
+                    </div>
                 </div>
                 {filteredEjercicios?.length > 0 && filteredEjercicios.map((ej) => (
                     <EjercicioCard key={ej.id} ejercicio={ej} />
