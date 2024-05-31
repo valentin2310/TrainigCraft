@@ -14,15 +14,16 @@ import clsx from "clsx";
 import { ToastContainer, toast } from "react-toastify";
 
 function renderEventContent(eventInfo) {
-    let fecha = new Date()
-    fecha = fecha.setDate(new Date(eventInfo.event.start).getDate() + 1)
-    fecha = new Date(fecha)
+    let fecha = new Date(eventInfo.event.start)
+    fecha = fecha.setDate(fecha.getDate() + 1)
+    const hoy = (new Date).setHours(0, 0, 0)
+
     return (
         <>
             <div className={clsx(
                 "p-1 font-semibold",
-                { 'bg-blue-500' : !eventInfo.event.extendedProps.isCompletado && fecha >= new Date() },
-                { 'bg-red-500' : !eventInfo.event.extendedProps.isCompletado && fecha < new Date() },
+                { 'bg-blue-500' : !eventInfo.event.extendedProps.isCompletado && fecha >= hoy },
+                { 'bg-red-500' : !eventInfo.event.extendedProps.isCompletado && fecha < hoy },
                 { 'bg-primary' : eventInfo.event.extendedProps.isCompletado },
             )}>
                 <span className="text-tiny">{eventInfo.event.title}</span>
