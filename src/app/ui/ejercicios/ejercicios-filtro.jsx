@@ -49,7 +49,7 @@ export default function FiltroEjercicios({ ejercicios, musculos, setFilteredEjer
                 placeholder="Ejercicio de.."
                 value={filtroName}
                 onValueChange={setFiltroName}
-                className="col-span-6"
+                className="col-span-12 md:col-span-6"
                 labelPlacement="outside"
                 startContent={<i className="ri-search-line text-primary"></i>}
             />
@@ -60,7 +60,7 @@ export default function FiltroEjercicios({ ejercicios, musculos, setFilteredEjer
                 isMultiline={true}
                 selectionMode="multiple"
                 placeholder="Filtro por musculos"
-                className="col-span-4"
+                className="col-span-12 md:col-span-4"
                 labelPlacement="outside"
                 selectedKeys={filtroMusculos}
                 startContent={<i className="ri-price-tag-3-line text-primary"></i>}
