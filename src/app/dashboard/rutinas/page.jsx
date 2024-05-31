@@ -49,9 +49,14 @@ export default function Page() {
                     categorias={categorias}
                     setFilteredRutinas={setFilteredRutinas}
                 />
-                <Button className="col-span-2" 
+                <Button className="col-span-2 block md:hidden" 
                     color="primary" variant="flat" 
                     startContent={<i className="ri-add-circle-line text-lg"></i>}
+                    onPress={onOpenCategoria}
+                    isIconOnly
+                />
+                <Button className="col-span-2 md:col-span-3 xl:col-span-2 hidden md:block" 
+                    color="primary" variant="flat" 
                     onPress={onOpenCategoria}
                 >
                     Nueva categoría

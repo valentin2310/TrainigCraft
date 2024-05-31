@@ -46,7 +46,7 @@ export default function FiltroRutinas({ rutinas, categorias, setFilteredRutinas 
                 placeholder="Rutina de.."
                 value={filtroName}
                 onValueChange={setFiltroName}
-                className="col-span-6"
+                className="col-span-12 xl:col-span-6"
                 labelPlacement="outside"
                 startContent={<i className="ri-search-line text-primary"></i>}
             />
@@ -57,7 +57,7 @@ export default function FiltroRutinas({ rutinas, categorias, setFilteredRutinas 
                 isMultiline={true}
                 selectionMode="multiple"
                 placeholder="Filtro por categoria"
-                className="col-span-4"
+                className="col-span-10 md:col-span-9 xl:col-span-4"
                 labelPlacement="outside"
                 selectedKeys={filtroCategoria}
                 startContent={<i className="ri-price-tag-3-line text-primary"></i>}

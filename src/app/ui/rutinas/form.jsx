@@ -57,7 +57,7 @@ export default function RutinaForm({ idUser, rutina = null, ejercicios, categori
     return (
         <>
             <form action={formAction}>
-                <div className="px-5 py-8 flex flex-col gap-5">
+                <div className="px-1 md:px-2 lg:px-5 py-8 flex flex-col gap-5">
                     <div className="flex flex-col gap-5">
                         <div className="grid lg:grid-cols-2 items-start gap-3">
                             <Input
@@ -99,9 +99,14 @@ export default function RutinaForm({ idUser, rutina = null, ejercicios, categori
                                         </SelectItem>
                                     )}
                                 </Select>
-                                <Button className="ps-5 pe-8" 
+                                <Button className="block xl:hidden" 
                                     color="primary" variant="flat" 
-                                    startContent={<i className="ri-add-circle-line text-lg ps-3"></i>}
+                                    startContent={<i className="ri-add-circle-line text-lg"></i>}
+                                    onPress={onOpenCategoria}
+                                    isIconOnly
+                                />
+                                <Button className="ps-5 pe-8 hidden xl:block" 
+                                    color="primary" variant="flat" 
                                     onPress={onOpenCategoria}
                                 >
                                     Nueva categoría

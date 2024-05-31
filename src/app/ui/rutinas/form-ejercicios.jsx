@@ -93,7 +93,7 @@ export default function RutinaFormEjercicios({ ejercicios, ejerciciosRutina, set
             </div>
 
             <div>
-                <div className="grid grid-cols-9 gap-3 mb-3">
+                <div className="grid grid-cols-12 gap-1 xl:gap-3 mb-3">
                     <Select
                         name="tipo"
                         label="Tipo"
@@ -102,7 +102,7 @@ export default function RutinaFormEjercicios({ ejercicios, ejerciciosRutina, set
                         required
                         isInvalid={!!state?.errors?.tipo}
                         errorMessage={state?.errors?.tipo}
-                        className="col-span-1"
+                        className="col-span-12 md:col-span-3 xl:col-span-2 2xl:col-span-1 order-1"
                         classNames={{
                             trigger: "py-2",
                         }}
@@ -123,7 +123,7 @@ export default function RutinaFormEjercicios({ ejercicios, ejerciciosRutina, set
                         required
                         isInvalid={!!state?.errors?.series}
                         errorMessage={state?.errors?.series}
-                        className="col-span-1"
+                        className="col-span-6 md:col-span-3 xl:col-span-1 order-2"
                     />
                     <Input
                         name="reps"
@@ -134,7 +134,7 @@ export default function RutinaFormEjercicios({ ejercicios, ejerciciosRutina, set
                         required
                         isInvalid={!!state?.errors?.repeticiones}
                         errorMessage={state?.errors?.repeticiones}
-                        className="col-span-1"
+                        className="col-span-6 md:col-span-3 xl:col-span-2 2xl:col-span-1 order-3"
                     />
                     <Input
                         label="Ejercicio"
@@ -145,7 +145,7 @@ export default function RutinaFormEjercicios({ ejercicios, ejerciciosRutina, set
                         onClick={onOpen}
                         isInvalid={!!state?.errors?.ejercicioId}
                         errorMessage={state?.errors?.ejercicioId}
-                        className="col-span-4"
+                        className="col-span-12 md:col-span-11 xl:col-span-4 2xl:col-span-7 order-4"
                     />
                     <div className="hidden">
                         <Input
@@ -162,9 +162,10 @@ export default function RutinaFormEjercicios({ ejercicios, ejerciciosRutina, set
                         onValueChange={setPeso}
                         isInvalid={!!state?.errors?.peso}
                         errorMessage={state?.errors?.peso}
-                        className="col-span-1"
+                        className="col-span-12 md:col-span-3 xl:col-span-2 2xl:col-span-1 order-6 md:order-3 xl:order-6"
                     />
-                    <Button className="h-14" color="primary" variant="flat" startContent={<i className="ri-add-circle-fill text-lg"></i>} onClick={handleSubmit}>Añadir</Button>
+                    <Button className="h-14 order-7 col-span-12 md:col-span-1 w-full block xl:hidden" color="primary" variant="flat" startContent={<i className="ri-add-circle-fill text-lg"></i>} onClick={handleSubmit} isIconOnly />
+                    <Button className="h-14 order-7 col-span-12 md:col-span-1 w-full hidden xl:block" color="primary" variant="flat" onClick={handleSubmit}>Añadir</Button>
                 </div>
             </div>
 
