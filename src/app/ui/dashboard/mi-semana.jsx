@@ -54,9 +54,11 @@ export default async function MiSemana() {
 
         const numberdayweek = [6,0,1,2,3,4,5];
         const currentDate = new Date()
+        currentDate.setHours(0, 0, 0)
 
         _eventos.forEach(item => {
             const fecha = new Date(item.date);
+            fecha.setHours(23, 59, 59)
             const dia = numberdayweek[fecha.getDay()]
 
             if (SEMANA[dia].estado == "completado") return;
@@ -101,7 +103,7 @@ export default async function MiSemana() {
 
             <div className="w-full md:px-2 flex justify-evenly sm:gap-1 lg:gap-2 rounded bg-gradient-to-br from-gray-100 to-gray-50 sm:bg-none">
                 {semana.map((dia) => {
-                    const icon = dia.estado == "completado" ? 'ri-checkbox-circle-line text-primary' : (dia.estado == "pendiente" ? 'ri-hourglass-2-fill text-warning' : (dia.estado == 'incompleto' ? 'ri-close-circle-line text-danger' : 'ri-checkbox-blank-circle-line'))
+                    const icon = dia.estado == "completado" ? 'ri-checkbox-circle-line text-primary' : (dia.estado == "pendiente" ? 'ri-hourglass-2-fill text-blue-500' : (dia.estado == 'incompleto' ? 'ri-close-circle-line text-danger' : 'ri-checkbox-blank-circle-line'))
 
                     return (
                         <div key={dia.simbolo} className="flex flex-col gap-0 items-center py-2 md:p-2 lg-p-4 w-full sm:bg-gradient-to-br from-gray-100 to-gray-50 text-secondary sm:rounded sm:shadow text-xs md:text-md">

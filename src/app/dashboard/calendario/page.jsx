@@ -38,9 +38,20 @@ export default function Page() {
         <>
             <div className="mb-5">
                 <p className="text-3xl font-semibold text-primary mb-3">Calendario</p>
-                <p>Planifica tus entrenamientos de forma sencilla, selecciona el día que quieras y añade la rutina que quieras hacer.</p>
-                <p>También puedes ver la información de las rutinas haciendo click sobre ellas, para tener toda la información detallada, selecciona <span className="text-primary">ver más</span>.</p>
-                <p>Puedes eliminar la rutina para cierto día haciendo click sobre la misma y dandole a <span className="text-red-500">quitar</span>.</p>
+                <p>Para planificar tu entrenamiento, selecciona un día y añade las rutinas que quieras hacer.</p>
+                <p>Seleccionando una rutina puedes <span className="text-primary">ver su información</span>, además de poder <span className="text-red-500">quitarla</span> de tu planificación.</p>
+                <p className="text-sm mt-2">Leyenda:</p>
+                <div className="flex gap-2 text-tiny">
+                    <div className="bg-red-500 rounded p-2 text-white">
+                        <span><i className="ri-close-circle-line me-2"></i>No realizado</span>
+                    </div>
+                    <div className="bg-primary rounded p-2 text-white">
+                        <span><i className="ri-checkbox-circle-line me-2"></i>Realizado</span>
+                    </div>
+                    <div className="bg-blue-500 rounded p-2 text-white">
+                        <span><i className="ri-hourglass-2-fill me-2"></i>Pendiente</span>
+                    </div>
+                </div>
             </div>
 
             <div className="w-full">
