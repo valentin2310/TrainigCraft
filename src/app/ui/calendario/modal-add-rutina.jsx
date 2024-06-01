@@ -91,7 +91,7 @@ export default function CalendarioModalAddRutina({ isOpen, onClose, onOpenChange
                                         />
                                     </div>
 
-                                    <div className="grid grid-cols-3 gap-2">
+                                    <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-2">
                                         {filteredRutinas && filteredRutinas.map((item) => (
                                             <div key={item.id} className=""  onClick={() => addSelected(item)}>
                                                 <RutinaCardSimple
