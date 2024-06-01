@@ -67,15 +67,18 @@ export default function EjercicioModalForm({ isOpen, onClose, onOpenChange, ejer
                                             type="text"
                                             label="Nombre *"
                                             labelPlacement="outside"
-                                            placeholder="Quiero lograr.."
+                                            placeholder="Flexiones.."
                                             required
                                             defaultValue={ejercicio?.nombre}
                                             isInvalid={!!state?.errors?.nombre}
                                             errorMessage={state?.errors?.nombre}
                                         />
-                                        <div className="w-full grid place-items-center">
-                                            <UpploadReact userId={idUser} imgUrl={ejercicio?.imgPath ?? null} setImgUrl={setImgUrl} />
-                                            <input type="hidden" name="imgUrl" value={imgUrl} />
+                                        <div className="">
+                                            <p className="text-sm">Imagen</p>
+                                            <div className="w-full grid place-items-center bg-gray-100 py-2 rounded-xl">
+                                                <UpploadReact userId={idUser} imgUrl={ejercicio?.imgPath ?? null} setImgUrl={setImgUrl} />
+                                                <input type="hidden" name="imgUrl" value={imgUrl} />
+                                            </div>
                                         </div>
                                         <Textarea
                                             name="descripcion"

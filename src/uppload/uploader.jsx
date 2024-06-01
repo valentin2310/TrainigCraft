@@ -6,7 +6,7 @@ import "uppload/dist/themes/light.css"
 import { Button } from "@nextui-org/react";
 import { useState } from "react";
 
-const defaultImage = "https://via.placeholder.com/150x150"
+const defaultImage = "/excercises/img-excercise1.png"
 
 export default function UpploadReact({ userId, imgUrl = null, setImgUrl }) {
     const uploader = new Uppload({
@@ -49,7 +49,7 @@ export default function UpploadReact({ userId, imgUrl = null, setImgUrl }) {
         <>
             <div className="max-w-fit flex flex-col items-center gap-1">
                 <img alt="" width={150} height={150} src={url} className="rounded-lg" />
-                <Button variant="ghost" color="primary" onClick={handleClick}>Seleccionar imagen.</Button>
+                <Button variant="flat" color="primary" onClick={handleClick} startContent={<i className="ri-image-line"></i>}>Seleccionar imagen.</Button>
             </div>
         </>
     )
