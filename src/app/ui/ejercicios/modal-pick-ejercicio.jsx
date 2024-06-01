@@ -66,10 +66,12 @@ export default function ModalPickEjercicio({ isOpen, onClose, onOpenChange, ejer
                                         />
                                     </div>
 
-                                    <div className="grid grid-cols-2 gap-2">
-                                        <div onClick={onOpenCreateEjercicio} className="p-4 cursor-pointer bg-secondary text-gray-300 rounded-xl shadow text-center border-2 border-gray-100 hover:bg-dark duration-500">
-                                            <p className="text-xl mb-4">Crear nuevo ejercicio</p>
-                                            <i className="ri-file-add-line text-5xl text-primary"></i>
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                                        <div onClick={onOpenCreateEjercicio} className="p-4 grid place-items-center cursor-pointer bg-secondary text-gray-300 rounded-xl shadow text-center border-2 border-gray-100 hover:bg-dark duration-500">
+                                            <div className="">
+                                                <p className="text-xl mb-4">Crear nuevo ejercicio</p>
+                                                <i className="ri-file-add-line text-5xl text-primary"></i>
+                                            </div>
                                         </div>
                                         {filteredEjercicios && filteredEjercicios.map((item) => (
                                             <div key={item.id} className="" onClick={() => addSelected(item)}>
