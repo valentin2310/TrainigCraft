@@ -13,6 +13,7 @@ import RutinaModalForm from "@/app/ui/rutinas/modal-form";
 import RutinaModalDelete from "@/app/ui/rutinas/modal-delete";
 import clsx from "clsx";
 import SesionCard from "@/app/ui/sesiones/sesion-card";
+import TimeLineSesiones from "@/app/ui/sesiones/timeline-sesiones";
 
 export default function Page({ params }) {
     const { id: idRutina } = params
@@ -154,15 +155,11 @@ export default function Page({ params }) {
                         </div>
                     </Tab>
                     <Tab key="estadisticas" title="Estadisticas">
-                        <div className="grid md:grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4 gap-3">
-                            {(sesionesRutina && sesionesRutina.length > 0) &&
-                                sesionesRutina.map((item, index) => (
-                                    <SesionCard key={index} sesion={item} />
-                                ))
-                                ||
-                                <p><i className="ri-information-2-line text-primary text-lg me-2"></i>No tienes ninguna sesión de entrenamiento con esta rutina.</p>
-                            }
-                        </div>
+                        {(sesionesRutina && sesionesRutina.length > 0) &&
+                            <TimeLineSesiones lista={sesionesRutina} />
+                            ||
+                            <p><i className="ri-information-2-line text-primary text-lg me-2"></i>No tienes ninguna sesión de entrenamiento con esta rutina.</p>
+                        }
                     </Tab>
                 </Tabs>
             </div>

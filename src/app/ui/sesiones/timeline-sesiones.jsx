@@ -12,8 +12,6 @@ export default function TimeLineSesiones({ lista }) {
     const [listaResto, setListaResto] = useState([])
 
     useEffect(() => {
-        console.log(lista)
-
         const now = new Date()
 
         const inSemana = lista.filter(item => {
@@ -48,7 +46,7 @@ export default function TimeLineSesiones({ lista }) {
 
     return (
         <>
-            <Accordion /* defaultExpandedKeys={[1, 2, 3, 4]} */ selectionMode="multiple" variant="splitted">
+            <Accordion defaultExpandedKeys={["1", "2", "3", "4"]} selectionMode="multiple" variant="splitted">
                 {(listaSemana && listaSemana.length > 0) &&
                     <AccordionItem key={1} aria-label="Hace una semana" title={
                         <><i className="ri-calendar-line me-2"></i>Hace una semana ({listaSemana.length})</>
