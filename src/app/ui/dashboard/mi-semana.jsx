@@ -117,7 +117,9 @@ export default async function MiSemana() {
                     const icon = dia.estado == "completado" ? 'ri-checkbox-circle-line text-primary' : (dia.estado == "pendiente" ? 'ri-hourglass-2-fill text-blue-500' : (dia.estado == 'incompleto' ? 'ri-close-circle-line text-danger' : 'ri-checkbox-blank-circle-line'))
 
                     return (
-                        <div key={dia.simbolo} className="flex flex-col gap-0 items-center py-2 md:p-2 lg-p-4 w-full sm:bg-gradient-to-br from-gray-100 to-gray-50 text-secondary sm:rounded sm:shadow text-xs md:text-md">
+                        <div key={dia.simbolo} className={clsx("flex flex-col gap-0 items-center py-2 md:p-2 lg-p-4 w-full sm:bg-gradient-to-br from-gray-100 to-gray-50 text-secondary sm:rounded sm:shadow text-xs md:text-md",
+                            {'bg-gradient-to-br from-primary/20 to-primary/10' : dia.hoy}
+                        )}>
                             <div className={clsx({'text-primary font-semibold' : dia.hoy})}>
                                 <p className="hidden md:block">{dia.dia}</p>
                                 <p className="md:hidden">{dia.simbolo}</p>
