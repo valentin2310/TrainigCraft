@@ -6,6 +6,7 @@ import { Button, useDisclosure } from "@nextui-org/react"
 import {  fetchSesionesEntrenamiento } from "@/app/lib/data"
 import { useSesionesEntrenamiento } from "@/app/stores/use-sesiones-entrenamiento"
 import GridSesiones from "@/app/ui/sesiones/grid-sesiones"
+import TimeLineSesiones from "@/app/ui/sesiones/timeline-sesiones"
 
 export default function MisSesiones() {
     const user = use(UserContext)
@@ -37,8 +38,9 @@ export default function MisSesiones() {
                 </div>
              </div>
             
-            <div className="max-h-[550px] md:max-h-none overflow-y-auto">
-                <GridSesiones lista={sesiones} />
+            <div className="">
+                <TimeLineSesiones lista={sesiones} />
+                {/* <GridSesiones lista={sesiones} /> */}
             </div>
             
         </>

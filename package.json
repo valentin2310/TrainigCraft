@@ -22,6 +22,7 @@
     "@nextui-org/react": "^2.2.10",
     "clsx": "^2.1.0",
     "color-thief-react": "^2.1.0",
+    "date-fns": "^3.6.0",
     "firebase": "^10.9.0",
     "firebase-admin": "^12.0.0",
     "firebaseui": "^6.1.0",
