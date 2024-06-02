@@ -81,13 +81,10 @@ export const formatSecondsToTime = (time) => {
 };
 
 export const calcularFecha = (timestamp) => {
-    console.log(timestamp)
     const { seconds, nanoseconds } = timestamp
 
     const date = new Date(seconds * 1000 + nanoseconds / 1000000)
-    console.log(date)
     const formattedDate = format(date, 'd/M/yyyy')
-    console.log(formattedDate)
 
     return formattedDate;
 }

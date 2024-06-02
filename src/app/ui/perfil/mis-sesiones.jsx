@@ -5,7 +5,7 @@ import { UserContext } from "@/app/providers"
 import { Button, useDisclosure } from "@nextui-org/react"
 import {  fetchSesionesEntrenamiento } from "@/app/lib/data"
 import { useSesionesEntrenamiento } from "@/app/stores/use-sesiones-entrenamiento"
-import GridSesiones from "../sesiones/grid-sesiones"
+import GridSesiones from "@/app/ui/sesiones/grid-sesiones"
 
 export default function MisSesiones() {
     const user = use(UserContext)
@@ -38,9 +38,6 @@ export default function MisSesiones() {
              </div>
             
             <div className="max-h-[550px] md:max-h-none overflow-y-auto">
-                <div className="grid grid-cols-3">
-                    
-                </div>
                 <GridSesiones lista={sesiones} />
             </div>
             

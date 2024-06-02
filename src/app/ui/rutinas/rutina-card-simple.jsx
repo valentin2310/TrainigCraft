@@ -5,7 +5,7 @@ export default function RutinaCardSimple({ rutina, selected = false }) {
     return (
         <>
             <div className={clsx(
-                "p-1 rounded-xl shadow text-secondary cursor-pointer h-full",
+                "p-1 rounded-xl shadow text-secondary cursor-pointer w-full h-full",
                 { 'bg-primary' : selected }
             )}>
                 <div className="p-4 w-full h-full flex flex-col justify-between bg-gradient-to-tr from-gray-100/90 to-gray-50/85 backdrop-blur rounded-xl">

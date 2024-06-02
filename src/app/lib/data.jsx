@@ -793,7 +793,7 @@ export async function fetchSesionesEntrenamiento(idUser) {
     try {
         const collectionRef = collection(db, `usuarios/${idUser}/sesiones`)
         const q = query(collectionRef, orderBy('created_at', 'desc'))
-        const lista = await fetchCollectionDataPlain(q)
+        const lista = await fetchCollectionDataWithId(q)
 
         return lista;
         
