@@ -14,7 +14,7 @@ export default function Page() {
 
             <div className="mt-12">
                 <Suspense fallback={<MisObjetivosSkeleton />}>
-                    <MisObjetivos nObjetivos={8} />
+                    <MisObjetivos nObjetivos={8} sinCompletar />
                 </Suspense>
             </div>
 
