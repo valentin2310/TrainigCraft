@@ -3,43 +3,51 @@
 import { fetchEventosSemanal } from "@/app/lib/data"
 import { UserContext } from "@/app/providers"
 import { Button, Link } from "@nextui-org/react"
+import clsx from "clsx"
 import { use, useEffect, useState } from "react"
 
 const SEMANA = [
     {
         'dia': 'Lunes',
         'simbolo': 'L',
-        'estado': null
+        'estado': null,
+        'hoy': false
     },
     {
         'dia': 'Martes',
         'simbolo': 'M',
-        'estado': null
+        'estado': null,
+        'hoy': false
     },
     {
         'dia': 'Miércoles',
         'simbolo': 'X',
-        'estado': null
+        'estado': null,
+        'hoy': false
     },
     {
         'dia': 'Jueves',
         'simbolo': 'J',
-        'estado': null
+        'estado': null,
+        'hoy': false
     },
     {
         'dia': 'Viernes',
         'simbolo': 'V',
-        'estado': null
+        'estado': null,
+        'hoy': false
     },
     {
         'dia': 'Sábado',
         'simbolo': 'S',
-        'estado': null
+        'estado': null,
+        'hoy': false
     },
     {
         'dia': 'Domingo',
         'simbolo': 'D',
-        'estado': null
+        'estado': null,
+        'hoy': false
     },
 ]
 
@@ -55,6 +63,9 @@ export default async function MiSemana() {
         const numberdayweek = [6,0,1,2,3,4,5];
         const currentDate = new Date()
         currentDate.setHours(0, 0, 0)
+
+        const currentDayWeek = numberdayweek[currentDate.getDay()]
+        SEMANA[currentDayWeek].hoy = true;
 
         _eventos.forEach(item => {
             const fecha = new Date(item.date);
@@ -107,8 +118,10 @@ export default async function MiSemana() {
 
                     return (
                         <div key={dia.simbolo} className="flex flex-col gap-0 items-center py-2 md:p-2 lg-p-4 w-full sm:bg-gradient-to-br from-gray-100 to-gray-50 text-secondary sm:rounded sm:shadow text-xs md:text-md">
-                            <p className="hidden md:block">{dia.dia}</p>
-                            <p className="md:hidden">{dia.simbolo}</p>
+                            <div className={clsx({'text-primary font-semibold' : dia.hoy})}>
+                                <p className="hidden md:block">{dia.dia}</p>
+                                <p className="md:hidden">{dia.simbolo}</p>
+                            </div>
                             <i className={`${icon} text-sm md:text-xl lg:text-3xl`}></i>
                         </div>
                     )
