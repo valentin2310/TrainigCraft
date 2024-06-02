@@ -14,14 +14,14 @@ export default function Page() {
         <>
             {/* Datos de usuario */}
             <div className="mb-3 sm:mb-10">
-                <div className="flex justify-between px-2">
+                <div className="flex justify-between px-2 mb-3">
                     <p className="font-semibold text-xl text-primary">Mi perfil</p>
-                    <Link href="#">
+                    {/* <Link href="#">
                         <Button className="sm:hidden rounded-full" size="sm" variant="flat" color="primary" isIconOnly startContent={<i className="ri-edit-2-line"></i>} />
                         <Button className="hidden sm:flex" variant="flat" color="primary" startContent={<i className="ri-edit-2-line text-xl"></i>}>
                             <span>Editar</span>
                         </Button>
-                    </Link>
+                    </Link> */}
                 </div>
                 <div className="flex flex-col md:flex-row gap-3 md:gap-10 items-center mt-3 md:mt-0">
                     {user &&
