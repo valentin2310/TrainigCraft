@@ -17,7 +17,7 @@ export default function Page() {
     const { rutinas, setRutinas, filteredRutinas, setFilteredRutinas } = useRutinas()
     const { categorias, setCategorias } = usecategorias()
     const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure()
-    const { isOpen : isOpenCategoria, onOpen : onOpenCategoria, onClose : onCloseCategoria, onOpenChange : onOpenChangeCategoria } = useDisclosure()
+    const { isOpen: isOpenCategoria, onOpen: onOpenCategoria, onClose: onCloseCategoria, onOpenChange: onOpenChangeCategoria } = useDisclosure()
 
     const fetchData = async () => {
         const _rutinas = await fetchRutinas(user.id)
@@ -38,25 +38,28 @@ export default function Page() {
 
     return (
         <>
-            <div className="mb-5 max-w-[800px]">
+            <div className="mb-5">
                 <h1 className="text-2xl text-primary font-semibold mb-3">Mis rutinas</h1>
-                <p>Aquí puedes ver y buscar todas tus rutinas, en caso de no tener ninguna rutina, puedes crear ilimitadas rutinas, como tu quieras, totalmente personalizada, también los ejercicios.</p>
+                <div className="p-2 max-w-[800px]">
+                    <p>Aquí puedes ver y buscar tus rutinas.</p>
+                    <p>También puedes crear una nueva rutina con tus propios ejercicios.</p>
+                </div>
             </div>
 
             <div className="mb-5 bg-gray-50 grid grid-cols-12 items-end gap-3 p-4 rounded shadow">
-                <FiltroRutinas 
+                <FiltroRutinas
                     rutinas={rutinas}
                     categorias={categorias}
                     setFilteredRutinas={setFilteredRutinas}
                 />
-                <Button className="col-span-2 block md:hidden" 
-                    color="primary" variant="flat" 
+                <Button className="col-span-2 block md:hidden"
+                    color="primary" variant="flat"
                     startContent={<i className="ri-add-circle-line text-lg"></i>}
                     onPress={onOpenCategoria}
                     isIconOnly
                 />
-                <Button className="col-span-2 md:col-span-3 xl:col-span-2 hidden md:block" 
-                    color="primary" variant="flat" 
+                <Button className="col-span-2 md:col-span-3 xl:col-span-2 hidden md:block"
+                    color="primary" variant="flat"
                     onPress={onOpenCategoria}
                 >
                     Nueva categoría
