@@ -6,6 +6,7 @@ import GridSesiones from "@/app/ui/sesiones/grid-sesiones"
 import { Accordion, AccordionItem, Divider } from "@nextui-org/react"
 
 export default function TimeLineSesiones({ lista }) {
+    const [listaHoy, setListaHoy] = useState([])
     const [listaSemana, setListaSemana] = useState([])
     const [listaMes, setListaMes] = useState([])
     const [listaAno, setListaAno] = useState([])
@@ -14,10 +15,16 @@ export default function TimeLineSesiones({ lista }) {
     useEffect(() => {
         const now = new Date()
 
+        const inHoy = lista.filter(item => {
+            const createdAt = new Date(item.created_at.seconds * 1000)
+            const daysDiff = differenceInDays(now, createdAt)
+            return daysDiff <= 1
+        })
+
         const inSemana = lista.filter(item => {
             const createdAt = new Date(item.created_at.seconds * 1000)
             const daysDiff = differenceInDays(now, createdAt)
-            return daysDiff <= 7
+            return daysDiff > 1 && daysDiff <= 7
         })
 
         const inMes = lista.filter(item => {
@@ -37,6 +44,7 @@ export default function TimeLineSesiones({ lista }) {
             return differenceInYears(now, createdAt) > 1
         })
 
+        setListaHoy(inHoy)
         setListaSemana(inSemana)
         setListaMes(inMes)
         setListaAno(inAno)
@@ -46,9 +54,18 @@ export default function TimeLineSesiones({ lista }) {
 
     return (
         <>
-            <Accordion defaultExpandedKeys={["1", "2", "3", "4"]} selectionMode="multiple" variant="splitted">
+            <Accordion defaultExpandedKeys={["1", "2", "3", "4", "5"]} selectionMode="multiple" variant="splitted">
+                {(listaHoy && listaHoy.length > 0) &&
+                    <AccordionItem key={1} aria-label="Hace un día" title={
+                        <><i className="ri-calendar-line me-2"></i>Hace un día ({listaHoy.length})</>
+                    }>
+                        <div className="pb-5">
+                            <GridSesiones lista={listaHoy} />
+                        </div>
+                    </AccordionItem>
+                }
                 {(listaSemana && listaSemana.length > 0) &&
-                    <AccordionItem key={1} aria-label="Hace una semana" title={
+                    <AccordionItem key={2} aria-label="Hace una semana" title={
                         <><i className="ri-calendar-line me-2"></i>Hace una semana ({listaSemana.length})</>
                     }>
                         <div className="pb-5">
@@ -57,7 +74,7 @@ export default function TimeLineSesiones({ lista }) {
                     </AccordionItem>
                 }
                 {(listaMes && listaMes.length > 0) &&
-                    <AccordionItem key={2} aria-label="Hace un mes" title={
+                    <AccordionItem key={3} aria-label="Hace un mes" title={
                         <><i className="ri-calendar-line me-2"></i>Hace un mes ({listaMes.length})</>
                     }>
                         <div className="pb-5">
@@ -66,7 +83,7 @@ export default function TimeLineSesiones({ lista }) {
                     </AccordionItem>
                 }
                 {(listaAno && listaAno.length > 0) &&
-                    <AccordionItem key={3} aria-label="Hace un año" title={
+                    <AccordionItem key={4} aria-label="Hace un año" title={
                         <><i className="ri-calendar-line me-2"></i>Hace un año ({listaAno.length})</>
                     }>
                         <div className="pb-5">
@@ -75,7 +92,7 @@ export default function TimeLineSesiones({ lista }) {
                     </AccordionItem>
                 }
                 {(listaResto && listaResto.length > 0) &&
-                    <AccordionItem key={4} aria-label="Hace mucho tiempo" title={
+                    <AccordionItem key={5} aria-label="Hace mucho tiempo" title={
                         <><i className="ri-calendar-line me-2"></i>Hace mucho tiempo ({listaResto.length})</>
                     }>
                         <div className="pb-5">

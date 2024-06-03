@@ -40,7 +40,7 @@ export default function Page() {
         <>
             <div className="mb-5">
                 <h1 className="text-2xl text-primary font-semibold mb-3">Mis rutinas</h1>
-                <div className="p-2 max-w-[800px]">
+                <div className="p-2 max-w-[800px] text-sm sm:text-medium">
                     <p>Aquí puedes ver y buscar tus rutinas.</p>
                     <p>También puedes crear una nueva rutina con tus propios ejercicios.</p>
                 </div>
