@@ -1,8 +1,11 @@
 import clsx from "clsx";
 import { formatSecondsToTime, calcularFecha } from "@/app/lib/utils";
-import { Button } from "@nextui-org/react";
+import { Button, useDisclosure } from "@nextui-org/react";
+import ModalSesionInfo from "@/app/ui/sesiones/modal_sesion_info";
 
 export default function SesionCard({ sesion }) {
+    const { isOpen, onOpen, onOpenChange } = useDisclosure()
+
     return (
         <>
             <div className="p-3 bg-gradient-to-tl from-gray-50 to-gray-100 rounded shadow">
@@ -17,7 +20,7 @@ export default function SesionCard({ sesion }) {
                         <p className="font-semibold">{sesion.datosRutina.titulo}</p>
                     </div>
                     <div className="">
-                        <Button variant="light" size="sm" color="primary" isIconOnly startContent={<i className="ri-eye-line text-lg"></i>} className="p-1" />
+                        <Button onClick={onOpen} variant="light" size="sm" color="primary" isIconOnly startContent={<i className="ri-eye-line text-lg"></i>} className="p-1" />
                     </div>
                 </div>
                 <div className="grid grid-cols-2 xl:grid-cols-4 text-sm gap-2">
@@ -39,6 +42,14 @@ export default function SesionCard({ sesion }) {
                     </div>
                 </div>
             </div>
+
+            {/* Modal información de la sesión */}
+            <ModalSesionInfo  
+                sesion={sesion}
+                isOpen={isOpen}
+                onOpen={onOpen}
+                onOpenChange={onOpenChange}
+            />
         </>
     )
 }
