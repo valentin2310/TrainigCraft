@@ -84,7 +84,7 @@ export default function Page({ params }) {
             sum += item.ejercicio.dificultad
         })
 
-        return sum / ejerciciosRutina.length
+        return (sum / ejerciciosRutina.length).toFixed(2)
     }
 
     const handleClick = () => {

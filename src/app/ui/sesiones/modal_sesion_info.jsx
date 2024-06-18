@@ -21,7 +21,7 @@ export default function ModalSesionInfo({ sesion, isOpen, onOpen, onOpenChange }
                                         "font-bold",
                                         { "text-primary": sesion.completado },
                                         { "text-red-500": !sesion.completado },
-                                    )}>{sesion.progreso}</span>%</p>
+                                    )}>{(sesion.progreso).toFixed(0)}</span>%</p>
                                 </div>
                                 Resumen:
                                 <div className="grid grid-cols-2 xl:grid-cols-4 text-sm gap-2">
